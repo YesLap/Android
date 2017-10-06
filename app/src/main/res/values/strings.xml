@@ -3,4 +3,5 @@
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="create_account">Don\'t have an account? create an account</string>
+    <string name="forgot_password">Forgot Password?</string>
 </resources>

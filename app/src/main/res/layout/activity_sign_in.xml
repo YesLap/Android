@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bgblue"
-    tools:context="com.sendlook.yeslap.MainActivity">
+    tools:context="com.sendlook.yeslap.SignInActivity">
 
     <ImageView
         android:id="@+id/ivWaveTop"
@@ -57,13 +57,24 @@
         android:padding="10sp"
         android:textColorHint="@android:color/white" />
 
-    <ImageView
-        android:id="@+id/btnSignIn"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:text="@string/forgot_password"
+        android:id="@+id/tvForgotPassword" />
+
+    <ImageView
+        android:id="@+id/btnSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvForgotPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:src="@drawable/icongo" />
 
     <TextView
@@ -75,6 +86,7 @@
         android:textAlignment="center"
         android:background="@color/colorTextViewOrange"
         android:textColor="@android:color/white"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:id="@+id/textView" />
 
 </RelativeLayout>
