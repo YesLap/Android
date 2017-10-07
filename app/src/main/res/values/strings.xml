@@ -4,4 +4,9 @@
     <string name="password">Password</string>
     <string name="create_account">Don\'t have an account? create an account</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="fill_email">Fill in the E-mail field</string>
+    <string name="fill_password">Fill in the Password field</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="have_account">I have an account! Sign in</string>
+    <string name="password_not_match">passwords don\'t match</string>
 </resources>

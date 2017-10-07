@@ -1,6 +1,5 @@
 package com.sendlook.yeslap;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -22,18 +21,18 @@ import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
-    private EditText etEmail, etPassword;
-    private TextView tvForgotPassword, tvNewAccount;
-    private ImageView btnSignIn;
+    private EditText etEmail, etPassword, etRetypePassword;
+    private ImageView btnSignUp;
+    private TextView tvHaveAccount;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_sign_up);
 
         //Instantiate Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -41,33 +40,33 @@ public class SignInActivity extends AppCompatActivity {
         //Cast
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
-        tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
-        tvNewAccount = (TextView) findViewById(R.id.tvNewAccount);
-        btnSignIn = (ImageView) findViewById(R.id.btnSignIn);
+        etRetypePassword = (EditText) findViewById(R.id.etRetypePassword);
+        btnSignUp = (ImageView) findViewById(R.id.btnSignUp);
+        tvHaveAccount = (TextView) findViewById(R.id.tvHaveAccount);
 
         //Button Event
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //Get the fields data
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
+                String retypePassword = etRetypePassword.getText().toString();
 
-                //Make sure the fields are empty
                 if (Objects.equals(email, "")) {
-                    toastyInfo(getString(R.string.fill_email));
+                    toastyInfo(getString(R.string.email));
                 } else if (Objects.equals(password, "")) {
-                    toastyInfo(getString(R.string.fill_password));
+                    toastyInfo(getString(R.string.password));
+                } else if (Objects.equals(retypePassword, "")) {
+                    toastyInfo(getString(R.string.retype_password));
+                } else if (!Objects.equals(password, retypePassword)){
+                    toastyInfo(getString(R.string.password_not_match));
                 } else {
-                    //Login in
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Intent intent = new Intent(SignInActivity.this, UserProfileActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                                toastySuccess("Account Created Successfully");
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -76,16 +75,16 @@ public class SignInActivity extends AppCompatActivity {
                             toastyError(e.getMessage());
                         }
                     });
+
                 }
 
             }
         });
 
-        tvNewAccount.setOnClickListener(new View.OnClickListener() {
+        tvHaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 

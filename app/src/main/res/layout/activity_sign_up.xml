@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bgblue"
-    tools:context="com.sendlook.yeslap.SignInActivity">
+    tools:context="com.sendlook.yeslap.SignUpActivity">
 
     <ImageView
         android:id="@+id/ivWaveTop"
@@ -59,34 +59,40 @@
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white" />
 
-    <TextView
-        android:id="@+id/tvForgotPassword"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/etRetypePassword"
+        android:layout_width="250sp"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etPassword"
         android:layout_below="@+id/etPassword"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:text="@string/forgot_password"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/input_outline_line"
+        android:drawableEnd="@drawable/iconlockwhite"
+        android:drawablePadding="10sp"
+        android:ems="10"
+        android:hint="@string/retype_password"
+        android:inputType="textPassword"
+        android:padding="10sp"
         android:textColor="@android:color/white"
-        android:textStyle="bold" />
+        android:textColorHint="@android:color/white" />
 
     <ImageView
-        android:id="@+id/btnSignIn"
+        android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvForgotPassword"
+        android:layout_below="@+id/etRetypePassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:src="@drawable/icongo" />
 
     <TextView
-        android:id="@+id/tvNewAccount"
+        android:id="@+id/tvHaveAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorTextViewOrange"
         android:padding="7sp"
-        android:text="@string/create_account"
+        android:text="@string/have_account"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="16sp"
