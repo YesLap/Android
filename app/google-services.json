@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "405673897660",
+    "firebase_url": "https://sendlook-yeslap.firebaseio.com",
+    "project_id": "sendlook-yeslap",
+    "storage_bucket": "sendlook-yeslap.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405673897660:android:67ba7c98f6874439",
+        "android_client_info": {
+          "package_name": "com.sendlook.yeslap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405673897660-4tm0qalfvsb6715bjmgq8u7uf99545hh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sendlook.yeslap",
+            "certificate_hash": "fa4bef26ed583abb9ea518c61bb01c2fbf274a0b"
+          }
+        },
+        {
+          "client_id": "405673897660-g5trop3as5joomf748vuqa9pr2c3fsh0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXCfUfW19EiMJ-o0384-2vVnqcQRDWELM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405673897660-g5trop3as5joomf748vuqa9pr2c3fsh0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
