@@ -19,6 +19,9 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
