@@ -20,8 +20,9 @@
         </activity>
         <activity
             android:name=".SignInActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".SignUpActivity"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".ForgotPasswordActivity"></activity>
     </application>
 
 </manifest>

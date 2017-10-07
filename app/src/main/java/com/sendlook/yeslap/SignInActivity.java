@@ -89,6 +89,14 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void toastySuccess(String msg) {
