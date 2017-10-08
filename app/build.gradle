@@ -27,6 +27,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.0.1'
     implementation 'com.android.support:design:26.0.1'
     implementation 'com.afollestad.material-dialogs:commons:0.9.4.7'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.GrenderG:toasty:1.2.5'
 
     implementation 'com.google.firebase:firebase-auth:11.4.2'

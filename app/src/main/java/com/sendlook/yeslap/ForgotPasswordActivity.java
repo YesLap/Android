@@ -1,5 +1,6 @@
 package com.sendlook.yeslap;
 
+import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private EditText etEmail;
     private ImageView btnForgot;
     private TextView tvRemember;
+    private ProgressDialog dialog;
     private FirebaseAuth mAuth;
 
 
@@ -50,10 +52,17 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     toastyInfo(getString(R.string.insert_email));
                 } else {
 
+                    dialog = new ProgressDialog(ForgotPasswordActivity.this);
+                    dialog.setTitle(getString(R.string.logging));
+                    dialog.setMessage(getString(R.string.logging_msg));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
                     mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                dialog.dismiss();
                                 toastySuccess("The instructions of password recovery was sended for your email!");
                                 finish();
                             }
@@ -61,6 +70,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            dialog.dismiss();
                             toastyError(e.getMessage());
                         }
                     });

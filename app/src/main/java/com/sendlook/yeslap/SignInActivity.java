@@ -1,5 +1,6 @@
 package com.sendlook.yeslap;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ public class SignInActivity extends AppCompatActivity {
     private ImageView btnSignIn;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +62,19 @@ public class SignInActivity extends AppCompatActivity {
                 } else if (Objects.equals(password, "")) {
                     toastyInfo(getString(R.string.fill_password));
                 } else {
+
+                    dialog = new ProgressDialog(SignInActivity.this);
+                    dialog.setTitle(getString(R.string.logging));
+                    dialog.setMessage(getString(R.string.logging_msg));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
                     //Login in
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                dialog.dismiss();
                                 Intent intent = new Intent(SignInActivity.this, UserProfileActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
@@ -73,6 +83,7 @@ public class SignInActivity extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            dialog.dismiss();
                             toastyError(e.getMessage());
                         }
                     });

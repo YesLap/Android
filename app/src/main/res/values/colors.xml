@@ -5,4 +5,6 @@
     <color name="colorAccent">#ffffff</color>
     <color name="colorEditText">#59b6fb</color>
     <color name="colorTextViewOrange">#fe9700</color>
+    <color name="colorDarkBlue">#3caaef</color>
+    <color name="colorLightBlue">#08a0ff</color>
 </resources>

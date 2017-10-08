@@ -3,7 +3,127 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@android:color/white"
     android:layout_height="match_parent"
     tools:context="com.sendlook.yeslap.UserProfileActivity">
+
+    <ImageView
+        android:id="@+id/btnGoToProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="30sp"
+        android:layout_marginTop="15sp"
+        android:src="@drawable/gotoprofile" android:contentDescription="TODO" />
+
+    <ImageView
+        android:id="@+id/btnGoToSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="30sp"
+        android:layout_marginTop="15sp"
+        android:src="@drawable/gotosetting" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageView"
+        android:layout_width="130sp"
+        android:layout_height="130sp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/img_profile"
+        android:layout_marginTop="80sp"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/circleImageView"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/tvUsername"
+        android:layout_marginTop="20dp"
+        android:text="@string/username"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="300sp"
+        android:layout_height="100sp"
+        android:layout_below="@+id/tvUsername"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_marginTop="20sp"
+        android:id="@+id/linearLayout">
+
+        <RelativeLayout
+            android:id="@+id/btnChat"
+            android:background="@color/colorDarkBlue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/iconchatwhite" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btnCalendar"
+            android:background="@color/colorLightBlue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/iconcalendarwhite" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btnSearch"
+            android:background="@color/colorDarkBlue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/iconfindwhite" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvUsername"
+        android:layout_alignEnd="@+id/circleImageView"
+        android:clickable="true"
+        app:backgroundTint="@color/colorLightBlue"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_create_white_24dp" />
+
+    <ImageView
+        android:id="@+id/btnFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        app:srcCompat="@drawable/iconfavoriteorange" />
 
 </RelativeLayout>
