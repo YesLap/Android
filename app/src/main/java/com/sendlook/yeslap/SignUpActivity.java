@@ -17,10 +17,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -71,15 +73,17 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
 
                     dialog = new ProgressDialog(SignUpActivity.this);
-                    dialog.setTitle(getString(R.string.logging));
-                    dialog.setMessage(getString(R.string.logging_msg));
+                    dialog.setTitle(getString(R.string.loading));
+                    dialog.setMessage(getString(R.string.loading_msg));
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
 
+                    //Function to create a new user account with email and password
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                //Fucntion to put the user data at Firebase Database
                                 mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
                                 HashMap<String, String> user = new HashMap<>();
                                 user.put("username", "");
@@ -121,6 +125,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        //tvHaveAccount Event Button
         tvHaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,6 +135,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    //Function to get the actual Date and Time
     private String getTime() {
         Calendar cal = Calendar.getInstance();
         Date data = cal.getTime();

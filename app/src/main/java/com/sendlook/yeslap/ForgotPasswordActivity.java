@@ -16,14 +16,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.w3c.dom.Text;
-
 import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
+    //Variables
     private EditText etEmail;
     private ImageView btnForgot;
     private TextView tvRemember;
@@ -36,12 +35,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
+        //Instantiate Firebase
         mAuth = FirebaseAuth.getInstance();
 
+        //Cast
         etEmail = (EditText) findViewById(R.id.etEmail);
         btnForgot = (ImageView) findViewById(R.id.btnForgot);
         tvRemember = (TextView) findViewById(R.id.tvRemember);
 
+        //btnForgot Event Button
         btnForgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,11 +55,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 } else {
 
                     dialog = new ProgressDialog(ForgotPasswordActivity.this);
-                    dialog.setTitle(getString(R.string.logging));
-                    dialog.setMessage(getString(R.string.logging_msg));
+                    dialog.setTitle(getString(R.string.loading));
+                    dialog.setMessage(getString(R.string.loading_msg));
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
 
+                    //Function to recovery a new password
                     mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -79,6 +82,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
         });
 
+        //tvRemeber Event Button
         tvRemember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

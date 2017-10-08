@@ -64,8 +64,8 @@ public class SignInActivity extends AppCompatActivity {
                 } else {
 
                     dialog = new ProgressDialog(SignInActivity.this);
-                    dialog.setTitle(getString(R.string.logging));
-                    dialog.setMessage(getString(R.string.logging_msg));
+                    dialog.setTitle(getString(R.string.loading));
+                    dialog.setMessage(getString(R.string.loading_msg));
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
 
@@ -92,6 +92,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
+        //tvNewAccount Event Button
         tvNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,6 +101,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
+        //tvForgotPassword Event Button
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
