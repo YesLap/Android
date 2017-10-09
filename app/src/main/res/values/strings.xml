@@ -15,4 +15,9 @@
     <string name="loading_msg">Wait while we check yours credentials!</string>
     <string name="username">Username</string>
     <string name="text_input_error_message">Please, insert a Username!</string>
+    <string name="select_image">Select a Image</string>
+    <string name="uploading_image">Uploading Image</string>
+    <string name="uploading_image_msg">Please, wait while we upload your image</string>
+    <string name="image_uploaded">Image Uploaded</string>
+    <string name="error_upload">Error in Upload</string>
 </resources>

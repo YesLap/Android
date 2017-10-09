@@ -101,15 +101,16 @@
                     android:layout_below="@+id/imageView"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/border_imageview_blue" />
+                    android:background="@drawable/border_imageview_blue"
+                    app:srcCompat="@drawable/img_profile" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/btnChamgeImage1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="4sp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="4sp"
                     android:clickable="true"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_create_white_24dp" />
@@ -136,15 +137,16 @@
                     android:layout_below="@+id/imageView2"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/border_imageview_blue" />
+                    android:background="@drawable/border_imageview_blue"
+                    app:srcCompat="@drawable/img_profile" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/btnChangeImage2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="4sp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="4sp"
                     android:clickable="true"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_create_white_24dp" />
@@ -171,15 +173,16 @@
                     android:layout_below="@+id/imageView3"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/border_imageview_blue" />
+                    android:background="@drawable/border_imageview_blue"
+                    app:srcCompat="@drawable/img_profile" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/btnChangeImage3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="4sp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="4sp"
                     android:clickable="true"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_create_white_24dp" />
@@ -194,9 +197,9 @@
         android:id="@+id/linearLayout"
         android:layout_width="300sp"
         android:layout_height="100sp"
-        android:layout_marginTop="10sp"
         android:layout_below="@+id/relativeLayout"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10sp"
         android:orientation="horizontal">
 
         <RelativeLayout

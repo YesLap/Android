@@ -1,7 +1,9 @@
 package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
+import android.content.*;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +23,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.util.HashMap;
@@ -42,7 +48,15 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private ImageView ivImage1, ivImage2, ivImage3;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private StorageReference mStorage;
     private ProgressDialog dialog;
+    private static final int GALLERY_PICK_IMAGE_1 = 1;
+    private static final int GALLERY_PICK_IMAGE_2 = 2;
+    private static final int GALLERY_PICK_IMAGE_3 = 3;
+    private static final int GALLERY_PICK_IMAGE_4 = 4;
+    private String downloadURL = "";
+    private Integer ImageStatus = 0;
+    private Integer Image = 0;
 
 
     @Override
@@ -55,7 +69,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
         //Cast
         btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
-        btnGotToSettings = (ImageView)findViewById(R.id.btnGoToSettings);
+        btnGotToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
         btnChat = (RelativeLayout) findViewById(R.id.btnChat);
@@ -98,11 +112,27 @@ public class EditUserProfileActivity extends AppCompatActivity {
             }
         });
 
+        //cvImageUser EventButton
+        cvImageUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Image = 1;
+                Intent intentImage1 = new Intent();
+                intentImage1.setType("image/*");
+                intentImage1.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_4);
+            }
+        });
+
         //ChangeImage1 Event Button
         btnChangeImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ImageStatus = 1;
+                Intent intentImage1 = new Intent();
+                intentImage1.setType("image/*");
+                intentImage1.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_1);
             }
         });
 
@@ -110,7 +140,11 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnChangeImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ImageStatus = 2;
+                Intent intentImage2 = new Intent();
+                intentImage2.setType("image/*");
+                intentImage2.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intentImage2, getString(R.string.select_image)), GALLERY_PICK_IMAGE_2);
             }
         });
 
@@ -118,10 +152,238 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnChangeImage3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ImageStatus = 3;
+                Intent intentImage3 = new Intent();
+                intentImage3.setType("image/*");
+                intentImage3.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intentImage3, getString(R.string.select_image)), GALLERY_PICK_IMAGE_3);
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        try {
+
+            if (Image == 1) {
+                if (requestCode == GALLERY_PICK_IMAGE_4 && resultCode == RESULT_OK) {
+                    Uri imgUri = data.getData();
+                    CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
+                }
+
+                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+                    dialog = new ProgressDialog(EditUserProfileActivity.this);
+                    dialog.setTitle(getString(R.string.uploading_image));
+                    dialog.setMessage(getString(R.string.uploading_image_msg));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
+                    CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
+                    //Saving Image1
+                    if (resultCode == RESULT_OK) {
+                        Uri resultUri = mResult.getUri();
+                        if (resultUri != null) {
+
+                            mStorage = FirebaseStorage.getInstance().getReference();
+                            StorageReference filePath = mStorage.child("user_images").child(mAuth.getCurrentUser().getUid()).child("Image.jpg");
+
+                            filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        downloadURL = task.getResult().getDownloadUrl().toString();
+                                        toastySuccess(getString(R.string.image_uploaded));
+
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("image", downloadURL);
+                                        mDatabase.updateChildren(user);
+
+                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
+                                        dialog.dismiss();
+                                    } else {
+                                        toastyError(task.getException().getMessage());
+                                        dialog.hide();
+                                    }
+                                }
+                            });
+                        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                            Exception error = mResult.getError();
+                            toastyError(error.getMessage());
+                            dialog.hide();
+                        }
+                        Image = 0;
+                    }
+                }
+            }
+            if (ImageStatus == 1) {
+                if (requestCode == GALLERY_PICK_IMAGE_1 && resultCode == RESULT_OK) {
+                    Uri imgUri = data.getData();
+                    CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
+                }
+
+                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+                    dialog = new ProgressDialog(EditUserProfileActivity.this);
+                    dialog.setTitle(getString(R.string.uploading_image));
+                    dialog.setMessage(getString(R.string.uploading_image_msg));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
+                    CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
+                    //Saving Image1
+                    if (resultCode == RESULT_OK && ImageStatus == 1) {
+                        Uri resultUri = mResult.getUri();
+                        if (resultUri != null) {
+
+                            mStorage = FirebaseStorage.getInstance().getReference();
+                            StorageReference filePath = mStorage.child("user_images").child(mAuth.getCurrentUser().getUid()).child("Image1.jpg");
+
+                            filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        downloadURL = task.getResult().getDownloadUrl().toString();
+                                        toastySuccess(getString(R.string.image_uploaded));
+
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("image1", downloadURL);
+                                        mDatabase.updateChildren(user);
+
+                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage1);
+                                        dialog.dismiss();
+                                    } else {
+                                        toastyError(task.getException().getMessage());
+                                        dialog.hide();
+                                    }
+                                }
+                            });
+                        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                            Exception error = mResult.getError();
+                            toastyError(error.getMessage());
+                            dialog.hide();
+                        }
+                        ImageStatus = 0;
+                    }
+                }
+            }
+            if (ImageStatus == 2) {
+                if (requestCode == GALLERY_PICK_IMAGE_2 && resultCode == RESULT_OK) {
+                    Uri imgUri = data.getData();
+                    CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
+                }
+
+                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+                    dialog = new ProgressDialog(EditUserProfileActivity.this);
+                    dialog.setTitle(getString(R.string.uploading_image));
+                    dialog.setMessage(getString(R.string.uploading_image_msg));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
+                    CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
+                    //Saving Image1
+                    if (resultCode == RESULT_OK) {
+                        Uri resultUri = mResult.getUri();
+                        if (resultUri != null) {
+
+                            mStorage = FirebaseStorage.getInstance().getReference();
+                            StorageReference filePath = mStorage.child("user_images").child(mAuth.getCurrentUser().getUid()).child("Image2.jpg");
+
+                            filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        downloadURL = task.getResult().getDownloadUrl().toString();
+                                        toastySuccess(getString(R.string.image_uploaded));
+
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("image2", downloadURL);
+                                        mDatabase.updateChildren(user);
+
+                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage2);
+                                        dialog.dismiss();
+                                    } else {
+                                        toastyError(task.getException().getMessage());
+                                        dialog.hide();
+                                    }
+                                }
+                            });
+                        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                            Exception error = mResult.getError();
+                            toastyError(error.getMessage());
+                            dialog.hide();
+                        }
+                        ImageStatus = 0;
+                    }
+                }
+            }
+            if (ImageStatus == 3) {
+                if (requestCode == GALLERY_PICK_IMAGE_3 && resultCode == RESULT_OK) {
+                    Uri imgUri = data.getData();
+                    CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
+                }
+
+                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+                    dialog = new ProgressDialog(EditUserProfileActivity.this);
+                    dialog.setTitle(getString(R.string.uploading_image));
+                    dialog.setMessage(getString(R.string.uploading_image_msg));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
+                    CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
+                    //Saving Image1
+                    if (resultCode == RESULT_OK) {
+                        Uri resultUri = mResult.getUri();
+                        if (resultUri != null) {
+
+                            mStorage = FirebaseStorage.getInstance().getReference();
+                            StorageReference filePath = mStorage.child("user_images").child(mAuth.getCurrentUser().getUid()).child("Image3.jpg");
+
+                            filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        downloadURL = task.getResult().getDownloadUrl().toString();
+                                        toastySuccess(getString(R.string.image_uploaded));
+
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("image3", downloadURL);
+                                        mDatabase.updateChildren(user);
+
+                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage3);
+                                        dialog.dismiss();
+                                    } else {
+                                        toastyError(task.getException().getMessage());
+                                        dialog.hide();
+                                    }
+                                }
+                            });
+                        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                            Exception error = mResult.getError();
+                            toastyError(error.getMessage());
+                            dialog.hide();
+                        }
+                        ImageStatus = 0;
+                    }
+                }
+            }
+
+
+
+
+        } catch (Exception e) {
+            toastyError(e.getMessage());
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void updateUsername() {
@@ -192,11 +454,14 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 tvUsername.setText(username);
                 if (image != null && !Objects.equals(image, "")) {
                     Picasso.with(EditUserProfileActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
-                } else if (image1 != null && !Objects.equals(image1, "")) {
+                }
+                if (image1 != null && !Objects.equals(image1, "")) {
                     Picasso.with(EditUserProfileActivity.this).load(image1).placeholder(R.drawable.img_profile).into(ivImage1);
-                } else if (image2 != null && !Objects.equals(image2, "")) {
+                }
+                if (image2 != null && !Objects.equals(image2, "")) {
                     Picasso.with(EditUserProfileActivity.this).load(image2).placeholder(R.drawable.img_profile).into(ivImage2);
-                } else if (image3 != null && !Objects.equals(image3, "")) {
+                }
+                if (image3 != null && !Objects.equals(image3, "")) {
                     Picasso.with(EditUserProfileActivity.this).load(image3).placeholder(R.drawable.img_profile).into(ivImage3);
                 }
 
