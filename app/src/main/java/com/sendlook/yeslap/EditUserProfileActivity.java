@@ -2,12 +2,15 @@ package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
 import android.content.*;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -28,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.tooltip.Tooltip;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.util.HashMap;
@@ -107,7 +111,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnEditUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Functio to update username
+                //Function to update username
                 updateUsername();
             }
         });
@@ -160,6 +164,27 @@ public class EditUserProfileActivity extends AppCompatActivity {
             }
         });
 
+        //Event to show tooltip in cvImageUser
+        showTooltipUserImage();
+
+    }
+
+    private void showTooltipUserImage() {
+        final Tooltip tooltip = new Tooltip.Builder(cvImageUser)
+                .setText("Click here to change your picture")
+                .setTextColor(Color.WHITE)
+                .setGravity(Gravity.TOP)
+                .setBackgroundColor(getResources().getColor(R.color.colorDarkBlue))
+                .setCornerRadius(8f)
+                .setDismissOnClick(true)
+                .show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tooltip.dismiss();
+            }
+        }, 3000);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private FirebaseUser mUser;
     private FloatingActionButton btnEditUserProfile;
     private ImageView btnGotoProfile, btnGoToSettings;
+    private RelativeLayout btnChat, btnCalendar, btnSearch;
     private TextView tvUsername;
     private CircleImageView cvImageUser;
     private ProgressDialog dialog;
@@ -51,6 +53,9 @@ public class UserProfileActivity extends AppCompatActivity {
         btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
+        btnChat = (RelativeLayout) findViewById(R.id.btnChat);
+        btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
+        btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
 
         //Get the user data
         getUserData();
@@ -72,46 +77,48 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        /**btnGotoProfile.setOnClickListener(new View.OnClickListener() {
+        //btnCalendar Event Button
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toastyInfo("Soon");
+                Intent intent = new Intent(UserProfileActivity.this, CalendarActivity.class);
+                startActivity(intent);
             }
-        });*/
+        });
 
     }
 
     private void getUserData() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+        if (mAuth != null) {
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
-        dialog = new ProgressDialog(this);
-        dialog.setTitle(getString(R.string.loading));
-        dialog.setMessage(getString(R.string.loading_msg));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+            dialog = new ProgressDialog(this);
+            dialog.setTitle(getString(R.string.loading));
+            dialog.setMessage(getString(R.string.loading_msg));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                String image = dataSnapshot.child("image").getValue(String.class);
+            mDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String username = dataSnapshot.child("username").getValue(String.class);
+                    String image = dataSnapshot.child("image").getValue(String.class);
 
-                tvUsername.setText(username);
-                if (image != null && !Objects.equals(image, "")) {
-                    Picasso.with(UserProfileActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
+                    tvUsername.setText(username);
+                    if (image != null && !Objects.equals(image, "")) {
+                        Picasso.with(UserProfileActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
+                    }
+
+                    dialog.dismiss();
+
                 }
 
-                dialog.dismiss();
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
+                }
+            });
+        }
     }
 
     @Override
@@ -124,6 +131,13 @@ public class UserProfileActivity extends AppCompatActivity {
             sendToStart();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //mAuth.signOut();
+        toastyInfo("Destroy");
     }
 
     private void sendToStart() {

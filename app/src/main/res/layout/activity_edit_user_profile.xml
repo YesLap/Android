@@ -26,15 +26,22 @@
         android:layout_marginTop="15sp"
         android:src="@drawable/gotosetting" />
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="120sp"
+        android:layout_height="120sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/maskphotoprofileprincipal" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/cvImageUser"
-        android:layout_width="110sp"
-        android:layout_height="110sp"
+        android:layout_width="70sp"
+        android:layout_height="70sp"
+        android:layout_alignTop="@+id/btnGoToSettings"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80sp"
-        android:src="@drawable/img_profile"
-        app:civ_border_color="@color/colorDarkBlue"
-        app:civ_border_width="2sp" />
+        android:layout_marginTop="70dp"
+        android:src="@drawable/img_profile" />
 
     <RelativeLayout
         android:id="@+id/relUsername"
@@ -42,7 +49,7 @@
         android:layout_height="50sp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/cvImageUser"
-        android:layout_marginTop="7dp">
+        android:layout_marginTop="25dp">
 
         <TextView
             android:id="@+id/tvUsername"
@@ -50,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_marginTop="10sp"
             android:text="@string/username"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textStyle="bold" />
@@ -62,6 +70,7 @@
             android:layout_marginStart="5sp"
             android:layout_toEndOf="@+id/tvUsername"
             android:clickable="true"
+            app:backgroundTint="@color/colorFloatButtonBlue"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_create_white_24dp" />
 
@@ -74,11 +83,11 @@
         android:layout_height="170sp"
         android:layout_below="@+id/relUsername"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="150sp"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -96,8 +105,8 @@
 
                 <ImageView
                     android:id="@+id/ivImage1"
-                    android:layout_width="100sp"
-                    android:layout_height="100sp"
+                    android:layout_width="70sp"
+                    android:layout_height="70sp"
                     android:layout_below="@+id/imageView"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
@@ -110,8 +119,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="4sp"
+                    android:layout_marginBottom="5sp"
                     android:clickable="true"
+                    app:backgroundTint="@color/colorFloatButtonBlue"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_create_white_24dp" />
 
@@ -132,8 +142,8 @@
 
                 <ImageView
                     android:id="@+id/ivImage2"
-                    android:layout_width="100sp"
-                    android:layout_height="100sp"
+                    android:layout_width="70sp"
+                    android:layout_height="70sp"
                     android:layout_below="@+id/imageView2"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
@@ -145,9 +155,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="4sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="40dp"
                     android:clickable="true"
+                    android:layout_marginBottom="5sp"
+                    app:backgroundTint="@color/colorFloatButtonBlue"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_create_white_24dp" />
 
@@ -168,11 +180,11 @@
 
                 <ImageView
                     android:id="@+id/ivImage3"
-                    android:layout_width="100sp"
-                    android:layout_height="100sp"
+                    android:layout_width="70sp"
+                    android:layout_height="70sp"
                     android:layout_below="@+id/imageView3"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:background="@drawable/border_imageview_blue"
                     app:srcCompat="@drawable/img_profile" />
 
@@ -182,8 +194,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="4sp"
+                    android:layout_marginBottom="5sp"
                     android:clickable="true"
+                    app:backgroundTint="@color/colorFloatButtonBlue"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_create_white_24dp" />
 
@@ -193,13 +206,21 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:src="@drawable/wavebottom" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="300sp"
         android:layout_height="100sp"
+        android:layout_marginTop="-15sp"
         android:layout_below="@+id/relativeLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10sp"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -251,6 +272,7 @@
         </RelativeLayout>
 
     </LinearLayout>
+
 
 
 </RelativeLayout>
