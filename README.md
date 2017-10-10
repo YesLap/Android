@@ -46,7 +46,7 @@ git pushorigin master
 git tag -a 1.0.0 -m "mensagem" (aquele 1.0.0 devera ser substituido pela versao que voce commitou, e a mensagem devera descrever o que voce editou no projeto)
 ```
 
-7. Enviar a tag para o github
+7. Enviar a tag para o GitHub
 ```bash
 git push origin master --tags
 ```
