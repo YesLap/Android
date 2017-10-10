@@ -1,19 +1,14 @@
 package com.sendlook.yeslap;
 
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
-
-import es.dmoral.toasty.Toasty;
 
 public class CalendarActivity extends AppCompatActivity {
 
@@ -90,25 +85,9 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void setCalendar(ImageView image, ImageView toogle) {
         if (Objects.equals(toogle.getResources(), getDrawable(R.drawable.off))) {
-            toastyInfo("Click at the red button to enable");
+            Utils.toastyInfo(getApplicationContext(), getString(R.string.click_red_button));
         }
 
-    }
-
-    private void toastySuccess(String msg) {
-        Toasty.success(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyError(String msg) {
-        Toasty.error(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyInfo(String msg) {
-        Toasty.info(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyUsual(String msg, Drawable icon) {
-        Toasty.normal(getApplicationContext(), msg, Toast.LENGTH_LONG, icon).show();
     }
 
 }

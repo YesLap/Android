@@ -2,33 +2,26 @@ package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
-
-import es.dmoral.toasty.Toasty;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -63,13 +56,13 @@ public class SignUpActivity extends AppCompatActivity {
                 String retypePassword = etRetypePassword.getText().toString();
 
                 if (Objects.equals(email, "")) {
-                    toastyInfo(getString(R.string.fill_email));
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_email));
                 } else if (Objects.equals(password, "")) {
-                    toastyInfo(getString(R.string.fill_password));
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_password));
                 } else if (Objects.equals(retypePassword, "")) {
-                    toastyInfo(getString(R.string.retype_password));
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.retype_password));
                 } else if (!Objects.equals(password, retypePassword)){
-                    toastyInfo(getString(R.string.password_not_match));
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.password_not_match));
                 } else {
 
                     dialog = new ProgressDialog(SignUpActivity.this);
@@ -84,21 +77,21 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 //Fucntion to put the user data at Firebase Database
-                                mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                 HashMap<String, String> user = new HashMap<>();
-                                user.put("username", "");
-                                user.put("email", email);
-                                user.put("image", "");
-                                user.put("image1", "");
-                                user.put("image2", "");
-                                user.put("image3", "");
-                                user.put("since", getTime());
+                                user.put(Utils.USERNAME, "");
+                                user.put(Utils.EMAIL, email);
+                                user.put(Utils.IMAGE, "");
+                                user.put(Utils.IMAGE_1, "");
+                                user.put(Utils.IMAGE_2, "");
+                                user.put(Utils.IMAGE_3, "");
+                                user.put(Utils.SINCE, getTime());
                                 mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             dialog.dismiss();
-                                            toastySuccess("Account Created Successfully");
+                                            Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
                                             Intent intent = new Intent(SignUpActivity.this, UserProfileActivity.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(intent);
@@ -107,7 +100,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        toastyError(e.getMessage());
+                                        Utils.toastyError(getApplicationContext(), e.getMessage());
                                     }
                                 });
                             }
@@ -116,7 +109,7 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             dialog.dismiss();
-                            toastyError(e.getMessage());
+                            Utils.toastyError(getApplicationContext(), e.getMessage());
                         }
                     });
 
@@ -141,22 +134,6 @@ public class SignUpActivity extends AppCompatActivity {
         Date data = cal.getTime();
         cal.setTime(data);
         return String.valueOf(data.getTime());
-    }
-
-    private void toastySuccess(String msg) {
-        Toasty.success(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyError(String msg) {
-        Toasty.error(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyInfo(String msg) {
-        Toasty.info(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyUsual(String msg, Drawable icon) {
-        Toasty.normal(getApplicationContext(), msg, Toast.LENGTH_LONG, icon).show();
     }
 
 }

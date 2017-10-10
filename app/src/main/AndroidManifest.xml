@@ -39,7 +39,8 @@
         <activity
             android:name=".EditUserProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".CalendarActivity"></activity>
+        <activity android:name=".CalendarActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

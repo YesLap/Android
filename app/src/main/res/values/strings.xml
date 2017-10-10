@@ -10,7 +10,7 @@
     <string name="have_account">I have an account! Sign in</string>
     <string name="password_not_match">passwords don\'t match</string>
     <string name="insert_email">Insert your E-mail</string>
-    <string name="remenber_password">I remember my password, back to Sign in!</string>
+    <string name="remember_password">I remember my password, back to Sign in!</string>
     <string name="loading">Loading</string>
     <string name="loading_msg">Wait while we check yours credentials!</string>
     <string name="username">Username</string>
@@ -20,4 +20,10 @@
     <string name="uploading_image_msg">Please, wait while we upload your image</string>
     <string name="image_uploaded">Image Uploaded</string>
     <string name="error_upload">Error in Upload</string>
+    <string name="account_created">Account Created Successfully!</string>
+    <string name="password_resend">The instructions of password recovery was sended for your e-mail!</string>
+    <string name="username_changed">Username Changed Successfully!</string>
+    <string name="click_red_button">Click at the red button to enable</string>
+    <string name="msg_change_picture">Click here to change your picture</string>
+    <string name="change_username">Change your username</string>
 </resources>

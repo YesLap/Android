@@ -1,15 +1,13 @@
 package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -17,8 +15,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
-
-import es.dmoral.toasty.Toasty;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
@@ -51,7 +47,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString().trim();
 
                 if (Objects.equals(email, "")) {
-                    toastyInfo(getString(R.string.insert_email));
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.insert_email));
                 } else {
 
                     dialog = new ProgressDialog(ForgotPasswordActivity.this);
@@ -66,7 +62,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 dialog.dismiss();
-                                toastySuccess("The instructions of password recovery was sended for your email!");
+                                Utils.toastySuccess(getApplicationContext(), getString(R.string.password_resend));
                                 finish();
                             }
                         }
@@ -74,7 +70,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             dialog.dismiss();
-                            toastyError(e.getMessage());
+                            Utils.toastyError(getApplicationContext(), e.getMessage());
                         }
                     });
 
@@ -91,21 +87,5 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    private void toastySuccess(String msg) {
-        Toasty.success(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyError(String msg) {
-        Toasty.error(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyInfo(String msg) {
-        Toasty.info(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyUsual(String msg, Drawable icon) {
-        Toasty.normal(getApplicationContext(), msg, Toast.LENGTH_LONG, icon).show();
     }
 }

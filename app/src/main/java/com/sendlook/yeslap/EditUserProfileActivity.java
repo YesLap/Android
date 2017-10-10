@@ -1,21 +1,19 @@
 package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
-import android.content.*;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,7 +37,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import es.dmoral.toasty.Toasty;
 
 public class EditUserProfileActivity extends AppCompatActivity {
 
@@ -122,7 +119,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Image = 1;
                 Intent intentImage1 = new Intent();
-                intentImage1.setType("image/*");
+                intentImage1.setType(Utils.TYPE_IMAGE);
                 intentImage1.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_4);
             }
@@ -134,7 +131,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ImageStatus = 1;
                 Intent intentImage1 = new Intent();
-                intentImage1.setType("image/*");
+                intentImage1.setType(Utils.TYPE_IMAGE);
                 intentImage1.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_1);
             }
@@ -146,7 +143,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ImageStatus = 2;
                 Intent intentImage2 = new Intent();
-                intentImage2.setType("image/*");
+                intentImage2.setType(Utils.TYPE_IMAGE);
                 intentImage2.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intentImage2, getString(R.string.select_image)), GALLERY_PICK_IMAGE_2);
             }
@@ -158,7 +155,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ImageStatus = 3;
                 Intent intentImage3 = new Intent();
-                intentImage3.setType("image/*");
+                intentImage3.setType(Utils.TYPE_IMAGE);
                 intentImage3.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intentImage3, getString(R.string.select_image)), GALLERY_PICK_IMAGE_3);
             }
@@ -171,7 +168,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
     private void showTooltipUserImage() {
         final Tooltip tooltip = new Tooltip.Builder(cvImageUser)
-                .setText("Click here to change your picture")
+                .setText(R.string.msg_change_picture)
                 .setTextColor(Color.WHITE)
                 .setGravity(Gravity.TOP)
                 .setBackgroundColor(getResources().getColor(R.color.colorDarkBlue))
@@ -213,31 +210,31 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         if (resultUri != null) {
 
                             mStorage = FirebaseStorage.getInstance().getReference();
-                            StorageReference filePath = mStorage.child("user_images").child(mAuth.getCurrentUser().getUid()).child("Image.jpg");
+                            StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image.jpg");
 
                             filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
                                         downloadURL = task.getResult().getDownloadUrl().toString();
-                                        toastySuccess(getString(R.string.image_uploaded));
+                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put("image", downloadURL);
+                                        user.put(Utils.IMAGE, downloadURL);
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
                                         dialog.dismiss();
                                     } else {
-                                        toastyError(task.getException().getMessage());
+                                        Utils.toastyError(getApplicationContext(), task.getException().getMessage());
                                         dialog.hide();
                                     }
                                 }
                             });
                         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                             Exception error = mResult.getError();
-                            toastyError(error.getMessage());
+                            Utils.toastyError(getApplicationContext(), error.getMessage());
                             dialog.hide();
                         }
                         Image = 0;
@@ -265,31 +262,31 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         if (resultUri != null) {
 
                             mStorage = FirebaseStorage.getInstance().getReference();
-                            StorageReference filePath = mStorage.child("user_images").child(mAuth.getCurrentUser().getUid()).child("Image1.jpg");
+                            StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image1.jpg");
 
                             filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
                                         downloadURL = task.getResult().getDownloadUrl().toString();
-                                        toastySuccess(getString(R.string.image_uploaded));
+                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put("image1", downloadURL);
+                                        user.put(Utils.IMAGE_1, downloadURL);
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage1);
                                         dialog.dismiss();
                                     } else {
-                                        toastyError(task.getException().getMessage());
+                                        Utils.toastyError(getApplicationContext(), task.getException().getMessage());
                                         dialog.hide();
                                     }
                                 }
                             });
                         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                             Exception error = mResult.getError();
-                            toastyError(error.getMessage());
+                            Utils.toastyError(getApplicationContext(), error.getMessage());
                             dialog.hide();
                         }
                         ImageStatus = 0;
@@ -317,31 +314,31 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         if (resultUri != null) {
 
                             mStorage = FirebaseStorage.getInstance().getReference();
-                            StorageReference filePath = mStorage.child("user_images").child(mAuth.getCurrentUser().getUid()).child("Image2.jpg");
+                            StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image2.jpg");
 
                             filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
                                         downloadURL = task.getResult().getDownloadUrl().toString();
-                                        toastySuccess(getString(R.string.image_uploaded));
+                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put("image2", downloadURL);
+                                        user.put(Utils.IMAGE_2, downloadURL);
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage2);
                                         dialog.dismiss();
                                     } else {
-                                        toastyError(task.getException().getMessage());
+                                        Utils.toastyError(getApplicationContext(), task.getException().getMessage());
                                         dialog.hide();
                                     }
                                 }
                             });
                         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                             Exception error = mResult.getError();
-                            toastyError(error.getMessage());
+                            Utils.toastyError(getApplicationContext(), error.getMessage());
                             dialog.hide();
                         }
                         ImageStatus = 0;
@@ -369,31 +366,31 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         if (resultUri != null) {
 
                             mStorage = FirebaseStorage.getInstance().getReference();
-                            StorageReference filePath = mStorage.child("user_images").child(mAuth.getCurrentUser().getUid()).child("Image3.jpg");
+                            StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image3.jpg");
 
                             filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
                                         downloadURL = task.getResult().getDownloadUrl().toString();
-                                        toastySuccess(getString(R.string.image_uploaded));
+                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put("image3", downloadURL);
+                                        user.put(Utils.IMAGE_3, downloadURL);
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage3);
                                         dialog.dismiss();
                                     } else {
-                                        toastyError(task.getException().getMessage());
+                                        Utils.toastyError(getApplicationContext(), task.getException().getMessage());
                                         dialog.hide();
                                     }
                                 }
                             });
                         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                             Exception error = mResult.getError();
-                            toastyError(error.getMessage());
+                            Utils.toastyError(getApplicationContext(), error.getMessage());
                             dialog.hide();
                         }
                         ImageStatus = 0;
@@ -405,7 +402,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            toastyError(e.getMessage());
+            Utils.toastyError(getApplicationContext(), e.getMessage());
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -415,8 +412,8 @@ public class EditUserProfileActivity extends AppCompatActivity {
         //Dialog to change the user name
         new LovelyTextInputDialog(EditUserProfileActivity.this, R.style.EditTextTintTheme)
                 .setTopColorRes(R.color.colorDarkBlue)
-                .setTitle("Change your Username")
-                //.setMessage("Change yout username")
+                .setTitle(R.string.change_username)
+                //.setMessage("Change your username")
                 .setIcon(R.drawable.ic_create_white_24dp)
                 .setInputFilter(R.string.text_input_error_message, new LovelyTextInputDialog.TextFilter() {
                     @Override
@@ -435,22 +432,22 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         dialog.show();
 
                         //Function to save the user data at Firebase: Users > UID > user data
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         Map<String, Object> user = new HashMap<>();
-                        user.put("username", text);
+                        user.put(Utils.USERNAME, text);
                         mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     dialog.dismiss();
-                                    toastySuccess("Username Changed Successfully!");
+                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.username_changed));
                                 }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 dialog.dismiss();
-                                toastyError(e.getMessage());
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
                             }
                         });
                     }
@@ -459,7 +456,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     }
 
     private void getUserData() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
 
         dialog = new ProgressDialog(this);
         dialog.setTitle(getString(R.string.loading));
@@ -470,11 +467,11 @@ public class EditUserProfileActivity extends AppCompatActivity {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                String image = dataSnapshot.child("image").getValue(String.class);
-                String image1 = dataSnapshot.child("image1").getValue(String.class);
-                String image2 = dataSnapshot.child("image2").getValue(String.class);
-                String image3 = dataSnapshot.child("image3").getValue(String.class);
+                String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+                String image = dataSnapshot.child(Utils.IMAGE).getValue(String.class);
+                String image1 = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
+                String image2 = dataSnapshot.child(Utils.IMAGE_2).getValue(String.class);
+                String image3 = dataSnapshot.child(Utils.IMAGE_3).getValue(String.class);
 
                 tvUsername.setText(username);
                 if (image != null && !Objects.equals(image, "")) {
@@ -501,22 +498,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    private void toastySuccess(String msg) {
-        Toasty.success(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyError(String msg) {
-        Toasty.error(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyInfo(String msg) {
-        Toasty.info(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyUsual(String msg, Drawable icon) {
-        Toasty.normal(getApplicationContext(), msg, Toast.LENGTH_LONG, icon).show();
     }
 
 }

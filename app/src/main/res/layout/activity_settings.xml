@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.sendlook.yeslap.UserProfileActivity">
+
+    <ImageView
+        android:id="@+id/btnGoToProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="30sp"
+        android:layout_marginTop="15sp"
+        android:src="@drawable/gotoprofile" />
+
+    <ImageView
+        android:id="@+id/btnGoToSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="30sp"
+        android:layout_marginTop="15sp"
+        android:src="@drawable/gotosetting" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="120sp"
+        android:layout_height="120sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/maskphotoprofileprincipal" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/cvImageUser"
+        android:layout_width="70sp"
+        android:layout_height="70sp"
+        android:layout_alignTop="@+id/btnGoToSettings"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:src="@drawable/img_profile" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cvImageUser"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/username"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="300sp"
+        android:layout_height="100sp"
+        android:layout_below="@+id/tvUsername"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20sp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/btnChat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorDarkBlue">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/iconchatwhite" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btnCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorLightBlue">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/iconcalendarwhite" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btnSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorDarkBlue">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/iconfindwhite" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnEditUserProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView4"
+        android:layout_alignEnd="@+id/imageView4"
+        android:layout_marginBottom="13dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorLightBlue"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_create_white_24dp" />
+
+    <ImageView
+        android:id="@+id/btnFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        app:srcCompat="@drawable/iconfavoriteorange" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:src="@drawable/wavebottom" />
+
+</RelativeLayout>

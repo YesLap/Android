@@ -2,15 +2,13 @@ package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,7 +22,6 @@ import com.squareup.picasso.Picasso;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import es.dmoral.toasty.Toasty;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -73,7 +70,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnGoToSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toastyInfo("Soon!");
+                Utils.toastyInfo(getApplicationContext(), "Soon!");
             }
         });
 
@@ -89,8 +86,8 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void getUserData() {
-        if (mAuth != null) {
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+        if (mAuth != null && mAuth.getCurrentUser() != null) {
+            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
 
             dialog = new ProgressDialog(this);
             dialog.setTitle(getString(R.string.loading));
@@ -101,8 +98,8 @@ public class UserProfileActivity extends AppCompatActivity {
             mDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String username = dataSnapshot.child("username").getValue(String.class);
-                    String image = dataSnapshot.child("image").getValue(String.class);
+                    String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+                    String image = dataSnapshot.child(Utils.IMAGE).getValue(String.class);
 
                     tvUsername.setText(username);
                     if (image != null && !Objects.equals(image, "")) {
@@ -137,7 +134,7 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //mAuth.signOut();
-        toastyInfo("Destroy");
+        Utils.toastyInfo(getApplicationContext(), "Destroy");
     }
 
     private void sendToStart() {
@@ -146,22 +143,6 @@ public class UserProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(UserProfileActivity.this, SignInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
-
-    private void toastySuccess(String msg) {
-        Toasty.success(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyError(String msg) {
-        Toasty.error(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyInfo(String msg) {
-        Toasty.info(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyUsual(String msg, Drawable icon) {
-        Toasty.normal(getApplicationContext(), msg, Toast.LENGTH_LONG, icon).show();
     }
 
 }

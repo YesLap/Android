@@ -2,15 +2,13 @@ package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,8 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.Objects;
-
-import es.dmoral.toasty.Toasty;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -58,9 +54,9 @@ public class SignInActivity extends AppCompatActivity {
 
                 //Make sure the fields are empty
                 if (Objects.equals(email, "")) {
-                    toastyInfo(getString(R.string.fill_email));
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_email));
                 } else if (Objects.equals(password, "")) {
-                    toastyInfo(getString(R.string.fill_password));
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_password));
                 } else {
 
                     dialog = new ProgressDialog(SignInActivity.this);
@@ -84,7 +80,7 @@ public class SignInActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             dialog.dismiss();
-                            toastyError(e.getMessage());
+                            Utils.toastyError(getApplicationContext(), e.getMessage());
                         }
                     });
                 }
@@ -110,22 +106,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void toastySuccess(String msg) {
-        Toasty.success(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyError(String msg) {
-        Toasty.error(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyInfo(String msg) {
-        Toasty.info(getApplicationContext(), msg, Toast.LENGTH_LONG, true).show();
-    }
-
-    private void toastyUsual(String msg, Drawable icon) {
-        Toasty.normal(getApplicationContext(), msg, Toast.LENGTH_LONG, icon).show();
     }
 
 }

@@ -1,2 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">YesLap</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="create_account">Você ainda não tem uma conta? Crie uma conta</string>
+    <string name="forgot_password">Esqueceu a senha?</string>
+    <string name="fill_email">Preencha o campo de E-mail</string>
+    <string name="fill_password">Preencha o campo de Senha</string>
+    <string name="retype_password">Digite novamente a Senha</string>
+    <string name="have_account">Eu tenho uma conta! Entrar</string>
+    <string name="password_not_match">Senhas não combinam</string>
+    <string name="insert_email">Insira seu E-mail</string>
+    <string name="remember_password">Eu lembro minha senha, voltar ao Entrar!</string>
+    <string name="loading">Carregando</string>
+    <string name="loading_msg">Aguarda enquanto nós checamos suas credenciais!</string>
+    <string name="username">Username</string>
+    <string name="text_input_error_message">Por favor, insera um Username!</string>
+    <string name="select_image">Selecione uma Imagem</string>
+    <string name="uploading_image">Enviando a Imagem</string>
+    <string name="uploading_image_msg">Por favor, aguarde enquanto nos enviamos sua imagem</string>
+    <string name="image_uploaded">Imagem Enviada</string>
+    <string name="error_upload">Erro ao Enviar</string>
+    <string name="account_created">Conta criada com sucesso!</string>
+    <string name="password_resend">As instruções para recupera a senha foram enviadas para seu e-mail!</string>
+    <string name="username_changed">Username alterado com sucesso!</string>
+    <string name="click_red_button">Clique no botão vermelho para ativar</string>
+    <string name="msg_change_picture">Clique aqui para mudar sua foto</string>
+    <string name="change_username">Altere seu username</string>
+</resources>
