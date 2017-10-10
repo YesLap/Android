@@ -1,5 +1,11 @@
 package com.sendlook.yeslap;
 
+<<<<<<< HEAD
+=======
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.support.v7.app.AppCompatActivity;
+>>>>>>> 1.0.12
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,6 +24,7 @@ public class CalendarActivity extends AppCompatActivity {
     private ImageView ivAfternoonSun, ivAfternoonMon, ivAfternoonTue, ivAfternoonWed, ivAfternoonThu, ivAfternoonFri, ivAfternoonSat;
     private ImageView ivNightSun, ivNightMon, ivNightTue, ivNightWed, ivNightThu, ivNightFri, ivNightSat;
     private ImageView ivAvailabilitySun, ivAvailabilityMon, ivAvailabilityTue, ivAvailabilityWed, ivAvailabilityThu, ivAvailabilityFri, ivAvailabilitySat;
+    private ImageView btnGoToProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,8 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         mAuth = FirebaseAuth.getInstance();
+
+        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToSettings);
 
         ivMorningSun = (ImageView) findViewById(R.id.ivMorningSun);
         ivMorningMon = (ImageView) findViewById(R.id.ivMorningMon);
@@ -58,6 +67,12 @@ public class CalendarActivity extends AppCompatActivity {
         ivAvailabilityFri = (ImageView) findViewById(R.id.ivAvailabilityFri);
         ivAvailabilitySat = (ImageView) findViewById(R.id.ivAvailabilitySat);
 
+        btnGoToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         ivMorningSun.setOnClickListener(new View.OnClickListener() {
             @Override

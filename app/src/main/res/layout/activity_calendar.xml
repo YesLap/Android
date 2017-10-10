@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/linearLayout"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:id="@+id/relativeLayout2">
 
         <ImageView
@@ -95,6 +95,7 @@
         android:id="@+id/relativeLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
         android:layout_alignStart="@+id/relativeLayout4"
         android:layout_below="@+id/relativeLayout2">
 
@@ -158,6 +159,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
         android:layout_alignStart="@+id/relativeLayout2"
         android:layout_below="@+id/relativeLayout3"
         android:id="@+id/relativeLayout4">
@@ -221,6 +223,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
         android:layout_alignStart="@+id/relativeLayout4"
         android:layout_below="@+id/relativeLayout4"
         android:id="@+id/relativeLayout5">
@@ -285,6 +288,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
         android:layout_alignStart="@+id/relativeLayout5"
         android:layout_below="@+id/relativeLayout5"
         android:id="@+id/relativeLayout6">
@@ -367,6 +371,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
+        android:layout_marginTop="5sp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/relativeLayout6"
         android:layout_below="@+id/relativeLayout6"
@@ -433,6 +438,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout8"
         android:layout_width="wrap_content"
+        android:layout_marginTop="5sp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/relativeLayout7"
         android:layout_below="@+id/relativeLayout7">

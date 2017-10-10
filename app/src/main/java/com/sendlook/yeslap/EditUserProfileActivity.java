@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -46,7 +47,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private TextView tvUsername;
     private RelativeLayout btnChat, btnCalendar, btnSearch;
     private FloatingActionButton btnEditUserProfile, btnEditUsername, btnChangeImage1, btnChangeImage2, btnChangeImage3;
-    private ImageView ivImage1, ivImage2, ivImage3;
+    private RoundedImageView ivImage1, ivImage2, ivImage3;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private StorageReference mStorage;
@@ -81,9 +82,9 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnChangeImage1 = (FloatingActionButton) findViewById(R.id.btnChamgeImage1);
         btnChangeImage2 = (FloatingActionButton) findViewById(R.id.btnChangeImage2);
         btnChangeImage3 = (FloatingActionButton) findViewById(R.id.btnChangeImage3);
-        ivImage1 = (ImageView) findViewById(R.id.ivImage1);
-        ivImage2 = (ImageView) findViewById(R.id.ivImage2);
-        ivImage3 = (ImageView) findViewById(R.id.ivImage3);
+        ivImage1 = (RoundedImageView) findViewById(R.id.ivImage1);
+        ivImage2 = (RoundedImageView) findViewById(R.id.ivImage2);
+        ivImage3 = (RoundedImageView) findViewById(R.id.ivImage3);
 
         //Function to get the user data
         getUserData();

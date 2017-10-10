@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.6'
     implementation 'com.github.vihtarb:tooltip:0.1.9'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
+    implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 
     implementation 'com.google.firebase:firebase-auth:11.4.2'
     implementation 'com.google.firebase:firebase-database:11.4.2'
