@@ -26,7 +26,7 @@ git add . (não esqueça de colocar o ponto)
 
 3. E em seguida dar um commit
 ```bash
-git commit -m "versaodocommit" (esta versão voce tera que chegar la no repositorio do github (https://github.com/YesLap/Android/releases) qual foi a ultima versao lançada e acrescentar uma a mais, ex, se a ultima for 1.0.9 voce devera colcoar 1.0.10)
+git commit -m "versaodocommit" (esta versão voce tera que chegar la no repositorio do GitHub [Releases](https://github.com/YesLap/Android/releases) qual foi a ultima versao lançada e acrescentar uma a mais, ex, se a ultima for 1.0.9 voce devera colcoar 1.0.10)
 ```
 
 4. Depois disso deverá voltar para a branch master
@@ -38,7 +38,7 @@ git checkout master
 ```bash
 git rebase nomedasuabranch (ex: edit-userprofile-rodrigo)
 git pull --rebase origin master
-git pushorigin master
+git push origin master
 ```
 
 6. Depois disso acrescentar uma tag com o que foi feito no projeto
