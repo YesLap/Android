@@ -1,4 +1,4 @@
-## Instruções para iniciar e mandar modificaçes feitas no código do App
+## Instruções para mandar modificaçes feitas no código do App Android
 
 Primeira coisa a se fazer, clonar o projeto do GitHub, para isso deves abrir o git no seu terminal primeiro, crie uma nova pasta para por o projeto nela  e abra o Git nessa pasta
 
