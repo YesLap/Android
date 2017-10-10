@@ -24,7 +24,7 @@ git checkout -b "nomedabranch" (para seguir um padrão colocar o nome da seguint
 git add . (não esqueça de colocar o ponto)
 ```
 
-3. E em seguida dar um commit
+3. E em seguida dar um commit ([Releases](https://github.com/YesLap/Android/releases))
 ```bash
 git commit -m "versaodocommit" (esta versão voce tera que chegar la no repositorio do GitHub [Releases](https://github.com/YesLap/Android/releases) qual foi a ultima versao lançada e acrescentar uma a mais, ex, se a ultima for 1.0.9 voce devera colcoar 1.0.10)
 ```
