@@ -1,16 +1,27 @@
 package com.sendlook.yeslap;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ToggleButton;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -20,8 +31,10 @@ public class CalendarActivity extends AppCompatActivity {
     private ImageView ivMorningSun, ivMorningMon, ivMorningTue, ivMorningWed, ivMorningThu, ivMorningFri, ivMorningSat;
     private ImageView ivAfternoonSun, ivAfternoonMon, ivAfternoonTue, ivAfternoonWed, ivAfternoonThu, ivAfternoonFri, ivAfternoonSat;
     private ImageView ivNightSun, ivNightMon, ivNightTue, ivNightWed, ivNightThu, ivNightFri, ivNightSat;
-    private ImageView ivAvailabilitySun, ivAvailabilityMon, ivAvailabilityTue, ivAvailabilityWed, ivAvailabilityThu, ivAvailabilityFri, ivAvailabilitySat;
-    private ImageView btnGoToProfile;
+    private ToggleButton tbAvailabilitySun, tbAvailabilityMon, tbAvailabilityTue, tbAvailabilityWed, tbAvailabilityThu, tbAvailabilityFri, tbAvailabilitySat;
+    private ImageView btnGoToProfile, btnGoToSettings;
+    private RelativeLayout btnCalendar, btnChat, btnSearch;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +43,12 @@ public class CalendarActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToSettings);
+        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
+        btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
+
+        btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
+        btnChat = (RelativeLayout) findViewById(R.id.btnChat);
+        btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
 
         ivMorningSun = (ImageView) findViewById(R.id.ivMorningSun);
         ivMorningMon = (ImageView) findViewById(R.id.ivMorningMon);
@@ -56,13 +74,13 @@ public class CalendarActivity extends AppCompatActivity {
         ivNightFri = (ImageView) findViewById(R.id.ivNightFri);
         ivNightSat = (ImageView) findViewById(R.id.ivNightSat);
 
-        ivAvailabilitySun = (ImageView) findViewById(R.id.ivAvailabilitySun);
-        ivAvailabilityMon = (ImageView) findViewById(R.id.ivAvailabilityMon);
-        ivAvailabilityTue = (ImageView) findViewById(R.id.ivAvailabilityTue);
-        ivAvailabilityWed = (ImageView) findViewById(R.id.ivAvailabilityWed);
-        ivAvailabilityThu = (ImageView) findViewById(R.id.ivAvailabilityThu);
-        ivAvailabilityFri = (ImageView) findViewById(R.id.ivAvailabilityFri);
-        ivAvailabilitySat = (ImageView) findViewById(R.id.ivAvailabilitySat);
+        tbAvailabilitySun = (ToggleButton) findViewById(R.id.tbAvailabilitySun);
+        tbAvailabilityMon = (ToggleButton) findViewById(R.id.tbAvailabilityMon);
+        tbAvailabilityTue = (ToggleButton) findViewById(R.id.tbAvailabilityTue);
+        tbAvailabilityWed = (ToggleButton) findViewById(R.id.tbAvailabilityWed);
+        tbAvailabilityThu = (ToggleButton) findViewById(R.id.tbAvailabilityThu);
+        tbAvailabilityFri = (ToggleButton) findViewById(R.id.tbAvailabilityFri);
+        tbAvailabilitySat = (ToggleButton) findViewById(R.id.tbAvailabilitySat);
 
         btnGoToProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,33 +89,220 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
+        btnGoToSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CalendarActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.toastyInfo(getApplicationContext(), "Are you already here!");
+            }
+        });
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.toastyInfo(getApplicationContext(), "Soon");
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.toastyInfo(getApplicationContext(), "Soon");
+            }
+        });
+
+        //SUNDAY
         ivMorningSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar("Sun" ,ivMorningSun, ivAvailabilitySun);
+                setCalendar(Utils.SUNDAY, Utils.MORNING, tbAvailabilitySun);
             }
         });
 
         ivAfternoonSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar("Sun" ,ivAfternoonSun, ivAfternoonSun);
+                setCalendar(Utils.SUNDAY, Utils.AFTERNOON, tbAvailabilitySun);
             }
         });
 
         ivNightSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar("Sun" ,ivNightSun, ivAfternoonSun);
+                setCalendar(Utils.SUNDAY, Utils.NIGHT, tbAvailabilitySun);
             }
         });
 
+        //MONDAY
+        ivMorningMon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.MONDAY, Utils.MORNING, tbAvailabilitySun);
+            }
+        });
+
+        ivAfternoonMon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.MONDAY, Utils.AFTERNOON, tbAvailabilitySun);
+            }
+        });
+
+        ivNightMon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.MONDAY, Utils.NIGHT, tbAvailabilitySun);
+            }
+        });
+
+        //TUESDAY
+        ivMorningTue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.TUESDAY, Utils.MORNING, tbAvailabilitySun);
+            }
+        });
+
+        ivAfternoonTue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.TUESDAY, Utils.AFTERNOON, tbAvailabilitySun);
+            }
+        });
+
+        ivNightTue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.TUESDAY, Utils.NIGHT, tbAvailabilitySun);
+            }
+        });
+
+        //WEDNESDAY
+        ivMorningWed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.WEDNESDAY, Utils.MORNING, tbAvailabilitySun);
+            }
+        });
+
+        ivAfternoonWed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.WEDNESDAY, Utils.AFTERNOON, tbAvailabilitySun);
+            }
+        });
+
+        ivNightWed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.WEDNESDAY, Utils.NIGHT, tbAvailabilitySun);
+            }
+        });
+
+        //THURSDAY
+        ivMorningThu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.THURSDAY, Utils.MORNING, tbAvailabilitySun);
+            }
+        });
+
+        ivAfternoonThu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.THURSDAY, Utils.AFTERNOON, tbAvailabilitySun);
+            }
+        });
+
+        ivNightThu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.THURSDAY, Utils.NIGHT, tbAvailabilitySun);
+            }
+        });
+
+        //FRIDAY
+        ivMorningFri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.FRIDAY, Utils.MORNING, tbAvailabilitySun);
+            }
+        });
+
+        ivAfternoonFri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.FRIDAY, Utils.AFTERNOON, tbAvailabilitySun);
+            }
+        });
+
+        ivNightFri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.FRIDAY, Utils.NIGHT, tbAvailabilitySun);
+            }
+        });
+
+        //SATURDAY
+        ivMorningSat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.SATURDAY, Utils.MORNING, tbAvailabilitySun);
+            }
+        });
+
+        ivAfternoonSat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.SATURDAY, Utils.AFTERNOON, tbAvailabilitySun);
+            }
+        });
+
+        ivNightSat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCalendar(Utils.SATURDAY, Utils.NIGHT, tbAvailabilitySun);
+            }
+        });
 
     }
 
-    private void setCalendar(String week,ImageView image, ImageView toogle) {
-        if (Objects.equals(toogle.getResources(), getDrawable(R.drawable.off))) {
-            Utils.toastyInfo(getApplicationContext(), getString(R.string.click_red_button));
+    private void setCalendar(String week, String state, ToggleButton toogle) {
+        //Check if the button is activated
+        if (!toogle.isChecked()) {
+            Utils.toastyInfo(getApplicationContext(), "Please, active the button");
+        } else {
+            //Dialog
+            dialog = new ProgressDialog(CalendarActivity.this);
+            dialog.setMessage(getString(R.string.loading));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+
+            //Saving at the Firebase
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("calendar").child(week).child(state);
+            HashMap<String, String> uid = new HashMap<>();
+            uid.put("uid", mAuth.getCurrentUser().getUid());
+            mDatabase.setValue(uid).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        dialog.dismiss();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                }
+            });
+
         }
 
     }

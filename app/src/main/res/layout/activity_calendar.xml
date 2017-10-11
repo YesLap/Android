@@ -80,14 +80,18 @@
             android:layout_toEndOf="@+id/ivAfternoonSun"
             android:src="@drawable/iconnightoff" />
 
-        <ImageView
-            android:id="@+id/ivAvailabilitySun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/tbAvailabilitySun"
+            android:layout_width="55sp"
+            android:layout_height="35sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
             android:layout_toEndOf="@+id/ivNightSun"
-            android:background="@drawable/off" />
+            android:background="@drawable/toggle_selector"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
 
     </RelativeLayout>
 
@@ -145,14 +149,18 @@
             android:layout_toEndOf="@+id/ivAfternoonMon"
             android:src="@drawable/iconnightoff" />
 
-        <ImageView
-            android:id="@+id/ivAvailabilityMon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/tbAvailabilityMon"
+            android:layout_width="55sp"
+            android:layout_height="35sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
             android:layout_toEndOf="@+id/ivNightMon"
-            android:src="@drawable/off" />
+            android:background="@drawable/toggle_selector"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
 
     </RelativeLayout>
 
@@ -210,14 +218,18 @@
             android:layout_toEndOf="@+id/ivAfternoonTue"
             android:src="@drawable/iconnightoff" />
 
-        <ImageView
-            android:id="@+id/ivAvailabilityTue"
-            android:src="@drawable/off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/tbAvailabilityTue"
+            android:layout_width="55sp"
+            android:layout_height="35sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightTue" />
+            android:layout_toEndOf="@+id/ivNightTue"
+            android:background="@drawable/toggle_selector"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -274,14 +286,18 @@
             android:layout_toEndOf="@+id/ivAfternoonWed"
             android:src="@drawable/iconnightoff" />
 
-        <ImageView
-            android:id="@+id/ivAvailabilityWed"
-            android:src="@drawable/off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/tbAvailabilityWed"
+            android:layout_width="55sp"
+            android:layout_height="35sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightWed" />
+            android:layout_toEndOf="@+id/ivNightWed"
+            android:background="@drawable/toggle_selector"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
 
     </RelativeLayout>
 
@@ -358,14 +374,18 @@
             android:layout_toEndOf="@+id/ivAfternoonThu"
             android:src="@drawable/iconnightoff" />
 
-        <ImageView
-            android:id="@+id/ivAvailabilityThu"
-            android:src="@drawable/off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/tbAvailabilityThu"
+            android:layout_width="55sp"
+            android:layout_height="35sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightThu" />
+            android:layout_toEndOf="@+id/ivNightThu"
+            android:background="@drawable/toggle_selector"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
 
     </RelativeLayout>
 
@@ -424,14 +444,18 @@
             android:layout_toEndOf="@+id/ivAfternoonFri"
             android:src="@drawable/iconnightoff" />
 
-        <ImageView
-            android:id="@+id/ivAvailabilityFri"
-            android:src="@drawable/off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/tbAvailabilityFri"
+            android:layout_width="55sp"
+            android:layout_height="35sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightFri" />
+            android:layout_toEndOf="@+id/ivNightFri"
+            android:background="@drawable/toggle_selector"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
 
     </RelativeLayout>
 
@@ -489,14 +513,18 @@
             android:layout_toEndOf="@+id/ivAfternoonSat"
             android:src="@drawable/iconnightoff" />
 
-        <ImageView
-            android:id="@+id/ivAvailabilitySat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/tbAvailabilitySat"
+            android:layout_width="55sp"
+            android:layout_height="35sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
             android:layout_toEndOf="@+id/ivNightSat"
-            android:src="@drawable/off" />
+            android:background="@drawable/toggle_selector"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
 
     </RelativeLayout>
 
