@@ -80,12 +80,12 @@ public class SignUpActivity extends AppCompatActivity {
                                 mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                 HashMap<String, String> user = new HashMap<>();
                                 user.put(Utils.USERNAME, "");
-                                user.put(Utils.EMAIL, email);
+                                user.put(Utils.EMAIL, Base64Custom.encodeBase64(email));
                                 user.put(Utils.IMAGE, "");
                                 user.put(Utils.IMAGE_1, "");
                                 user.put(Utils.IMAGE_2, "");
                                 user.put(Utils.IMAGE_3, "");
-                                user.put(Utils.SINCE, getTime());
+                                //user.put(Utils.SINCE, getTime());
                                 mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {

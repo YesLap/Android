@@ -11,14 +11,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -144,21 +148,21 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.MONDAY, Utils.MORNING, tbAvailabilitySun);
+                setCalendar(Utils.MONDAY, Utils.MORNING, tbAvailabilityMon);
             }
         });
 
         ivAfternoonMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.MONDAY, Utils.AFTERNOON, tbAvailabilitySun);
+                setCalendar(Utils.MONDAY, Utils.AFTERNOON, tbAvailabilityMon);
             }
         });
 
         ivNightMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.MONDAY, Utils.NIGHT, tbAvailabilitySun);
+                setCalendar(Utils.MONDAY, Utils.NIGHT, tbAvailabilityMon);
             }
         });
 
@@ -166,21 +170,21 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningTue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.TUESDAY, Utils.MORNING, tbAvailabilitySun);
+                setCalendar(Utils.TUESDAY, Utils.MORNING, tbAvailabilityTue);
             }
         });
 
         ivAfternoonTue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.TUESDAY, Utils.AFTERNOON, tbAvailabilitySun);
+                setCalendar(Utils.TUESDAY, Utils.AFTERNOON, tbAvailabilityTue);
             }
         });
 
         ivNightTue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.TUESDAY, Utils.NIGHT, tbAvailabilitySun);
+                setCalendar(Utils.TUESDAY, Utils.NIGHT, tbAvailabilityTue);
             }
         });
 
@@ -188,21 +192,21 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningWed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.WEDNESDAY, Utils.MORNING, tbAvailabilitySun);
+                setCalendar(Utils.WEDNESDAY, Utils.MORNING, tbAvailabilityWed);
             }
         });
 
         ivAfternoonWed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.WEDNESDAY, Utils.AFTERNOON, tbAvailabilitySun);
+                setCalendar(Utils.WEDNESDAY, Utils.AFTERNOON, tbAvailabilityWed);
             }
         });
 
         ivNightWed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.WEDNESDAY, Utils.NIGHT, tbAvailabilitySun);
+                setCalendar(Utils.WEDNESDAY, Utils.NIGHT, tbAvailabilityWed);
             }
         });
 
@@ -210,21 +214,21 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.THURSDAY, Utils.MORNING, tbAvailabilitySun);
+                setCalendar(Utils.THURSDAY, Utils.MORNING, tbAvailabilityThu);
             }
         });
 
         ivAfternoonThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.THURSDAY, Utils.AFTERNOON, tbAvailabilitySun);
+                setCalendar(Utils.THURSDAY, Utils.AFTERNOON, tbAvailabilityThu);
             }
         });
 
         ivNightThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.THURSDAY, Utils.NIGHT, tbAvailabilitySun);
+                setCalendar(Utils.THURSDAY, Utils.NIGHT, tbAvailabilityThu);
             }
         });
 
@@ -232,21 +236,21 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningFri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.FRIDAY, Utils.MORNING, tbAvailabilitySun);
+                setCalendar(Utils.FRIDAY, Utils.MORNING, tbAvailabilityFri);
             }
         });
 
         ivAfternoonFri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.FRIDAY, Utils.AFTERNOON, tbAvailabilitySun);
+                setCalendar(Utils.FRIDAY, Utils.AFTERNOON, tbAvailabilityFri);
             }
         });
 
         ivNightFri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.FRIDAY, Utils.NIGHT, tbAvailabilitySun);
+                setCalendar(Utils.FRIDAY, Utils.NIGHT, tbAvailabilityFri);
             }
         });
 
@@ -254,21 +258,21 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningSat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SATURDAY, Utils.MORNING, tbAvailabilitySun);
+                setCalendar(Utils.SATURDAY, Utils.MORNING, tbAvailabilitySat);
             }
         });
 
         ivAfternoonSat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SATURDAY, Utils.AFTERNOON, tbAvailabilitySun);
+                setCalendar(Utils.SATURDAY, Utils.AFTERNOON, tbAvailabilitySat);
             }
         });
 
         ivNightSat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SATURDAY, Utils.NIGHT, tbAvailabilitySun);
+                setCalendar(Utils.SATURDAY, Utils.NIGHT, tbAvailabilitySat);
             }
         });
 
@@ -288,7 +292,7 @@ public class CalendarActivity extends AppCompatActivity {
             //Saving at the Firebase
             mDatabase = FirebaseDatabase.getInstance().getReference().child("calendar").child(week).child(state);
             HashMap<String, String> uid = new HashMap<>();
-            uid.put("uid", mAuth.getCurrentUser().getUid());
+            uid.put("uid", Base64Custom.encodeBase64(mAuth.getCurrentUser().getUid()));
             mDatabase.setValue(uid).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -306,5 +310,6 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
     }
+
 
 }

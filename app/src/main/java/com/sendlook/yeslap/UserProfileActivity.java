@@ -109,13 +109,13 @@ public class UserProfileActivity extends AppCompatActivity {
                     String image = dataSnapshot.child(Utils.IMAGE).getValue(String.class);
 
                     if (!(username == null || Objects.equals(username, ""))) {
-                        tvUsername.setText(username);
+                        tvUsername.setText(Base64Custom.decodeBase64(username));
                     } else {
                         tvUsername.setText("Username");
                     }
                     
                     if (image != null && !Objects.equals(image, "")) {
-                        Picasso.with(UserProfileActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
+                        Picasso.with(UserProfileActivity.this).load(Base64Custom.decodeBase64(image)).placeholder(R.drawable.img_profile).into(cvImageUser);
                     }
 
                     dialog.dismiss();

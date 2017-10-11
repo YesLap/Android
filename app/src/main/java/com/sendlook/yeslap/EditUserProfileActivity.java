@@ -30,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.tooltip.Tooltip;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.util.HashMap;
@@ -202,7 +201,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE, downloadURL);
+                                        user.put(Utils.IMAGE, Base64Custom.encodeBase64(downloadURL));
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
@@ -254,7 +253,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_1, downloadURL);
+                                        user.put(Utils.IMAGE_1, Base64Custom.encodeBase64(downloadURL));
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage1);
@@ -306,7 +305,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_2, downloadURL);
+                                        user.put(Utils.IMAGE_2, Base64Custom.encodeBase64(downloadURL));
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage2);
@@ -358,7 +357,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_3, downloadURL);
+                                        user.put(Utils.IMAGE_3, Base64Custom.encodeBase64(downloadURL));
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage3);
@@ -415,7 +414,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         //Function to save the user data at Firebase: Users > UID > user data
                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         Map<String, Object> user = new HashMap<>();
-                        user.put(Utils.USERNAME, text);
+                        user.put(Utils.USERNAME, Base64Custom.encodeBase64(text));
                         mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -455,21 +454,21 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 String image3 = dataSnapshot.child(Utils.IMAGE_3).getValue(String.class);
 
                 if (!(username == null || Objects.equals(username, ""))) {
-                    tvUsername.setText(username);
+                    tvUsername.setText(Base64Custom.decodeBase64(username));
                 } else {
                     tvUsername.setText("Username");
                 }
                 if (image != null && !Objects.equals(image, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
+                    Picasso.with(EditUserProfileActivity.this).load(Base64Custom.decodeBase64(image)).placeholder(R.drawable.img_profile).into(cvImageUser);
                 }
                 if (image1 != null && !Objects.equals(image1, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(image1).placeholder(R.drawable.img_profile).into(ivImage1);
+                    Picasso.with(EditUserProfileActivity.this).load(Base64Custom.decodeBase64(image1)).placeholder(R.drawable.img_profile).into(ivImage1);
                 }
                 if (image2 != null && !Objects.equals(image2, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(image2).placeholder(R.drawable.img_profile).into(ivImage2);
+                    Picasso.with(EditUserProfileActivity.this).load(Base64Custom.decodeBase64(image2)).placeholder(R.drawable.img_profile).into(ivImage2);
                 }
                 if (image3 != null && !Objects.equals(image3, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(image3).placeholder(R.drawable.img_profile).into(ivImage3);
+                    Picasso.with(EditUserProfileActivity.this).load(Base64Custom.decodeBase64(image3)).placeholder(R.drawable.img_profile).into(ivImage3);
                 }
 
                 dialog.dismiss();
