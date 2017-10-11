@@ -57,6 +57,13 @@ public class UserProfileActivity extends AppCompatActivity {
         //Get the user data
         getUserData();
 
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToStart();
+            }
+        });
+
         //btnEditUserProfile Event Button
         btnEditUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +108,12 @@ public class UserProfileActivity extends AppCompatActivity {
                     String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
                     String image = dataSnapshot.child(Utils.IMAGE).getValue(String.class);
 
-                    tvUsername.setText(username);
+                    if (!(username == null || Objects.equals(username, ""))) {
+                        tvUsername.setText(username);
+                    } else {
+                        tvUsername.setText("Username");
+                    }
+                    
                     if (image != null && !Objects.equals(image, "")) {
                         Picasso.with(UserProfileActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
                     }

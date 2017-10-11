@@ -46,7 +46,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private CircleImageView cvImageUser;
     private TextView tvUsername;
     private RelativeLayout btnChat, btnCalendar, btnSearch;
-    private FloatingActionButton btnEditUserProfile, btnEditUsername, btnChangeImage1, btnChangeImage2, btnChangeImage3;
+    private FloatingActionButton btnEditUserProfile, btnEditUsername, btnChangeImage,btnChangeImage1, btnChangeImage2, btnChangeImage3;
     private RoundedImageView ivImage1, ivImage2, ivImage3;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -79,6 +79,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
         btnEditUserProfile = (FloatingActionButton) findViewById(R.id.btnEditUserProfile);
         btnEditUsername = (FloatingActionButton) findViewById(R.id.btnEditUsername);
+        btnChangeImage = (FloatingActionButton) findViewById(R.id.btnChangeImage);
         btnChangeImage1 = (FloatingActionButton) findViewById(R.id.btnChamgeImage1);
         btnChangeImage2 = (FloatingActionButton) findViewById(R.id.btnChangeImage2);
         btnChangeImage3 = (FloatingActionButton) findViewById(R.id.btnChangeImage3);
@@ -114,8 +115,8 @@ public class EditUserProfileActivity extends AppCompatActivity {
             }
         });
 
-        //cvImageUser EventButton
-        cvImageUser.setOnClickListener(new View.OnClickListener() {
+        //btnChangeImage EventButton
+        btnChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Image = 1;
@@ -162,27 +163,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Event to show tooltip in cvImageUser
-        showTooltipUserImage();
-
-    }
-
-    private void showTooltipUserImage() {
-        final Tooltip tooltip = new Tooltip.Builder(cvImageUser)
-                .setText(R.string.msg_change_picture)
-                .setTextColor(Color.WHITE)
-                .setGravity(Gravity.TOP)
-                .setBackgroundColor(getResources().getColor(R.color.colorDarkBlue))
-                .setCornerRadius(8f)
-                .setDismissOnClick(true)
-                .show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                tooltip.dismiss();
-            }
-        }, 3000);
     }
 
     @Override
@@ -412,7 +392,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private void updateUsername() {
         //Dialog to change the user name
         new LovelyTextInputDialog(EditUserProfileActivity.this, R.style.EditTextTintTheme)
-                .setTopColorRes(R.color.colorDarkBlue)
+                .setTopColorRes(R.color.colorLightBlue)
                 .setTitle(R.string.change_username)
                 //.setMessage("Change your username")
                 .setIcon(R.drawable.ic_create_white_24dp)
@@ -474,7 +454,11 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 String image2 = dataSnapshot.child(Utils.IMAGE_2).getValue(String.class);
                 String image3 = dataSnapshot.child(Utils.IMAGE_3).getValue(String.class);
 
-                tvUsername.setText(username);
+                if (!(username == null || Objects.equals(username, ""))) {
+                    tvUsername.setText(username);
+                } else {
+                    tvUsername.setText("Username");
+                }
                 if (image != null && !Objects.equals(image, "")) {
                     Picasso.with(EditUserProfileActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
                 }

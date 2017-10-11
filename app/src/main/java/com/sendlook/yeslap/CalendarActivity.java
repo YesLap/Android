@@ -1,11 +1,8 @@
 package com.sendlook.yeslap;
 
-<<<<<<< HEAD
-=======
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
->>>>>>> 1.0.12
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -77,28 +74,28 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(ivMorningSun, ivAvailabilitySun);
+                setCalendar("Sun" ,ivMorningSun, ivAvailabilitySun);
             }
         });
 
         ivAfternoonSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(ivAfternoonSun, ivAfternoonSun);
+                setCalendar("Sun" ,ivAfternoonSun, ivAfternoonSun);
             }
         });
 
         ivNightSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(ivNightSun, ivAfternoonSun);
+                setCalendar("Sun" ,ivNightSun, ivAfternoonSun);
             }
         });
 
 
     }
 
-    private void setCalendar(ImageView image, ImageView toogle) {
+    private void setCalendar(String week,ImageView image, ImageView toogle) {
         if (Objects.equals(toogle.getResources(), getDrawable(R.drawable.off))) {
             Utils.toastyInfo(getApplicationContext(), getString(R.string.click_red_button));
         }

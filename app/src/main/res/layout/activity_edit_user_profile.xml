@@ -28,20 +28,33 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="120sp"
-        android:layout_height="120sp"
+        android:layout_width="140sp"
+        android:layout_height="140sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
         android:src="@drawable/maskphotoprofileprincipal" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/cvImageUser"
-        android:layout_width="70sp"
-        android:layout_height="70sp"
+        android:layout_width="90sp"
+        android:layout_height="90sp"
         android:layout_alignTop="@+id/btnGoToSettings"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
         android:src="@drawable/img_profile" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnChangeImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView4"
+        android:layout_alignEnd="@+id/imageView4"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorFloatButtonBlue"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_create_white_24dp" />
 
     <RelativeLayout
         android:id="@+id/relUsername"
@@ -87,12 +100,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150sp"
+            android:layout_height="170sp"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="170sp"
                 android:layout_weight="1">
 
                 <ImageView
@@ -104,23 +117,25 @@
                     android:src="@drawable/iconreferencefaceprofile" />
 
                 <ImageView
-                    android:layout_width="82sp"
-                    android:layout_height="82sp"
-                    android:layout_marginTop="4sp"
+                    android:layout_width="100sp"
+                    android:layout_height="100sp"
                     android:layout_below="@+id/imageView"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="4sp"
                     android:src="@drawable/masksqurephotoprofile" />
 
                 <com.github.siyamed.shapeimageview.RoundedImageView
                     android:id="@+id/ivImage1"
-                    android:layout_width="70sp"
-                    android:layout_height="70sp"
+                    android:layout_width="88sp"
+                    android:layout_height="88sp"
                     android:layout_below="@+id/imageView"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/img_profile"
+                    app:siBorderColor="@color/colorFloatButtonBlue"
+                    app:siBorderWidth="1dp"
                     app:siRadius="10dp"
-                    app:siSquare="true"/>
+                    app:siSquare="true" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/btnChamgeImage1"
@@ -128,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="5sp"
+                    android:layout_marginBottom="10dp"
                     android:clickable="true"
                     app:backgroundTint="@color/colorFloatButtonBlue"
                     app:fabSize="mini"
@@ -150,23 +165,25 @@
                     android:src="@drawable/iconreferencestadupprofile" />
 
                 <ImageView
-                    android:layout_width="82sp"
-                    android:layout_height="82sp"
-                    android:layout_marginTop="4sp"
+                    android:layout_width="100sp"
+                    android:layout_height="100sp"
                     android:layout_below="@+id/imageView2"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="4sp"
                     android:src="@drawable/masksqurephotoprofile" />
 
                 <com.github.siyamed.shapeimageview.RoundedImageView
                     android:id="@+id/ivImage2"
-                    android:layout_width="70sp"
-                    android:layout_height="70sp"
+                    android:layout_width="88sp"
+                    android:layout_height="88sp"
                     android:layout_below="@+id/imageView2"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/img_profile"
+                    app:siBorderColor="@color/colorFloatButtonBlue"
+                    app:siBorderWidth="1dp"
                     app:siRadius="10dp"
-                    app:siSquare="true"/>
+                    app:siSquare="true" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/btnChangeImage2"
@@ -174,9 +191,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginEnd="40dp"
                     android:clickable="true"
-                    android:layout_marginBottom="5sp"
                     app:backgroundTint="@color/colorFloatButtonBlue"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_create_white_24dp" />
@@ -194,26 +211,28 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/iconreferencefreepositionprofile" />
+                    android:src="@drawable/iconreferencepositionprofile" />
 
                 <ImageView
-                    android:layout_width="82sp"
-                    android:layout_height="82sp"
-                    android:layout_marginTop="4sp"
+                    android:layout_width="100sp"
+                    android:layout_height="100sp"
                     android:layout_below="@+id/imageView3"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="4sp"
                     android:src="@drawable/masksqurephotoprofile" />
 
                 <com.github.siyamed.shapeimageview.RoundedImageView
                     android:id="@+id/ivImage3"
-                    android:layout_width="70sp"
-                    android:layout_height="70sp"
+                    android:layout_width="88sp"
+                    android:layout_height="88sp"
                     android:layout_below="@+id/imageView3"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/img_profile"
+                    app:siBorderColor="@color/colorFloatButtonBlue"
+                    app:siBorderWidth="1dp"
                     app:siRadius="10dp"
-                    app:siSquare="true"/>
+                    app:siSquare="true" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/btnChangeImage3"
@@ -221,7 +240,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="5sp"
+                    android:layout_marginBottom="10dp"
                     android:clickable="true"
                     app:backgroundTint="@color/colorFloatButtonBlue"
                     app:fabSize="mini"
@@ -245,7 +264,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="300sp"
         android:layout_height="100sp"
-        android:layout_marginTop="-15sp"
+        android:layout_marginTop="5sp"
         android:layout_below="@+id/relativeLayout"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal">
@@ -278,7 +297,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/iconcalendarwhite" />
+                android:background="@drawable/iconcalendarwhite" />
 
         </RelativeLayout>
 
@@ -299,7 +318,6 @@
         </RelativeLayout>
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

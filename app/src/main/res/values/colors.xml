@@ -6,8 +6,8 @@
     <color name="colorEditText">#59b6fb</color>
     <color name="colorTextViewOrange">#fe9700</color>
     <color name="colorFloatButtonBlue">#a8dbff</color>
-    <color name="colorDarkBlue">#3caaef</color>
     <color name="colorLightBlue">#08a0ff</color>
+    <color name="colorDarkBlue">#3caaef</color>
     <color name="colorLightGrey">#f2efef</color>
     <color name="colorGreen">#14f200</color>
 </resources>

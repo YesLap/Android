@@ -9,7 +9,7 @@
     </style>
 
     <style name="EditTextTintTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/colorDarkBlue</item>
+        <item name="colorAccent">@color/colorLightBlue</item>
     </style>
 
 </resources>
