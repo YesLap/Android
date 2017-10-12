@@ -50,3 +50,8 @@ git tag -a 1.0.0 -m "mensagem" (aquele 1.0.0 devera ser substituido pela versao 
 ```bash
 git push origin master --tags
 ```
+
+8. Para atualizar seu projeto caso tenha um novo commit de outra pessoa
+```bash
+git pull
+```
