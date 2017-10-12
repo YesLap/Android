@@ -90,6 +90,14 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void getUserData() {

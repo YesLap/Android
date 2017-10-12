@@ -118,7 +118,8 @@ public class CalendarActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.toastyInfo(getApplicationContext(), "Soon");
+                Intent intent = new Intent(CalendarActivity.this, FindUsersActivity.class);
+                startActivity(intent);
             }
         });
 

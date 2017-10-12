@@ -101,7 +101,8 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnGotToSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(EditUserProfileActivity.this, FindUsersActivity.class);
+                startActivity(intent);
             }
         });
 

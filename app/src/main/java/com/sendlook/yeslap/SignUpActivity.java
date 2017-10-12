@@ -61,7 +61,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_password));
                 } else if (Objects.equals(retypePassword, "")) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.retype_password));
-                } else if (!Objects.equals(password, retypePassword)){
+                } else if (!Objects.equals(password, retypePassword)) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.password_not_match));
                 } else {
 
@@ -78,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 //Fucntion to put the user data at Firebase Database
                                 mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                                HashMap<String, String> user = new HashMap<>();
+                                final HashMap<String, String> user = new HashMap<>();
                                 user.put(Utils.USERNAME, "");
                                 user.put(Utils.EMAIL, Base64Custom.encodeBase64(email));
                                 user.put(Utils.IMAGE, "");
@@ -90,11 +90,27 @@ public class SignUpActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            dialog.dismiss();
-                                            Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
-                                            Intent intent = new Intent(SignUpActivity.this, UserProfileActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(intent);
+                                            mDatabase = FirebaseDatabase.getInstance().getReference().child("users_list");
+                                            HashMap<String, String> userlist = new HashMap<>();
+                                            userlist.put("uid", Base64Custom.encodeBase64(mAuth.getCurrentUser().getUid()));
+                                            mDatabase.setValue(userlist).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        dialog.dismiss();
+                                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
+                                                        Intent intent = new Intent(SignUpActivity.this, UserProfileActivity.class);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    dialog.dismiss();
+                                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                }
+                                            });
                                         }
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
