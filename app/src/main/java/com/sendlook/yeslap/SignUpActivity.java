@@ -17,6 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sendlook.yeslap.model.Base64Custom;
+import com.sendlook.yeslap.model.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -85,6 +87,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 user.put(Utils.IMAGE_1, "");
                                 user.put(Utils.IMAGE_2, "");
                                 user.put(Utils.IMAGE_3, "");
+                                user.put(Utils.UID, Base64Custom.encodeBase64(mAuth.getCurrentUser().getUid()));
                                 //user.put(Utils.SINCE, getTime());
                                 mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

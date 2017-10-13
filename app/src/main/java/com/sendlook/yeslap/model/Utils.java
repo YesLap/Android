@@ -1,4 +1,4 @@
-package com.sendlook.yeslap;
+package com.sendlook.yeslap.model;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -18,6 +18,7 @@ public class Utils {
     public static final String IMAGE_2 = "image2";
     public static final String IMAGE_3 = "image3";
     public static final String SINCE = "since";
+    public static final String UID = "uid";
 
     public static final String MONDAY = "1";
     public static final String TUESDAY = "2";

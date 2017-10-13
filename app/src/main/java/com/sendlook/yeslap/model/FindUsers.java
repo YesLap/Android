@@ -1,4 +1,4 @@
-package com.sendlook.yeslap;
+package com.sendlook.yeslap.model;
 
 public class FindUsers {
 

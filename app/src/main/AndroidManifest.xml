@@ -41,7 +41,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".CalendarActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".FindUsersActivity"/>
+        <activity android:name=".FindUsersActivity" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

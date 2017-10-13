@@ -2,27 +2,30 @@ package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sendlook.yeslap.model.Base64Custom;
+import com.sendlook.yeslap.model.FindUsers;
+import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -34,6 +37,7 @@ public class FindUsersActivity extends AppCompatActivity {
     private ImageView ivBgOffSun, ivBgOffMon, ivBgOffTue, ivBgOffWed, ivBgOffThu, ivBgOffFri, ivBgOffSat;
     private TextView tvSun, tvMon, tvTue, tvWed, tvThu, tvFri, tvSat;
     private ImageView ivMorning, ivAfternoon, ivNight;
+    private ImageView btnGoToProfile, btnGoToSettings;
     private ArrayList<String> arrayUsers;
     private ArrayAdapter<String> adapter;
     private ProgressDialog dialog;
@@ -72,6 +76,25 @@ public class FindUsersActivity extends AppCompatActivity {
         ivMorning = (ImageView) findViewById(R.id.ivMorning);
         ivAfternoon = (ImageView) findViewById(R.id.ivAfternoon);
         ivNight = (ImageView) findViewById(R.id.ivNight);
+
+        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
+        btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
+
+        btnGoToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FindUsersActivity.this, UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnGoToSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FindUsersActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         ivBgOffSun.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,7 +201,9 @@ public class FindUsersActivity extends AppCompatActivity {
                 v.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        v.setUID(m.getUid(), getApplicationContext());
+                        Intent intent = new Intent(FindUsersActivity.this, ChatActivity.class);
+                        intent.putExtra("uid", Base64Custom.decodeBase64(m.getUid()));
+                        startActivity(intent);
                     }
                 });
             }
