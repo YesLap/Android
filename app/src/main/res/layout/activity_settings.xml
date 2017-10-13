@@ -8,13 +8,330 @@
     tools:context="com.sendlook.yeslap.UserProfileActivity">
 
 
-    <ImageView
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--android:cropToPadding="true"-->
+        <!--android:src="@drawable/wavebottom" />-->
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:adjustViewBounds="true"
-        android:cropToPadding="true"
-        android:src="@drawable/wavebottom" />
+        android:layout_alignParentTop="true">
+
+        <!--Layout principal-->
+        <!--mudar para relativa-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp">
+
+                <ImageView
+                    android:id="@+id/imgGoToProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/gotoprofile" />
+
+                <ImageView
+                    android:id="@+id/imgGoToChat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/iconchatsmall" />
+
+            </RelativeLayout>
+
+            <!--Settings User -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/settings_icon_referenceface_profile" />
+
+                <Button
+                    android:id="@+id/btnLocationUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:text="City"
+                    android:textColor="@color/gray_btn_bg_pressed_color"
+                    android:textStyle="bold"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:drawableStart="@drawable/settings_icon_location"
+                    android:textAlignment="center" />
+
+                <Button
+                    android:id="@+id/btnGenderUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:drawableStart="@drawable/settings_icon_female"
+                    android:text=""
+                    android:textAlignment="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--app:srcCompat="@drawable/settings_icon_birthday" />-->
+
+                    <TextView
+                        android:id="@+id/tvRangeAgeUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/settings_icon_birthday"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        tools:text="18" />
+
+                    <!--<SeekBar-->
+                        <!--android:id="@+id/rangeAgeUser"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:min="18"-->
+                        <!--android:max="55"-->
+                        <!--android:layout_marginStart="10dp" />-->
+                    <com.appyvet.materialrangebar.RangeBar
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/rangeAgeUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        app:mrb_pinMaxFont="10sp"
+                        app:mrb_rangeBarPaddingBottom="12dp"
+                        app:mrb_selectorBoundaryColor="@color/gray_btn_bg_pressed_color"
+                        app:mrb_selectorBoundarySize="2dp"
+                        app:mrb_pinTextColor="@color/gray_btn_bg_pressed_color"
+                        app:mrb_selectorColor="@android:color/white"
+                        app:mrb_connectingLineColor="@color/colorDarkPink"
+                        app:mrb_selectorSize="10dp"
+                        app:mrb_tickStart="18"
+                        app:mrb_tickEnd="55"
+                        app:mrb_rangeBar="false"
+                        app:mrb_tickInterval="1" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                app:srcCompat="@drawable/settings_division_lineblue" />
+
+            <!--Settings Search-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/settings_icon_bluefind" />
+
+                <Button
+                    android:id="@+id/btnLocationSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:text="City"
+                    android:textColor="@color/gray_btn_bg_pressed_color"
+                    android:textStyle="bold"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:drawableStart="@drawable/settings_icon_location"
+                    android:textAlignment="center" />
+
+                <Button
+                    android:id="@+id/btnGenderSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:drawableStart="@drawable/settings_icon_male"
+                    android:text=""
+                    android:textAlignment="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="5dp"-->
+                        <!--app:srcCompat="@drawable/settings_icon_birthday" />-->
+
+                    <TextView
+                        android:id="@+id/tvRangeAgeSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/settings_icon_birthday"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        tools:text="18-55" />
+
+                    <com.appyvet.materialrangebar.RangeBar
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/rangeAgeSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        app:mrb_pinMaxFont="10sp"
+                        app:mrb_rangeBarPaddingBottom="12dp"
+                        app:mrb_selectorBoundaryColor="@color/gray_btn_bg_pressed_color"
+                        app:mrb_selectorBoundarySize="2dp"
+                        app:mrb_pinTextColor="@color/gray_btn_bg_pressed_color"
+                        app:mrb_selectorColor="@android:color/white"
+                        app:mrb_connectingLineColor="@color/colorDarkPink"
+                        app:mrb_selectorSize="10dp"
+                        app:mrb_tickStart="18"
+                        app:mrb_tickEnd="55"
+                        app:mrb_tickInterval="1" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                app:srcCompat="@drawable/settings_division_lineblue" />
+
+            <!--Legal-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:textSize="18sp"
+                    tools:text="@string/legal" />
+
+                <Button
+                    android:id="@+id/btnPrivacyPolicy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:text="@string/privacy_policy"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:textAlignment="textStart" />
+
+                <Button
+                    android:id="@+id/btnTermsService"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:text="@string/terms_of_service"
+                    android:textAlignment="textStart" />
+
+                <Button
+                    android:id="@+id/btmLicenses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/settings_btn_legal"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:text="@string/licenses"
+                    android:textAlignment="textStart" />
+
+                <Button
+                    android:id="@+id/btnLogOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:background="@drawable/settings_btn_log_out"
+                    android:text="@string/logout" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/logoyeslap" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    tools:text="@string/version_app" />
+
+                <Button
+                    android:id="@+id/btnDeleteAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:background="@drawable/settings_btn_delete_account"
+                    android:text="@string/delete_account" />
+            </LinearLayout>
+
+            <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            android:src="@drawable/wavebottom" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

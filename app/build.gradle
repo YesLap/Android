@@ -22,10 +22,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:26.0.1'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:appcompat-v7:26.0.1'
-    implementation 'com.android.support:design:26.0.1'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.android.gms:play-services-cast:11.4.2'
     implementation 'com.google.android.gms:play-services:11.4.2'
     implementation 'com.afollestad.material-dialogs:commons:0.9.4.7'
@@ -36,6 +36,10 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.6'
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+
+    implementation ('com.appyvet:materialrangebar:1.4') {
+        exclude module: 'support-compat'
+    }
 
     implementation 'com.google.firebase:firebase-auth:11.4.2'
     implementation 'com.google.firebase:firebase-database:11.4.2'
@@ -53,14 +57,12 @@ dependencies {
             def requested = details.requested
             if (requested.group == 'com.android.support') {
                 if (!requested.name.startsWith("multidex")) {
-                    details.useVersion '26.0.1'
+                    details.useVersion '26.1.0'
                 }
             }
         }
     }
 
 }
-
-
 
 apply plugin: 'com.google.gms.google-services'

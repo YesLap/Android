@@ -8,6 +8,10 @@
     <color name="colorFloatButtonBlue">#a8dbff</color>
     <color name="colorLightBlue">#08a0ff</color>
     <color name="colorDarkBlue">#3caaef</color>
+    <color name="colorLightRed">#ff0808</color>
+    <color name="colorDarkRed">#ef3c3c</color>
+    <color name="colorDarkPink">#ef3c84</color>
     <color name="colorLightGrey">#f2efef</color>
     <color name="colorGreen">#14f200</color>
+
 </resources>

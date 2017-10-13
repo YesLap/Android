@@ -27,4 +27,11 @@
     <string name="msg_change_picture">Click here to change your picture</string>
     <string name="change_username">Change your username</string>
     <string name="enter_your_message">Enter your message</string>
+    <string name="logout">Log Out</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="version_app">Version 6.8.0</string>
+    <string name="legal">LEGAL</string>
+    <string name="licenses">Licenses</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>
