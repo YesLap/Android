@@ -253,10 +253,12 @@
         android:layout_below="@id/linearDays"
         android:layout_above="@id/imageView5">
 
-        <ListView
-            android:id="@+id/lstUsers"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvUsers"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:cacheColorHint="@color/colorLightBlue"
+            android:footerDividersEnabled="true" />
 
     </RelativeLayout>
 
@@ -267,7 +269,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:adjustViewBounds="true"
-        android:cropToPadding="true"
+        android:cropToPadding="false"
         android:src="@drawable/wavebottom" />
 
 </RelativeLayout>

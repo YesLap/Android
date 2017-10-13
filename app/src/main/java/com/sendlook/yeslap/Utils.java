@@ -19,13 +19,13 @@ public class Utils {
     public static final String IMAGE_3 = "image3";
     public static final String SINCE = "since";
 
-    public static final String MONDAY = "monday";
-    public static final String TUESDAY = "tuesday";
-    public static final String WEDNESDAY = "wednesday";
-    public static final String THURSDAY = "thursday";
-    public static final String FRIDAY = "friday";
-    public static final String SATURDAY = "saturday";
-    public static final String SUNDAY = "sunday";
+    public static final String MONDAY = "1";
+    public static final String TUESDAY = "2";
+    public static final String WEDNESDAY = "3";
+    public static final String THURSDAY = "4";
+    public static final String FRIDAY = "5";
+    public static final String SATURDAY = "6";
+    public static final String SUNDAY = "7";
 
     public static final String MORNING = "morning";
     public static final String AFTERNOON = "afternoon";

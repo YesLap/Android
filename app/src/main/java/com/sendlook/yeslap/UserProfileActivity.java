@@ -150,13 +150,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //mAuth.signOut();
-        Utils.toastyInfo(getApplicationContext(), "Destroy");
-    }
-
     private void sendToStart() {
         //Method that displaces the user and sends to the SignIn screen
         mAuth.signOut();
