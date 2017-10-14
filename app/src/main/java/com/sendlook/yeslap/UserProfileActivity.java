@@ -79,7 +79,8 @@ public class UserProfileActivity extends AppCompatActivity {
         btnGoToSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.toastyInfo(getApplicationContext(), "Soon!");
+                Intent intent = new Intent(UserProfileActivity.this, SettingsActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -37,9 +37,7 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.6'
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 
-    implementation ('com.appyvet:materialrangebar:1.4') {
-        exclude module: 'support-compat'
-    }
+    implementation 'com.crystal:crystalrangeseekbar:1.1.1'
 
     implementation 'com.google.firebase:firebase-auth:11.4.2'
     implementation 'com.google.firebase:firebase-database:11.4.2'

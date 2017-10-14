@@ -33,8 +33,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp">
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
 
                 <ImageView
                     android:id="@+id/imgGoToProfile"
@@ -60,8 +60,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="25dp"
                 android:orientation="vertical" >
 
@@ -84,15 +84,30 @@
                     android:drawableStart="@drawable/settings_icon_location"
                     android:textAlignment="center" />
 
-                <Button
-                    android:id="@+id/btnGenderUser"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/settings_btn_legal"
-                    android:drawableEnd="@drawable/settings_right_arrow"
-                    android:drawableStart="@drawable/settings_icon_female"
-                    android:text=""
-                    android:textAlignment="center" />
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgGenderUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        app:srcCompat="@drawable/settings_icon_female" />
+
+                    <Button
+                        android:id="@+id/btnGenderUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:background="@drawable/settings_btn_legal"
+                        android:drawableEnd="@drawable/settings_right_arrow"
+                        android:text=""
+                        android:textAlignment="center" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -110,37 +125,27 @@
                         android:id="@+id/tvRangeAgeUser"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:visibility="visible"
                         android:drawableStart="@drawable/settings_icon_birthday"
                         android:drawablePadding="5dp"
                         android:gravity="center"
                         android:textSize="16sp"
                         tools:text="18" />
 
-                    <!--<SeekBar-->
-                        <!--android:id="@+id/rangeAgeUser"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:min="18"-->
-                        <!--android:max="55"-->
-                        <!--android:layout_marginStart="10dp" />-->
-                    <com.appyvet.materialrangebar.RangeBar
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
                         android:id="@+id/rangeAgeUser"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        app:mrb_pinMaxFont="10sp"
-                        app:mrb_rangeBarPaddingBottom="12dp"
-                        app:mrb_selectorBoundaryColor="@color/gray_btn_bg_pressed_color"
-                        app:mrb_selectorBoundarySize="2dp"
-                        app:mrb_pinTextColor="@color/gray_btn_bg_pressed_color"
-                        app:mrb_selectorColor="@android:color/white"
-                        app:mrb_connectingLineColor="@color/colorDarkPink"
-                        app:mrb_selectorSize="10dp"
-                        app:mrb_tickStart="18"
-                        app:mrb_tickEnd="55"
-                        app:mrb_rangeBar="false"
-                        app:mrb_tickInterval="1" />
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        app:corner_radius="10"
+                        app:min_value="18"
+                        app:max_value="55"
+                        app:bar_color="@color/colorDarkPink"
+                        app:bar_highlight_color="@color/colorLightPink"
+                        app:left_thumb_color="@color/colorDarkGrey"
+                        app:left_thumb_color_pressed="@color/colorDarkGrey"
+                        app:data_type="_integer"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -156,8 +161,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="25dp"
                 android:orientation="vertical" >
 
@@ -180,15 +185,30 @@
                     android:drawableStart="@drawable/settings_icon_location"
                     android:textAlignment="center" />
 
-                <Button
-                    android:id="@+id/btnGenderSearch"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/settings_btn_legal"
-                    android:drawableEnd="@drawable/settings_right_arrow"
-                    android:drawableStart="@drawable/settings_icon_male"
-                    android:text=""
-                    android:textAlignment="center" />
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgGenderSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        app:srcCompat="@drawable/settings_icon_male" />
+
+                    <Button
+                        android:id="@+id/btnGenderSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:background="@drawable/settings_btn_legal"
+                        android:drawableEnd="@drawable/settings_right_arrow"
+                        android:text=""
+                        android:textAlignment="center" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -209,26 +229,27 @@
                         android:drawableStart="@drawable/settings_icon_birthday"
                         android:drawablePadding="5dp"
                         android:gravity="center"
+                        android:visibility="visible"
                         android:textSize="16sp"
                         tools:text="18-55" />
 
-                    <com.appyvet.materialrangebar.RangeBar
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
                         android:id="@+id/rangeAgeSearch"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        app:mrb_pinMaxFont="10sp"
-                        app:mrb_rangeBarPaddingBottom="12dp"
-                        app:mrb_selectorBoundaryColor="@color/gray_btn_bg_pressed_color"
-                        app:mrb_selectorBoundarySize="2dp"
-                        app:mrb_pinTextColor="@color/gray_btn_bg_pressed_color"
-                        app:mrb_selectorColor="@android:color/white"
-                        app:mrb_connectingLineColor="@color/colorDarkPink"
-                        app:mrb_selectorSize="10dp"
-                        app:mrb_tickStart="18"
-                        app:mrb_tickEnd="55"
-                        app:mrb_tickInterval="1" />
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        app:corner_radius="10"
+                        app:min_value="18"
+                        app:max_value="55"
+                        app:bar_color="@color/colorDarkPink"
+                        app:bar_highlight_color="@color/colorLightPink"
+                        app:left_thumb_color="@color/colorDarkGrey"
+                        app:left_thumb_color_pressed="@color/colorDarkGrey"
+                        app:right_thumb_color="@color/colorDarkGrey"
+                        app:right_thumb_color_pressed="@color/colorDarkGrey"
+                        app:data_type="_integer" />
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -244,8 +265,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:orientation="vertical" >
 
                 <TextView
@@ -253,6 +274,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:textSize="18sp"
+                    android:visibility="visible"
+                    android:textColor="@color/colorDarkGrey"
                     tools:text="@string/legal" />
 
                 <Button
@@ -274,7 +297,7 @@
                     android:textAlignment="textStart" />
 
                 <Button
-                    android:id="@+id/btmLicenses"
+                    android:id="@+id/btnLicenses"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -304,8 +327,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="visible"
                     android:gravity="center"
+                    android:textColor="@android:color/black"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     tools:text="@string/version_app" />
 
@@ -313,6 +338,7 @@
                     android:id="@+id/btnDeleteAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
