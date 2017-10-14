@@ -27,7 +27,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.android.gms:play-services-cast:11.4.2'
-    implementation 'com.google.android.gms:play-services:11.4.2'
+
     implementation 'com.afollestad.material-dialogs:commons:0.9.4.7'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.github.GrenderG:toasty:1.2.5'
