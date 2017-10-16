@@ -17,7 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.sendlook.yeslap.model.Base64Custom;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -117,16 +116,16 @@ public class UserProfileActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                    String image = dataSnapshot.child(Utils.IMAGE).getValue(String.class);
+                    String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
 
                     if (!(username == null || Objects.equals(username, ""))) {
-                        tvUsername.setText(Base64Custom.decodeBase64(username));
+                        tvUsername.setText((username));
                     } else {
                         tvUsername.setText("Username");
                     }
                     
                     if (image != null && !Objects.equals(image, "")) {
-                        Picasso.with(UserProfileActivity.this).load(Base64Custom.decodeBase64(image)).placeholder(R.drawable.img_profile).into(cvImageUser);
+                        Picasso.with(UserProfileActivity.this).load((image)).placeholder(R.drawable.img_profile).into(cvImageUser);
                     }
 
                     dialog.dismiss();

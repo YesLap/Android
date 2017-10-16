@@ -12,7 +12,6 @@ public class Utils {
     public static final String USER_IMAGES = "user_images";
 
     public static final String USERNAME = "username";
-    public static final String IMAGE = "image";
     public static final String EMAIL = "email";
     public static final String IMAGE_1 = "image1";
     public static final String IMAGE_2 = "image2";

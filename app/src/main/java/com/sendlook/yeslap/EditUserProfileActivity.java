@@ -2,11 +2,14 @@ package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,10 +28,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.sendlook.yeslap.model.Base64Custom;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.enums.EPickType;
+import com.vansuita.pickimage.listeners.IPickClick;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.util.HashMap;
@@ -44,7 +50,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private CircleImageView cvImageUser;
     private TextView tvUsername;
     private RelativeLayout btnChat, btnCalendar, btnSearch;
-    private FloatingActionButton btnEditUserProfile, btnEditUsername, btnChangeImage,btnChangeImage1, btnChangeImage2, btnChangeImage3;
+    private FloatingActionButton btnEditUserProfile, btnEditUsername, btnChangeImage1, btnChangeImage2, btnChangeImage3;
     private RoundedImageView ivImage1, ivImage2, ivImage3;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -53,7 +59,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private static final int GALLERY_PICK_IMAGE_1 = 1;
     private static final int GALLERY_PICK_IMAGE_2 = 2;
     private static final int GALLERY_PICK_IMAGE_3 = 3;
-    private static final int GALLERY_PICK_IMAGE_4 = 4;
     private String downloadURL = "";
     private Integer ImageStatus = 0;
     private Integer Image = 0;
@@ -77,7 +82,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
         btnEditUserProfile = (FloatingActionButton) findViewById(R.id.btnEditUserProfile);
         btnEditUsername = (FloatingActionButton) findViewById(R.id.btnEditUsername);
-        btnChangeImage = (FloatingActionButton) findViewById(R.id.btnChangeImage);
         btnChangeImage1 = (FloatingActionButton) findViewById(R.id.btnChamgeImage1);
         btnChangeImage2 = (FloatingActionButton) findViewById(R.id.btnChangeImage2);
         btnChangeImage3 = (FloatingActionButton) findViewById(R.id.btnChangeImage3);
@@ -114,27 +118,47 @@ public class EditUserProfileActivity extends AppCompatActivity {
             }
         });
 
-        //btnChangeImage EventButton
-        btnChangeImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Image = 1;
-                Intent intentImage1 = new Intent();
-                intentImage1.setType(Utils.TYPE_IMAGE);
-                intentImage1.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_4);
-            }
-        });
-
         //ChangeImage1 Event Button
         btnChangeImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageStatus = 1;
-                Intent intentImage1 = new Intent();
-                intentImage1.setType(Utils.TYPE_IMAGE);
-                intentImage1.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_1);
+                PickSetup setup = new PickSetup()
+                        .setTitle("Choose")
+                        .setTitleColor(Color.BLACK)
+                        //.setBackgroundColor(yourColor)
+                        //.setProgressText(yourText)
+                        //.setProgressTextColor(yourColor)
+                        .setCancelText("Cancel")
+                        .setCancelTextColor(Color.BLACK)
+                        //.setButtonTextColor(yourColor)
+                        //.setDimAmount(yourFloat)
+                        .setFlip(true)
+                        .setMaxSize(500)
+                        .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
+                        .setCameraButtonText("Camera")
+                        .setGalleryButtonText("Gallery")
+                        .setIconGravity(Gravity.LEFT)
+                        .setButtonOrientation(LinearLayoutCompat.VERTICAL)
+                        .setSystemDialog(false);
+                //.setGalleryIcon(R.drawable.gallery)
+                //.setCameraIcon(R.drawable.photo_camera);
+
+                PickImageDialog.build(setup)
+                        .setOnClick(new IPickClick() {
+                            @Override
+                            public void onGalleryClick() {
+                                ImageStatus = 1;
+                                Intent intentImage1 = new Intent();
+                                intentImage1.setType(Utils.TYPE_IMAGE);
+                                intentImage1.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_1);
+                            }
+
+                            @Override
+                            public void onCameraClick() {
+                                //Toast.makeText(SampleActivity.this, "Camera Click!", Toast.LENGTH_LONG).show();
+                            }
+                        }).show(EditUserProfileActivity.this);
             }
         });
 
@@ -142,11 +166,43 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnChangeImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageStatus = 2;
-                Intent intentImage2 = new Intent();
-                intentImage2.setType(Utils.TYPE_IMAGE);
-                intentImage2.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intentImage2, getString(R.string.select_image)), GALLERY_PICK_IMAGE_2);
+                PickSetup setup = new PickSetup()
+                        .setTitle("Choose")
+                        .setTitleColor(Color.BLACK)
+                        //.setBackgroundColor(yourColor)
+                        //.setProgressText(yourText)
+                        //.setProgressTextColor(yourColor)
+                        .setCancelText("Cancel")
+                        .setCancelTextColor(Color.BLACK)
+                        //.setButtonTextColor(yourColor)
+                        //.setDimAmount(yourFloat)
+                        .setFlip(true)
+                        .setMaxSize(500)
+                        .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
+                        .setCameraButtonText("Camera")
+                        .setGalleryButtonText("Gallery")
+                        .setIconGravity(Gravity.LEFT)
+                        .setButtonOrientation(LinearLayoutCompat.VERTICAL)
+                        .setSystemDialog(false);
+                //.setGalleryIcon(R.drawable.gallery)
+                //.setCameraIcon(R.drawable.photo_camera);
+
+                PickImageDialog.build(setup)
+                        .setOnClick(new IPickClick() {
+                            @Override
+                            public void onGalleryClick() {
+                                Image = 2;
+                                Intent intentImage2 = new Intent();
+                                intentImage2.setType(Utils.TYPE_IMAGE);
+                                intentImage2.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intentImage2, getString(R.string.select_image)), GALLERY_PICK_IMAGE_2);
+                            }
+
+                            @Override
+                            public void onCameraClick() {
+                                //Toast.makeText(SampleActivity.this, "Camera Click!", Toast.LENGTH_LONG).show();
+                            }
+                        }).show(EditUserProfileActivity.this);
             }
         });
 
@@ -154,11 +210,44 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnChangeImage3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageStatus = 3;
-                Intent intentImage3 = new Intent();
-                intentImage3.setType(Utils.TYPE_IMAGE);
-                intentImage3.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intentImage3, getString(R.string.select_image)), GALLERY_PICK_IMAGE_3);
+                PickSetup setup = new PickSetup()
+                        .setTitle("Choose")
+                        .setTitleColor(Color.BLACK)
+                        //.setBackgroundColor(yourColor)
+                        //.setProgressText(yourText)
+                        //.setProgressTextColor(yourColor)
+                        .setCancelText("Cancel")
+                        .setCancelTextColor(Color.BLACK)
+                        //.setButtonTextColor(yourColor)
+                        //.setDimAmount(yourFloat)
+                        .setFlip(true)
+                        .setMaxSize(500)
+                        .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
+                        .setCameraButtonText("Camera")
+                        .setGalleryButtonText("Gallery")
+                        .setIconGravity(Gravity.LEFT)
+                        .setButtonOrientation(LinearLayoutCompat.VERTICAL)
+                        .setSystemDialog(false);
+                //.setGalleryIcon(R.drawable.gallery)
+                //.setCameraIcon(R.drawable.photo_camera);
+
+                PickImageDialog.build(setup)
+                        .setOnClick(new IPickClick() {
+                            @Override
+                            public void onGalleryClick() {
+                                Image = 3;
+                                Intent intentImage3 = new Intent();
+                                intentImage3.setType(Utils.TYPE_IMAGE);
+                                intentImage3.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intentImage3, getString(R.string.select_image)), GALLERY_PICK_IMAGE_3
+                                );
+                            }
+
+                            @Override
+                            public void onCameraClick() {
+                                //Toast.makeText(SampleActivity.this, "Camera Click!", Toast.LENGTH_LONG).show();
+                            }
+                        }).show(EditUserProfileActivity.this);
             }
         });
 
@@ -169,58 +258,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
         try {
 
-            if (Image == 1) {
-                if (requestCode == GALLERY_PICK_IMAGE_4 && resultCode == RESULT_OK) {
-                    Uri imgUri = data.getData();
-                    CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
-                }
-
-                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-                    dialog = new ProgressDialog(EditUserProfileActivity.this);
-                    dialog.setTitle(getString(R.string.uploading_image));
-                    dialog.setMessage(getString(R.string.uploading_image_msg));
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-
-                    CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
-                    //Saving Image1
-                    if (resultCode == RESULT_OK) {
-                        Uri resultUri = mResult.getUri();
-                        if (resultUri != null) {
-
-                            mStorage = FirebaseStorage.getInstance().getReference();
-                            StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image.jpg");
-
-                            filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        downloadURL = task.getResult().getDownloadUrl().toString();
-                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
-
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                                        Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE, Base64Custom.encodeBase64(downloadURL));
-                                        mDatabase.updateChildren(user);
-
-                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
-                                        dialog.dismiss();
-                                    } else {
-                                        Utils.toastyError(getApplicationContext(), task.getException().getMessage());
-                                        dialog.hide();
-                                    }
-                                }
-                            });
-                        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                            Exception error = mResult.getError();
-                            Utils.toastyError(getApplicationContext(), error.getMessage());
-                            dialog.hide();
-                        }
-                        Image = 0;
-                    }
-                }
-            }
             if (ImageStatus == 1) {
                 if (requestCode == GALLERY_PICK_IMAGE_1 && resultCode == RESULT_OK) {
                     Uri imgUri = data.getData();
@@ -253,10 +290,11 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_1, Base64Custom.encodeBase64(downloadURL));
+                                        user.put(Utils.IMAGE_1, downloadURL);
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage1);
+                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
                                         dialog.dismiss();
                                     } else {
                                         Utils.toastyError(getApplicationContext(), task.getException().getMessage());
@@ -305,7 +343,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_2, Base64Custom.encodeBase64(downloadURL));
+                                        user.put(Utils.IMAGE_2, downloadURL);
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage2);
@@ -357,7 +395,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                         Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_3, Base64Custom.encodeBase64(downloadURL));
+                                        user.put(Utils.IMAGE_3, downloadURL);
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage3);
@@ -414,7 +452,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         //Function to save the user data at Firebase: Users > UID > user data
                         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         Map<String, Object> user = new HashMap<>();
-                        user.put(Utils.USERNAME, Base64Custom.encodeBase64(text));
+                        user.put(Utils.USERNAME, text);
                         mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -448,27 +486,25 @@ public class EditUserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                String image = dataSnapshot.child(Utils.IMAGE).getValue(String.class);
                 String image1 = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
                 String image2 = dataSnapshot.child(Utils.IMAGE_2).getValue(String.class);
                 String image3 = dataSnapshot.child(Utils.IMAGE_3).getValue(String.class);
 
                 if (!(username == null || Objects.equals(username, ""))) {
-                    tvUsername.setText(Base64Custom.decodeBase64(username));
+                    tvUsername.setText(username);
                 } else {
                     tvUsername.setText("Username");
                 }
-                if (image != null && !Objects.equals(image, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(Base64Custom.decodeBase64(image)).placeholder(R.drawable.img_profile).into(cvImageUser);
-                }
+
                 if (image1 != null && !Objects.equals(image1, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(Base64Custom.decodeBase64(image1)).placeholder(R.drawable.img_profile).into(ivImage1);
+                    Picasso.with(EditUserProfileActivity.this).load(image1).placeholder(R.drawable.img_profile).into(ivImage1);
+                    Picasso.with(EditUserProfileActivity.this).load(image1).placeholder(R.drawable.img_profile).into(cvImageUser);
                 }
                 if (image2 != null && !Objects.equals(image2, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(Base64Custom.decodeBase64(image2)).placeholder(R.drawable.img_profile).into(ivImage2);
+                    Picasso.with(EditUserProfileActivity.this).load(image2).placeholder(R.drawable.img_profile).into(ivImage2);
                 }
                 if (image3 != null && !Objects.equals(image3, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(Base64Custom.decodeBase64(image3)).placeholder(R.drawable.img_profile).into(ivImage3);
+                    Picasso.with(EditUserProfileActivity.this).load((image3)).placeholder(R.drawable.img_profile).into(ivImage3);
                 }
 
                 dialog.dismiss();

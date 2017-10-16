@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="@android:color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:layout_marginTop="5sp"
+        android:layout_marginEnd="16sp"
+        android:layout_marginBottom="5sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/maskphotoprofileprincipal" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/cvImageUser"
+        android:layout_marginTop="20sp"
+        android:layout_width="50sp"
+        android:layout_marginEnd="30sp"
+        android:layout_height="50sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/img_profile" />
+
+    <ImageView
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:layout_alignBottom="@+id/imageView4"
+        android:layout_alignEnd="@+id/imageView4"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/on_user"
+        android:id="@+id/imageView6" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:padding="10sp"
+        android:minWidth="50sp"
+        android:minHeight="50sp"
+        android:textStyle="bold"
+        android:maxWidth="220sp"
+        android:layout_marginEnd="5sp"
+        android:layout_alignTop="@+id/cvImageUser"
+        android:layout_toStartOf="@+id/imageView4"
+        android:background="@drawable/input_outline_right" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="-15sp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView4"
+        android:layout_toStartOf="@+id/tvMessage"
+        android:background="@drawable/icongraybombmessage" />
+
+</RelativeLayout>

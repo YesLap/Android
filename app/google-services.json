@@ -40,6 +40,13 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "405673897660-8aooql2vefffo6lss5kqkiduotctjm2p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yeslap"
+              }
+            },
+            {
               "client_id": "405673897660-g5trop3as5joomf748vuqa9pr2c3fsh0.apps.googleusercontent.com",
               "client_type": 3
             }

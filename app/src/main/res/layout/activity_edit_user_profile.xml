@@ -43,19 +43,6 @@
         android:layout_marginTop="70dp"
         android:src="@drawable/img_profile" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btnChangeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView4"
-        android:layout_alignEnd="@+id/imageView4"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="12dp"
-        android:clickable="true"
-        app:backgroundTint="@color/colorFloatButtonBlue"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/ic_create_white_24dp" />
-
     <RelativeLayout
         android:id="@+id/relUsername"
         android:layout_width="match_parent"

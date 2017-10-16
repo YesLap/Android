@@ -17,7 +17,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.sendlook.yeslap.model.Base64Custom;
 import com.sendlook.yeslap.model.Utils;
 
 import java.util.Calendar;
@@ -81,39 +80,22 @@ public class SignUpActivity extends AppCompatActivity {
                                 //Fucntion to put the user data at Firebase Database
                                 mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                 final HashMap<String, String> user = new HashMap<>();
-                                user.put(Utils.USERNAME, "");
-                                user.put(Utils.EMAIL, Base64Custom.encodeBase64(email));
-                                user.put(Utils.IMAGE, "");
+                                user.put(Utils.USERNAME, "Username");
+                                user.put(Utils.EMAIL, (email));
                                 user.put(Utils.IMAGE_1, "");
                                 user.put(Utils.IMAGE_2, "");
                                 user.put(Utils.IMAGE_3, "");
-                                user.put(Utils.UID, Base64Custom.encodeBase64(mAuth.getCurrentUser().getUid()));
+                                user.put(Utils.UID, (mAuth.getCurrentUser().getUid()));
                                 //user.put(Utils.SINCE, getTime());
                                 mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            mDatabase = FirebaseDatabase.getInstance().getReference().child("users_list");
-                                            HashMap<String, String> userlist = new HashMap<>();
-                                            userlist.put("uid", Base64Custom.encodeBase64(mAuth.getCurrentUser().getUid()));
-                                            mDatabase.setValue(userlist).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        dialog.dismiss();
-                                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
-                                                        Intent intent = new Intent(SignUpActivity.this, UserProfileActivity.class);
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        startActivity(intent);
-                                                    }
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    dialog.dismiss();
-                                                    Utils.toastyError(getApplicationContext(), e.getMessage());
-                                                }
-                                            });
+                                            dialog.dismiss();
+                                            Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
+                                            Intent intent = new Intent(SignUpActivity.this, UserProfileActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(intent);
                                         }
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {

@@ -4,7 +4,7 @@ public class FindUsers {
 
     private String uid;
     private String username;
-    private String image;
+    private String image1;
 
     public FindUsers() {
 
@@ -27,16 +27,16 @@ public class FindUsers {
     }
 
     public String getImage() {
-        return image;
+        return image1;
     }
 
     public void setImage(String image) {
-        this.image = image;
+        this.image1 = image;
     }
 
-    public FindUsers(String uid, String username, String image) {
+    public FindUsers(String uid, String username, String image1) {
         this.uid = uid;
         this.username = username;
-        this.image = image;
+        this.image1 = image1;
     }
 }

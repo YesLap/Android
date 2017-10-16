@@ -48,12 +48,15 @@
         android:textStyle="bold" />
 
     <ListView
-        android:layout_below="@id/btnGoToProfile"
         android:id="@+id/lvChat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5sp"
-        android:layout_above="@id/lnChat"/>
+        android:layout_above="@id/lnChat"
+        android:layout_below="@id/btnGoToProfile"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:divider="@android:color/white"
+        android:padding="5sp" />
 
     <ImageView
         android:layout_width="match_parent"

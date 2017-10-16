@@ -36,6 +36,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.6'
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+    implementation 'com.github.jrvansuita:PickImage:2.1.4'
 
     implementation 'com.crystal:crystalrangeseekbar:1.1.1'
 

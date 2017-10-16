@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -18,7 +17,6 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.sendlook.yeslap.model.Base64Custom;
 import com.sendlook.yeslap.model.FindUsers;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Callback;
@@ -26,6 +24,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -202,7 +201,7 @@ public class FindUsersActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(FindUsersActivity.this, ChatActivity.class);
-                        intent.putExtra("uid", Base64Custom.decodeBase64(m.getUid()));
+                        intent.putExtra("uid", (m.getUid()));
                         startActivity(intent);
                     }
                 });
@@ -223,27 +222,21 @@ public class FindUsersActivity extends AppCompatActivity {
         }
 
         public void setUID(String uid, Context context) {
-            Utils.toastyInfo(context, Base64Custom.decodeBase64(uid));
+            Utils.toastyInfo(context, (uid));
         }
 
         public void setName(String name) {
             TextView tvUsername = (TextView) mView.findViewById(R.id.tvUsername);
-            tvUsername.setText(Base64Custom.decodeBase64(name));
+            tvUsername.setText((name));
         }
 
-        public void setImage(final String image, final Context context) {
-            final ImageView ivUser = (CircleImageView) mView.findViewById(R.id.cvImageUser);
-            Picasso.with(context).load(Base64Custom.decodeBase64(image)).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.img_profile).into(ivUser, new Callback() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onError() {
-                    Picasso.with(context).load(Base64Custom.decodeBase64(image)).placeholder(R.drawable.img_profile).into(ivUser);
-                }
-            });
+        public void setImage(String image, Context context) {
+            ImageView ivUser = (CircleImageView) mView.findViewById(R.id.cvImageUser);
+            /**if (image.isEmpty() || image == "" || image == null) {
+                ivUser.setImageResource(R.drawable.img_profile);
+            } else {
+                Picasso.with(context).load((image)).placeholder(R.drawable.img_profile).into(ivUser);
+            }*/
         }
 
 
