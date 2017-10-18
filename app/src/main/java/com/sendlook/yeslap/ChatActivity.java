@@ -15,15 +15,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sendlook.yeslap.model.ChatMessage;
 import com.sendlook.yeslap.model.MesageAdapter;
 import com.sendlook.yeslap.model.Message;
 import com.sendlook.yeslap.model.Utils;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -32,10 +29,10 @@ public class ChatActivity extends AppCompatActivity {
     private EditText etChat;
     private ImageView btnSendMessage;
     private ListView lvChat;
-    private CircleImageView cvImage;
     private TextView tvUsername;
     private String uidAddressee;
     private String uidSender;
+    private String usernameSender;
     private ArrayList<Message> messages;
     private ArrayAdapter<Message> adapter;
     private ValueEventListener valueEventListenerMessages;
@@ -51,7 +48,6 @@ public class ChatActivity extends AppCompatActivity {
         btnSendMessage = (ImageView) findViewById(R.id.btnSendMessage);
         lvChat = (ListView) findViewById(R.id.lvChat);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
-        cvImage = (CircleImageView) findViewById(R.id.cvImageUser);
 
         getBundleIntent();
         getUserData();
@@ -70,11 +66,42 @@ public class ChatActivity extends AppCompatActivity {
                     msg.setMessage(message);
 
                     //salva para o remetente
-                    saveMessage(uidSender, uidAddressee, msg);
-                    //salva para o destinatario
-                    saveMessage(uidAddressee, uidSender, msg);
+                    Boolean returnSender = saveMessage(uidSender, uidAddressee, msg);
+                    if (!returnSender) {
+                        Utils.toastyError(getApplicationContext(), "Error sending message");
+                    } else {
+                        //salva para o destinatario
+                        Boolean returnAddressee = saveMessage(uidAddressee, uidSender, msg);
+                        if (!returnAddressee) {
+                            Utils.toastyError(getApplicationContext(), "Error sending message");
+                        } else {
+                            etChat.setText("");
+                        }
+                    }
 
-                    etChat.setText("");
+                    //Salva a Conversa para o Remetente
+                    ChatMessage chatSender = new ChatMessage();
+                    chatSender.setUid(uidAddressee);
+                    chatSender.setName(tvUsername.getText().toString());
+                    chatSender.setMessage(message);
+                    Boolean returnSaveChatSender = saveChat(uidSender, uidAddressee, chatSender);
+                    if (!returnSaveChatSender) {
+                        Utils.toastyError(getApplicationContext(), "Error saving conversation");
+                    } else {
+                        //Salva a Conversa para o Remetente
+                        ChatMessage chatAddressee = new ChatMessage();
+                        chatAddressee.setUid(uidSender);
+                        chatAddressee.setName(usernameSender);
+                        chatAddressee.setMessage(message);
+                        Boolean returnSaveChatAdressee = saveChat(uidAddressee, uidSender, chatAddressee);
+                        if (!returnSaveChatAdressee) {
+                            Utils.toastyError(getApplicationContext(), "Error saving conversation");
+                        }
+                    }
+
+
+
+
                 }
 
             }
@@ -121,19 +148,27 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    private boolean saveChat(String uidSender, String uidAddressee, ChatMessage chatMessage) {
+        try {
+
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("chatmessages");
+            mDatabase.child(uidSender).child(uidAddressee).setValue(chatMessage);
+
+            return true;
+        } catch (Exception e) {
+            Utils.toastyError(getApplicationContext(), e.getMessage());
+            return false;
+        }
+    }
+
     private void getUserData() {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uidAddressee);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
 
                 tvUsername.setText(username);
-                if (image != null && !Objects.equals(image, "")) {
-                    Picasso.with(ChatActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImage);
-                }
-
             }
 
             @Override
@@ -150,6 +185,18 @@ public class ChatActivity extends AppCompatActivity {
             uidAddressee = bundle.getString("uid");
             uidSender = mAuth.getCurrentUser().getUid();
         }
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uidSender);
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                usernameSender = dataSnapshot.child("username").getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
