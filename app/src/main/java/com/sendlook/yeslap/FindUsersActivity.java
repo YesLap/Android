@@ -231,12 +231,12 @@ public class FindUsersActivity extends AppCompatActivity {
         }
 
         public void setImage(String image, Context context) {
-            ImageView ivUser = (CircleImageView) mView.findViewById(R.id.cvImageUser);
-            /**if (image.isEmpty() || image == "" || image == null) {
+            CircleImageView ivUser = (CircleImageView) mView.findViewById(R.id.cvImageUser);
+            if (image == "" || image == null) {
                 ivUser.setImageResource(R.drawable.img_profile);
             } else {
                 Picasso.with(context).load((image)).placeholder(R.drawable.img_profile).into(ivUser);
-            }*/
+            }
         }
 
 

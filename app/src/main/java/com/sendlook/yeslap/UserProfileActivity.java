@@ -95,8 +95,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
-                startActivity(intent);
+                checkUsernameAndImage();
             }
         });
 
@@ -166,6 +165,30 @@ public class UserProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(UserProfileActivity.this, SignInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    private void checkUsernameAndImage() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String username = dataSnapshot.child("username").getValue(String.class);
+                String image = dataSnapshot.child("image1").getValue(String.class);
+
+                if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
+                    Utils.toastyInfo(getApplicationContext(), "Please, change your username and add a profile photo to look for someone!");
+                } else {
+                    Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

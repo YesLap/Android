@@ -18,8 +18,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sendlook.yeslap.model.ChatMessage;
 import com.sendlook.yeslap.model.ChatMessageAdapter;
+import com.sendlook.yeslap.model.Utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ChatMessagesActivity extends AppCompatActivity {
 
@@ -78,6 +80,29 @@ public class ChatMessagesActivity extends AppCompatActivity {
             }
         });
 
+        //btnCalendar Event Button
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChatMessagesActivity.this, CalendarActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkUsernameAndImage();
+            }
+        });
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.toastyInfo(getApplicationContext(), "Are you already here!");
+            }
+        });
+
     }
 
     @Override
@@ -91,4 +116,35 @@ public class ChatMessagesActivity extends AppCompatActivity {
         super.onStart();
         mDatabase.addValueEventListener(valueEventListener);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDatabase.addValueEventListener(valueEventListener);
+    }
+
+    private void checkUsernameAndImage() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String username = dataSnapshot.child("username").getValue(String.class);
+                String image = dataSnapshot.child("image1").getValue(String.class);
+
+                if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
+                    Utils.toastyInfo(getApplicationContext(), "Please, change your username and add a profile photo to look for someone!");
+                } else {
+                    Intent intent = new Intent(ChatMessagesActivity.this, FindUsersActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }
