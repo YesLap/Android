@@ -26,13 +26,22 @@
         android:layout_marginTop="15sp"
         android:src="@drawable/gotosetting" />
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/cvImageUser"
+        android:layout_marginEnd="5sp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_above="@+id/lvChat"
+        android:layout_toStartOf="@+id/tvUsername"
+        android:src="@drawable/img_profile" />
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnGoToSettings"
+        android:layout_alignTop="@+id/cvImageUser"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"
         android:text="Username"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorLightBlue"
