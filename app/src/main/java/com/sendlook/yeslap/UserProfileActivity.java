@@ -99,14 +99,6 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     private void getUserData() {
