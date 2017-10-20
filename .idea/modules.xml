@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Android-b468f169227eb75e858fb8b7c3a0ea509312adf1.iml" filepath="$PROJECT_DIR$/Android-b468f169227eb75e858fb8b7c3a0ea509312adf1.iml" />
+      <module fileurl="file://C:\Users\rodri\Desktop\Android-b468f169227eb75e858fb8b7c3a0ea509312adf1\YesLap.iml" filepath="C:\Users\rodri\Desktop\Android-b468f169227eb75e858fb8b7c3a0ea509312adf1\YesLap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\rodri\Desktop\Android-b468f169227eb75e858fb8b7c3a0ea509312adf1\app\app.iml" filepath="C:\Users\rodri\Desktop\Android-b468f169227eb75e858fb8b7c3a0ea509312adf1\app\app.iml" />
+    </modules>
+  </component>
+</project>

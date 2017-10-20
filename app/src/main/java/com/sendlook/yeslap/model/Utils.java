@@ -1,0 +1,66 @@
+package com.sendlook.yeslap.model;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.widget.Toast;
+
+import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
+
+import es.dmoral.toasty.Toasty;
+
+public class Utils {
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
+    public static final String USERS = "users";
+    public static final String USER_IMAGES = "user_images";
+
+    public static final String USERNAME = "username";
+    public static final String EMAIL = "email";
+    public static final String IMAGE_1 = "image1";
+    public static final String IMAGE_2 = "image2";
+    public static final String IMAGE_3 = "image3";
+    public static final String SINCE = "since";
+    public static final String UID = "uid";
+
+    public static final String MONDAY = "1";
+    public static final String TUESDAY = "2";
+    public static final String WEDNESDAY = "3";
+    public static final String THURSDAY = "4";
+    public static final String FRIDAY = "5";
+    public static final String SATURDAY = "6";
+    public static final String SUNDAY = "7";
+
+    public static final String MORNING = "morning";
+    public static final String AFTERNOON = "afternoon";
+    public static final String NIGHT = "night";
+
+    public static final String TYPE_IMAGE = "image/*";
+
+
+    public static void toastySuccess(Context context, String msg) {
+        Toasty.success(context, msg, Toast.LENGTH_LONG, true).show();
+    }
+
+    public static void toastyError(Context context, String msg) {
+        Toasty.error(context, msg, Toast.LENGTH_LONG, true).show();
+    }
+
+    public static void toastyInfo(Context context, String msg) {
+        Toasty.info(context, msg, Toast.LENGTH_LONG, true).show();
+    }
+
+    public static void toastyUsual(Context context, String msg, Drawable icon) {
+        Toasty.normal(context, msg, Toast.LENGTH_LONG, icon).show();
+    }
+
+}

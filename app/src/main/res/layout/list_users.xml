@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="?android:selectableItemBackground"
+    android:padding="10sp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="90sp"
+        android:layout_height="90sp"
+        android:layout_marginTop="20sp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/maskphotoprofileprincipal" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/cvImageUser"
+        android:layout_width="55sp"
+        android:layout_height="55sp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/tvUsername"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="38dp"
+        android:src="@drawable/img_profile" />
+
+    <ImageView
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:layout_alignBottom="@+id/imageView4"
+        android:layout_alignEnd="@+id/imageView4"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/on_user" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/imageView4"
+        android:text="Username"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorLightBlue"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="5sp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvUsername"
+        android:layout_below="@+id/tvUsername"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22sp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/iconbubbleweekon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5sp"
+                    android:text="1"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMorningMon"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:src="@drawable/iconmorningoff" />
+
+                <ImageView
+                    android:id="@+id/ivAfternoonMon"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivMorningMon"
+                    android:src="@drawable/iconafternoonoff" />
+
+                <ImageView
+                    android:id="@+id/ivNightMon"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="18sp"
+                    android:layout_marginStart="9sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivAfternoonMon"
+                    android:src="@drawable/iconnightoff" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginStart="2sp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22sp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/iconbubbleweekon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5sp"
+                    android:text="2"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMorningTue"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:src="@drawable/iconmorningoff" />
+
+                <ImageView
+                    android:id="@+id/ivAfternoonTue"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivMorningTue"
+                    android:src="@drawable/iconafternoonoff" />
+
+                <ImageView
+                    android:id="@+id/ivNightTue"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="18sp"
+                    android:layout_marginStart="9sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivAfternoonTue"
+                    android:src="@drawable/iconnightoff" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginStart="2sp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22sp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/iconbubbleweekon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5sp"
+                    android:text="3"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMorningWed"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:src="@drawable/iconmorningoff" />
+
+                <ImageView
+                    android:id="@+id/ivAfternoonWed"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivMorningWed"
+                    android:src="@drawable/iconafternoonoff" />
+
+                <ImageView
+                    android:id="@+id/ivNightWed"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="18sp"
+                    android:layout_marginStart="9sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivAfternoonWed"
+                    android:src="@drawable/iconnightoff" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2sp"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22sp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/iconbubbleweekon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5sp"
+                    android:text="4"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMorningThu"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:src="@drawable/iconmorningoff" />
+
+                <ImageView
+                    android:id="@+id/ivAfternoonThu"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivMorningThu"
+                    android:src="@drawable/iconafternoonoff" />
+
+                <ImageView
+                    android:id="@+id/ivNightThu"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="18sp"
+                    android:layout_marginStart="9sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivAfternoonThu"
+                    android:src="@drawable/iconnightoff" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginStart="2sp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22sp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/iconbubbleweekon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5sp"
+                    android:text="5"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMorningFri"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:src="@drawable/iconmorningoff" />
+
+                <ImageView
+                    android:id="@+id/ivAfternoonFri"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivMorningFri"
+                    android:src="@drawable/iconafternoonoff" />
+
+                <ImageView
+                    android:id="@+id/ivNightFri"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="18sp"
+                    android:layout_marginStart="9sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivAfternoonFri"
+                    android:src="@drawable/iconnightoff" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2sp"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22sp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/iconbubbleweekon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5sp"
+                    android:text="6"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMorningSat"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:src="@drawable/iconmorningoff" />
+
+                <ImageView
+                    android:id="@+id/ivAfternoonSat"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivMorningSat"
+                    android:src="@drawable/iconafternoonoff" />
+
+                <ImageView
+                    android:id="@+id/ivNightSat"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="18sp"
+                    android:layout_marginStart="9sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivAfternoonSat"
+                    android:src="@drawable/iconnightoff" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2sp"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22sp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/iconbubbleweekon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5sp"
+                    android:text="7"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMorningSun"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:src="@drawable/iconmorningoff" />
+
+                <ImageView
+                    android:id="@+id/ivAfternoonSun"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivMorningSun"
+                    android:src="@drawable/iconafternoonoff" />
+
+                <ImageView
+                    android:id="@+id/ivNightSun"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="18sp"
+                    android:layout_marginStart="9sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivAfternoonSun"
+                    android:src="@drawable/iconnightoff" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_marginStart="15sp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cvImageUser"
+        android:layout_toEndOf="@+id/linearLayout2"
+        android:background="@drawable/iconchatsmall" />
+
+</RelativeLayout>

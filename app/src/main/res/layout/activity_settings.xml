@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.sendlook.yeslap.UserProfileActivity">
+
+
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--android:cropToPadding="true"-->
+        <!--android:src="@drawable/wavebottom" />-->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <!--Layout principal-->
+        <!--mudar para relativa-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <ImageView
+                    android:id="@+id/imgGoToProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/gotoprofile" />
+
+                <ImageView
+                    android:id="@+id/imgGoToChat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/iconchatsmall" />
+
+            </RelativeLayout>
+
+            <!--Settings User -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/settings_icon_referenceface_profile" />
+
+                <Button
+                    android:id="@+id/btnLocationUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:text="City"
+                    android:textColor="@color/gray_btn_bg_pressed_color"
+                    android:textStyle="bold"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:drawableStart="@drawable/settings_icon_location"
+                    android:textAlignment="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgGenderUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        app:srcCompat="@drawable/settings_icon_female" />
+
+                    <Button
+                        android:id="@+id/btnGenderUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:background="@drawable/settings_btn_legal"
+                        android:drawableEnd="@drawable/settings_right_arrow"
+                        android:text=""
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--app:srcCompat="@drawable/settings_icon_birthday" />-->
+
+                    <TextView
+                        android:id="@+id/tvRangeAgeUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:visibility="visible"
+                        android:drawableStart="@drawable/settings_icon_birthday"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        tools:text="18" />
+
+                    <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+                        android:id="@+id/rangeAgeUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        app:corner_radius="10"
+                        app:min_value="18"
+                        app:max_value="55"
+                        app:bar_color="@color/colorDarkPink"
+                        app:bar_highlight_color="@color/colorLightPink"
+                        app:left_thumb_color="@color/colorDarkGrey"
+                        app:left_thumb_color_pressed="@color/colorDarkGrey"
+                        app:data_type="_integer"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                app:srcCompat="@drawable/settings_division_lineblue" />
+
+            <!--Settings Search-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/settings_icon_bluefind" />
+
+                <Button
+                    android:id="@+id/btnLocationSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:text="City"
+                    android:textColor="@color/gray_btn_bg_pressed_color"
+                    android:textStyle="bold"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:drawableStart="@drawable/settings_icon_location"
+                    android:textAlignment="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgGenderSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        app:srcCompat="@drawable/settings_icon_male" />
+
+                    <Button
+                        android:id="@+id/btnGenderSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:background="@drawable/settings_btn_legal"
+                        android:drawableEnd="@drawable/settings_right_arrow"
+                        android:text=""
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="5dp"-->
+                        <!--app:srcCompat="@drawable/settings_icon_birthday" />-->
+
+                    <TextView
+                        android:id="@+id/tvRangeAgeSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/settings_icon_birthday"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:textSize="16sp"
+                        tools:text="18-55" />
+
+                    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                        android:id="@+id/rangeAgeSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        app:corner_radius="10"
+                        app:min_value="18"
+                        app:max_value="55"
+                        app:bar_color="@color/colorDarkPink"
+                        app:bar_highlight_color="@color/colorLightPink"
+                        app:left_thumb_color="@color/colorDarkGrey"
+                        app:left_thumb_color_pressed="@color/colorDarkGrey"
+                        app:right_thumb_color="@color/colorDarkGrey"
+                        app:right_thumb_color_pressed="@color/colorDarkGrey"
+                        app:data_type="_integer" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                app:srcCompat="@drawable/settings_division_lineblue" />
+
+            <!--Legal-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:textSize="18sp"
+                    android:visibility="visible"
+                    android:textColor="@color/colorDarkGrey"
+                    tools:text="@string/legal" />
+
+                <Button
+                    android:id="@+id/btnPrivacyPolicy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:text="@string/privacy_policy"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:textAlignment="textStart" />
+
+                <Button
+                    android:id="@+id/btnTermsService"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_btn_legal"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:text="@string/terms_of_service"
+                    android:textAlignment="textStart" />
+
+                <Button
+                    android:id="@+id/btnLicenses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/settings_btn_legal"
+                    android:drawableEnd="@drawable/settings_right_arrow"
+                    android:text="@string/licenses"
+                    android:textAlignment="textStart" />
+
+                <Button
+                    android:id="@+id/btnLogOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:background="@drawable/settings_btn_log_out"
+                    android:text="@string/logout" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/logoyeslap" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="visible"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    tools:text="@string/version_app" />
+
+                <Button
+                    android:id="@+id/btnDeleteAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:background="@drawable/settings_btn_delete_account"
+                    android:text="@string/delete_account" />
+            </LinearLayout>
+
+            <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            android:src="@drawable/wavebottom" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

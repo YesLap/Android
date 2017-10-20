@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">YesLap</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="create_account">Don\'t have an account? create an account</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="fill_email">Fill in the E-mail field</string>
+    <string name="fill_password">Fill in the Password field</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="have_account">I have an account! Sign in</string>
+    <string name="password_not_match">passwords don\'t match</string>
+    <string name="insert_email">Insert your E-mail</string>
+    <string name="remember_password">I remember my password, back to Sign in!</string>
+    <string name="loading">Loading</string>
+    <string name="loading_msg">Wait while we check yours credentials!</string>
+    <string name="username">Username</string>
+    <string name="text_input_error_message">Please, insert a Username!</string>
+    <string name="select_image">Select a Image</string>
+    <string name="uploading_image">Uploading Image</string>
+    <string name="uploading_image_msg">Please, wait while we upload your image</string>
+    <string name="image_uploaded">Image Uploaded</string>
+    <string name="error_upload">Error in Upload</string>
+    <string name="account_created">Account Created Successfully!</string>
+    <string name="password_resend">The instructions of password recovery was sended for your e-mail!</string>
+    <string name="username_changed">Username Changed Successfully!</string>
+    <string name="click_red_button">Click at the red button to enable</string>
+    <string name="msg_change_picture">Click here to change your picture</string>
+    <string name="change_username">Change your username</string>
+    <string name="enter_your_message">Enter your message</string>
+    <string name="logout">Log Out</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="version_app">Version 1.0.22</string>
+    <string name="legal">LEGAL</string>
+    <string name="licenses">Licenses</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+</resources>

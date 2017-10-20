@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    tools:context="com.sendlook.yeslap.ChatActivity">
+
+    <ImageView
+        android:id="@+id/btnGoToProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="30sp"
+        android:layout_marginTop="15sp"
+        android:src="@drawable/gotoprofile" />
+
+    <ImageView
+        android:id="@+id/btnGoToSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="30sp"
+        android:layout_marginTop="15sp"
+        android:src="@drawable/gotosetting" />
+
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btnGoToSettings"
+        android:layout_centerHorizontal="true"
+        android:text="Username"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorLightBlue"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/lvChat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/lnChat"
+        android:layout_below="@id/btnGoToProfile"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:divider="@android:color/white"
+        android:padding="5sp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:src="@drawable/wavebottom"
+        android:id="@+id/imageView5" />
+
+    <LinearLayout
+        android:layout_width="280sp"
+        android:id="@+id/lnChat"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/input_outline_chat">
+
+        <EditText
+            android:id="@+id/etChat"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="5sp"
+            android:layout_marginEnd="5sp"
+            android:layout_weight="4"
+            android:singleLine="true"
+            android:padding="10sp"
+            android:background="@drawable/input_outline_chat"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_your_message" />
+
+        <ImageView
+            android:id="@+id/btnSendMessage"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:layout_weight="1"
+            android:layout_marginTop="7sp"
+            android:layout_marginEnd="5sp"
+            android:src="@drawable/sendbutton"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
