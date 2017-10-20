@@ -11,16 +11,25 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sendlook.yeslap.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MesageAdapter extends ArrayAdapter<Message>{
 
     private Context context;
     private ArrayList<Message> message;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
 
     public MesageAdapter(@NonNull Context c, @NonNull ArrayList<Message> objects) {
@@ -48,9 +57,26 @@ public class MesageAdapter extends ArrayAdapter<Message>{
                 view = inflater.inflate(R.layout.message_left, parent, false);
             }
 
-
             TextView tvMessage = (TextView) view.findViewById(R.id.tvMessage);
             tvMessage.setText(messages.getMessage());
+
+            /**
+            final CircleImageView cvUserImage = view.findViewById(R.id.cvImageUser);
+            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(messages.getUid());
+            mDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
+                    if (image != null | image != "") {
+                        Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvUserImage);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });*/
 
         }
 
