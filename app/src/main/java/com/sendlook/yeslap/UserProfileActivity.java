@@ -99,6 +99,14 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void getUserData() {
@@ -122,7 +130,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     } else {
                         tvUsername.setText("Username");
                     }
-                    
+
                     if (image != null && !Objects.equals(image, "")) {
                         Picasso.with(UserProfileActivity.this).load((image)).placeholder(R.drawable.img_profile).into(cvImageUser);
                     }
