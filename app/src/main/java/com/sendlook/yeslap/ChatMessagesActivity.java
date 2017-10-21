@@ -1,5 +1,6 @@
 package com.sendlook.yeslap;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +35,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     private ValueEventListener valueEventListener;
     private ArrayAdapter<ChatMessage> adapter;
     private ArrayList<ChatMessage> arrayChatMessages;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +115,12 @@ public class ChatMessagesActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mDatabase.removeEventListener(valueEventListener);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         mDatabase.addValueEventListener(valueEventListener);
@@ -124,6 +133,11 @@ public class ChatMessagesActivity extends AppCompatActivity {
     }
 
     private void checkUsernameAndImage() {
+        dialog = new ProgressDialog(this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -132,8 +146,10 @@ public class ChatMessagesActivity extends AppCompatActivity {
                 String image = dataSnapshot.child("image1").getValue(String.class);
 
                 if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
+                    dialog.dismiss();
                     Utils.toastyInfo(getApplicationContext(), "Please, change your username and add a profile photo to look for someone!");
                 } else {
+                    dialog.dismiss();
                     Intent intent = new Intent(ChatMessagesActivity.this, FindUsersActivity.class);
                     startActivity(intent);
                 }

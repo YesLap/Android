@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -168,6 +169,11 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void checkUsernameAndImage() {
+        dialog = new ProgressDialog(this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -176,8 +182,10 @@ public class UserProfileActivity extends AppCompatActivity {
                 String image = dataSnapshot.child("image1").getValue(String.class);
 
                 if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
+                    dialog.dismiss();
                     Utils.toastyInfo(getApplicationContext(), "Please, change your username and add a profile photo to look for someone!");
                 } else {
+                    dialog.dismiss();
                     Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
                     startActivity(intent);
                 }
