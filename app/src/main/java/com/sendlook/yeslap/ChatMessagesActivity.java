@@ -42,8 +42,10 @@ public class ChatMessagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_messages);
 
+        //Instatiate Firebase
         mAuth = FirebaseAuth.getInstance();
 
+        //Cast
         btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
         btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
         lstChatMessages = (ListView) findViewById(R.id.lstChatMessages);
@@ -51,10 +53,14 @@ public class ChatMessagesActivity extends AppCompatActivity {
         btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
 
+        //Array of chat messages
         arrayChatMessages = new ArrayList<>();
+        //Custom adapter
         adapter = new ChatMessageAdapter(getApplicationContext(), arrayChatMessages);
+        //adapter of list of chat message
         lstChatMessages.setAdapter(adapter);
 
+        //Get the Chat Messages from firebase
         mDatabase = FirebaseDatabase.getInstance().getReference().child("chatmessages").child(mAuth.getCurrentUser().getUid());
         valueEventListener = new ValueEventListener() {
             @Override
@@ -73,6 +79,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
             }
         };
 
+        //Click item on listView
         lstChatMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -92,6 +99,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
             }
         });
 
+        //btnSearch Event button
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +107,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
             }
         });
 
+        //btnChat Event button
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +120,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        //Stop the EventListener
         mDatabase.removeEventListener(valueEventListener);
     }
 
@@ -123,6 +133,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //Iniciate the EventListener
         mDatabase.addValueEventListener(valueEventListener);
     }
 
@@ -132,6 +143,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
         mDatabase.addValueEventListener(valueEventListener);
     }
 
+    //Check if the username and image profile isn't null
     private void checkUsernameAndImage() {
         dialog = new ProgressDialog(this);
         dialog.setMessage(getString(R.string.loading));

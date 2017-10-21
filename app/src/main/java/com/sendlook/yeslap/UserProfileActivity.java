@@ -93,6 +93,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+        //btnSearch Event Button
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,6 +101,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+        //btnChat Event Button
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,6 +112,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+    //Get the user data from Firebase
     private void getUserData() {
         if (mAuth != null && mAuth.getCurrentUser() != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
@@ -168,6 +171,7 @@ public class UserProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Check if the username and image profile isn't null
     private void checkUsernameAndImage() {
         dialog = new ProgressDialog(this);
         dialog.setMessage(getString(R.string.loading));

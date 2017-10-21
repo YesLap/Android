@@ -46,6 +46,7 @@ public class FindUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_users);
 
+        //Instantiate Firebase and Iniciate the DatabaseReference
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users_list").child(mAuth.getCurrentUser().getUid());
 
