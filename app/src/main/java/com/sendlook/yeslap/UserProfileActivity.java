@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -20,6 +21,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
+import com.takusemba.spotlight.OnSpotlightEndedListener;
+import com.takusemba.spotlight.OnSpotlightStartedListener;
+import com.takusemba.spotlight.OnTargetStateChangedListener;
+import com.takusemba.spotlight.SimpleTarget;
+import com.takusemba.spotlight.Spotlight;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -56,9 +62,6 @@ public class UserProfileActivity extends AppCompatActivity {
         btnChat = (RelativeLayout) findViewById(R.id.btnChat);
         btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
-
-        //Get the user data
-        getUserData();
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +116,78 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+    private void showSpotlight() {
+        SimpleTarget targetEditProfile = new SimpleTarget.Builder(this)
+                .setPoint(440f, 343f)
+                .setRadius(50f)
+                .setTitle("Welcome to YesLap!")
+                .setDescription("Click here to edit your profile")
+                .build();
+
+        SimpleTarget targetChatMessages = new SimpleTarget.Builder(this)
+                .setPoint(160f, 600f)
+                .setRadius(90f)
+                .setTitle("Chat Messages")
+                .setDescription("Here you can see your chat messages")
+                .build();
+
+        SimpleTarget targetCalendar = new SimpleTarget.Builder(this)
+                .setPoint(360f, 600f)
+                .setRadius(90f)
+                .setTitle("Appointment Book")
+                .setDescription("Here you can change when you are free or busy")
+                .build();
+
+        SimpleTarget targetFind = new SimpleTarget.Builder(this)
+                .setPoint(565f, 600f)
+                .setRadius(90f)
+                .setTitle("Find Users")
+                .setDescription("Here you can find users to chat")
+                .build();
+
+        SimpleTarget targetFavorite = new SimpleTarget.Builder(this)
+                .setPoint(360f, 820f)
+                .setRadius(90f)
+                .setTitle("Favorite Users")
+                .setDescription("Here you can see your favorite users")
+                .build();
+
+        SimpleTarget targetSettings = new SimpleTarget.Builder(this)
+                .setPoint(618f, 120f)
+                .setRadius(50f)
+                .setTitle("Settings")
+                .setDescription("Here you can change your settings")
+                .build();
+
+        SimpleTarget targetEnd = new SimpleTarget.Builder(this)
+                .setPoint(300f, 300f)
+                .setRadius(1f)
+                .setTitle("Enjoy the YesLap")
+                .setDescription("Now you already know how the app works, enjoy it to the fullest. Sincerely, YesLap Team!")
+                .build();
+
+        Spotlight.with(this)
+                .setDuration(1000L)
+                .setAnimation(new DecelerateInterpolator(2f))
+                .setTargets(targetEditProfile, targetChatMessages, targetCalendar, targetFind, targetFavorite, targetSettings, targetEnd)
+                .setOnSpotlightStartedListener(new OnSpotlightStartedListener() {
+                    @Override
+                    public void onStarted() {
+
+                    }
+                })
+                .setOnSpotlightEndedListener(new OnSpotlightEndedListener() {
+                    @Override
+                    public void onEnded() {
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                        HashMap<String, Object> spotlight = new HashMap<>();
+                        spotlight.put("spotlight", "true");
+                        mDatabase.updateChildren(spotlight);
+                    }
+                })
+                .start();
+    }
+
     //Get the user data from Firebase
     private void getUserData() {
         if (mAuth != null && mAuth.getCurrentUser() != null) {
@@ -124,11 +199,12 @@ public class UserProfileActivity extends AppCompatActivity {
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
 
-            mDatabase.addValueEventListener(new ValueEventListener() {
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
                     String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
+                    String spotlight = dataSnapshot.child(Utils.SPOTLIGHT).getValue(String.class);
 
                     if (!(username == null || Objects.equals(username, ""))) {
                         tvUsername.setText((username));
@@ -142,6 +218,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     dialog.dismiss();
 
+                    if (!Objects.equals(spotlight, "true")) {
+                        showSpotlight();
+                    }
                 }
 
                 @Override
@@ -149,6 +228,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 }
             });
+
         }
     }
 
@@ -167,6 +247,9 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //Get the user data
+        getUserData();
+        //
         setStatusOnline();
     }
 

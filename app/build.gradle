@@ -37,13 +37,14 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.6'
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     implementation 'com.github.jrvansuita:PickImage:2.1.4'
-
     implementation 'com.crystal:crystalrangeseekbar:1.1.1'
+    implementation 'com.github.takusemba:spotlight:1.1.3'
 
     implementation 'com.google.firebase:firebase-auth:11.4.2'
     implementation 'com.google.firebase:firebase-database:11.4.2'
     implementation 'com.google.firebase:firebase-storage:11.4.2'
     implementation 'com.firebase:firebase-client-android:2.5.2'
+    //###########NÃO MUDAR A VERSAO DO FIREBASE UI############
     implementation 'com.firebaseui:firebase-ui-database:2.0.1'
 
     testImplementation 'junit:junit:4.12'
