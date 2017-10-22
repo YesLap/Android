@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -59,6 +61,29 @@ public class MesageAdapter extends ArrayAdapter<Message>{
 
             TextView tvMessage = (TextView) view.findViewById(R.id.tvMessage);
             tvMessage.setText(messages.getMessage());
+
+            final ImageView ivStatus = view.findViewById(R.id.ivStatus);
+            try {
+                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(messages.getUid());
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String status = dataSnapshot.child(Utils.STATUS).getValue(String.class);
+                        if (Objects.equals(status, "online")) {
+                            ivStatus.setImageResource(R.drawable.on_user);
+                        } else {
+                            ivStatus.setImageResource(R.drawable.off_user);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            } catch (Exception e) {
+                Utils.toastyError(context, e.getMessage());
+            }
 
             /**
              final CircleImageView cvUserImage = view.findViewById(R.id.cvImageUser);

@@ -25,6 +25,7 @@
         android:src="@drawable/img_profile" />
 
     <ImageView
+        android:id="@+id/ivStatus"
         android:layout_width="20sp"
         android:layout_height="20sp"
         android:layout_alignBottom="@+id/imageView4"

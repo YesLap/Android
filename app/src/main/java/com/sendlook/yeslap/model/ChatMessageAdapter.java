@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +21,7 @@ import com.sendlook.yeslap.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -48,30 +50,33 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
             view = inflater.inflate(R.layout.list_users, parent, false);
             TextView tvUsername = view.findViewById(R.id.tvUsername);
-            //TextView tvMessages = view.findViewById(R.id.tvMessages);
+            final ImageView ivStatus = view.findViewById(R.id.ivStatus);
             final CircleImageView cvUserImage = view.findViewById(R.id.cvImageUser);
 
             ChatMessage chatMessage = chatMessages.get(position);
             tvUsername.setText(chatMessage.getName());
-            //tvMessages.setText(chatMessage.getMessage());
-            //Recuperar a Foto
-            /**
-             mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(chatMessage.getUid());
-             mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-            String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
-            if (image != null | image != "") {
-            Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvUserImage);
-            }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            try {
+                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(chatMessage.getUid());
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String status = dataSnapshot.child(Utils.STATUS).getValue(String.class);
+                        if (Objects.equals(status, "online")) {
+                            ivStatus.setImageResource(R.drawable.on_user);
+                        } else {
+                            ivStatus.setImageResource(R.drawable.off_user);
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            } catch (Exception e) {
+                Utils.toastyError(context, e.getMessage());
             }
-            });*/
-
 
         }
 

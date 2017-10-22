@@ -21,6 +21,7 @@ import com.sendlook.yeslap.model.Message;
 import com.sendlook.yeslap.model.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -203,5 +204,31 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         mDatabase.removeEventListener(valueEventListenerMessages);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setStatusOnline();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setStatusOffline();
+    }
+
+    private void setStatusOnline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "online");
+        mDatabase.updateChildren(status);
+    }
+
+    private void setStatusOffline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "offline");
+        mDatabase.updateChildren(status);
     }
 }

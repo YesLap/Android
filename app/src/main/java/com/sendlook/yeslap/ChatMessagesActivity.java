@@ -23,6 +23,7 @@ import com.sendlook.yeslap.model.ChatMessageAdapter;
 import com.sendlook.yeslap.model.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class ChatMessagesActivity extends AppCompatActivity {
@@ -128,6 +129,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mDatabase.removeEventListener(valueEventListener);
+        setStatusOffline();
     }
 
     @Override
@@ -141,6 +143,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mDatabase.addValueEventListener(valueEventListener);
+        setStatusOnline();
     }
 
     //Check if the username and image profile isn't null
@@ -173,6 +176,20 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void setStatusOnline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "online");
+        mDatabase.updateChildren(status);
+    }
+
+    private void setStatusOffline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "offline");
+        mDatabase.updateChildren(status);
     }
 
 }

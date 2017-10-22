@@ -24,6 +24,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -182,6 +183,18 @@ public class FindUsersActivity extends AppCompatActivity {
         dialog.dismiss();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setStatusOnline();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setStatusOffline();
+    }
+
     private void loadUsers() {
 
         dialog = new ProgressDialog(FindUsersActivity.this);
@@ -211,6 +224,20 @@ public class FindUsersActivity extends AppCompatActivity {
 
         rvUsers.setAdapter(adapter);
 
+    }
+
+    private void setStatusOnline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "online");
+        mDatabase.updateChildren(status);
+    }
+
+    private void setStatusOffline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "offline");
+        mDatabase.updateChildren(status);
     }
 
     public static class FindUsersViewHolder extends RecyclerView.ViewHolder {

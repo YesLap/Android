@@ -14,7 +14,10 @@ import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sendlook.yeslap.model.Utils;
+
+import java.util.HashMap;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -184,6 +187,33 @@ public class SettingsActivity extends AppCompatActivity {
                 callActivity(UserProfileActivity.class);
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setStatusOnline();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setStatusOffline();
+    }
+
+    private void setStatusOnline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "online");
+        mDatabase.updateChildren(status);
+    }
+
+    private void setStatusOffline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "offline");
+        mDatabase.updateChildren(status);
     }
 
     private View.OnClickListener callActivity(final Class<?> activityClass) {

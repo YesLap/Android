@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -163,6 +164,18 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setStatusOnline();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setStatusOffline();
+    }
+
     private void sendToStart() {
         //Method that displaces the user and sends to the SignIn screen
         mAuth.signOut();
@@ -201,6 +214,20 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void setStatusOnline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "online");
+        mDatabase.updateChildren(status);
+    }
+
+    private void setStatusOffline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "offline");
+        mDatabase.updateChildren(status);
     }
 
 }

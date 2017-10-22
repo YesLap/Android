@@ -33,7 +33,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/on_user"
-        android:id="@+id/imageView6" />
+        android:id="@+id/ivStatus" />
 
     <TextView
         android:id="@+id/tvMessage"

@@ -31,6 +31,8 @@ public class Utils {
     public static final String IMAGE_3 = "image3";
     public static final String SINCE = "since";
     public static final String UID = "uid";
+    public static final String STATUS = "status";
+
 
     public static final String MONDAY = "1";
     public static final String TUESDAY = "2";

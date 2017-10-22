@@ -276,6 +276,18 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setStatusOnline();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setStatusOffline();
+    }
+
     private void setCalendar(String week, String state, ToggleButton toogle) {
         //Check if the button is activated
         if (!toogle.isChecked()) {
@@ -333,5 +345,18 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    private void setStatusOnline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "online");
+        mDatabase.updateChildren(status);
+    }
+
+    private void setStatusOffline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "offline");
+        mDatabase.updateChildren(status);
+    }
 
 }
