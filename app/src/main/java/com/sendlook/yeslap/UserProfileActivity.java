@@ -233,30 +233,29 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        //If there is no one logged in to Firebase then it sends you to the SignIn screen.
-        super.onStart();
-        mUser = mAuth.getCurrentUser();
-
-        if (mUser == null) {
-            sendToStart();
-        }
-
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        //Get the user data
-        getUserData();
-        //
-        setStatusOnline();
+        //If there is no one logged in to Firebase then it sends you to the SignIn screen.
+        mUser = mAuth.getCurrentUser();
+        if (mUser == null) {
+            sendToStart();
+        } else {
+            //Get the user data
+            getUserData();
+            //Set status Online
+            setStatusOnline();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        setStatusOffline();
+        mUser = mAuth.getCurrentUser();
+        //Chek if the user is logged
+        if (mUser != null) {
+            //Set status Offline
+            setStatusOffline();
+        }
     }
 
     private void sendToStart() {

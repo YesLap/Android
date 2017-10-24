@@ -68,15 +68,18 @@ public class ChatMessagesActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arrayChatMessages.clear();
                 for (DataSnapshot chat: dataSnapshot.getChildren()) {
-                    ChatMessage chatMessage = chat.getValue(ChatMessage.class);
-                    arrayChatMessages.add(chatMessage);
+                    try {
+                        ChatMessage chatMessage = chat.getValue(ChatMessage.class);
+                        arrayChatMessages.add(chatMessage);
+                    } catch (Exception e) {
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         };
 

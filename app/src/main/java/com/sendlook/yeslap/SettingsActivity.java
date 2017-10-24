@@ -12,7 +12,9 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
+import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sendlook.yeslap.model.Utils;
@@ -23,6 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private FirebaseUser mUser;
 
     private ImageView ivGoToProfile;
     private ImageView ivGoToChat;
@@ -172,10 +175,11 @@ public class SettingsActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAuth != null) {
-                    mAuth.signOut();
-                }
-                Utils.toastyInfo(getApplicationContext(), "Log Out");
+                mAuth.signOut();
+                Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                Utils.toastyInfo(getApplicationContext(), "See you soon!");
                 callActivity(UserProfileActivity.class);
             }
         });
@@ -193,13 +197,19 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setStatusOnline();
+        mUser = mAuth.getCurrentUser();
+        if (mUser != null) {
+            setStatusOnline();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        setStatusOffline();
+        mUser = mAuth.getCurrentUser();
+        if (mUser != null) {
+            setStatusOffline();
+        }
     }
 
     private void setStatusOnline() {
@@ -215,6 +225,7 @@ public class SettingsActivity extends AppCompatActivity {
         status.put("status", "offline");
         mDatabase.updateChildren(status);
     }
+
 
     private View.OnClickListener callActivity(final Class<?> activityClass) {
         return new View.OnClickListener() {

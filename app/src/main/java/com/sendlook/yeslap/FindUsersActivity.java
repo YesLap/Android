@@ -15,8 +15,11 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sendlook.yeslap.model.FindUsers;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Callback;
@@ -186,13 +189,17 @@ public class FindUsersActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setStatusOnline();
+        if (mAuth != null) {
+            setStatusOnline();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        setStatusOffline();
+        if (mAuth != null) {
+            setStatusOffline();
+        }
     }
 
     private void loadUsers() {
@@ -209,7 +216,21 @@ public class FindUsersActivity extends AppCompatActivity {
             @Override
             protected void populateViewHolder(final FindUsersViewHolder v, final FindUsers m, int position) {
                 v.setName(m.getUsername());
-                v.setImage(m.getImage(), getApplicationContext());
+                v.setImage(m.getImage1(), getApplicationContext());
+
+                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(m.getUid());
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        v.setImage(dataSnapshot.child(Utils.IMAGE_1).getValue(String.class), getApplicationContext());
+                        v.setStatus(dataSnapshot.child(Utils.STATUS).getValue(String.class));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
                 v.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -260,10 +281,19 @@ public class FindUsersActivity extends AppCompatActivity {
 
         public void setImage(String image, Context context) {
             CircleImageView ivUser = (CircleImageView) mView.findViewById(R.id.cvImageUser);
-            if (image == "" || image == null) {
+            if (Objects.equals(image, "") || image == null) {
                 ivUser.setImageResource(R.drawable.img_profile);
             } else {
                 Picasso.with(context).load((image)).placeholder(R.drawable.img_profile).into(ivUser);
+            }
+        }
+
+        public void setStatus(String status) {
+            ImageView ivStatus = (ImageView) mView.findViewById(R.id.ivStatus);
+            if (Objects.equals(status, "online")) {
+                ivStatus.setImageResource(R.drawable.on_user);
+            } else {
+                ivStatus.setImageResource(R.drawable.off_user);
             }
         }
 

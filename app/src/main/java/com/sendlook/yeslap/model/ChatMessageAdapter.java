@@ -3,6 +3,7 @@ package com.sendlook.yeslap.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,18 +56,25 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
             ChatMessage chatMessage = chatMessages.get(position);
             tvUsername.setText(chatMessage.getName());
-
             try {
                 mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(chatMessage.getUid());
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String status = dataSnapshot.child(Utils.STATUS).getValue(String.class);
+                        String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
                         if (Objects.equals(status, "online")) {
                             ivStatus.setImageResource(R.drawable.on_user);
                         } else {
                             ivStatus.setImageResource(R.drawable.off_user);
                         }
+
+                        if (Objects.equals(image, "") || image == null) {
+                           cvUserImage.setImageResource(R.drawable.img_profile);
+                        } else {
+                            Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvUserImage);
+                        }
+
                     }
 
                     @Override

@@ -63,17 +63,26 @@ public class MesageAdapter extends ArrayAdapter<Message>{
             tvMessage.setText(messages.getMessage());
 
             final ImageView ivStatus = view.findViewById(R.id.ivStatus);
+            final CircleImageView cvUserImage = view.findViewById(R.id.cvImageUser);
             try {
                 mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(messages.getUid());
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String status = dataSnapshot.child(Utils.STATUS).getValue(String.class);
+                        String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
                         if (Objects.equals(status, "online")) {
                             ivStatus.setImageResource(R.drawable.on_user);
                         } else {
                             ivStatus.setImageResource(R.drawable.off_user);
                         }
+
+                        if (Objects.equals(image, "") || image == null) {
+                            cvUserImage.setImageResource(R.drawable.img_profile);
+                        } else {
+                            Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvUserImage);
+                        }
+
                     }
 
                     @Override

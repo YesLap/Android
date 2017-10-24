@@ -279,13 +279,18 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setStatusOnline();
+        if  (mAuth != null) {
+            setStatusOnline();
+        }
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        setStatusOffline();
+        if  (mAuth != null) {
+            setStatusOffline();
+        }
     }
 
     private void setCalendar(String week, String state, ToggleButton toogle) {

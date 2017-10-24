@@ -101,8 +101,6 @@ public class ChatActivity extends AppCompatActivity {
                     }
 
 
-
-
                 }
 
             }
@@ -209,13 +207,17 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setStatusOnline();
+        if (mAuth != null) {
+            setStatusOnline();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        setStatusOffline();
+        if (mAuth != null) {
+            setStatusOffline();
+        }
     }
 
     private void setStatusOnline() {
