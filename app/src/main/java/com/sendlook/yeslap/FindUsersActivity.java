@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ru.whalemare.sheetmenu.SheetMenu;
 
 public class FindUsersActivity extends AppCompatActivity {
 
@@ -235,9 +237,29 @@ public class FindUsersActivity extends AppCompatActivity {
                 v.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(FindUsersActivity.this, ChatActivity.class);
-                        intent.putExtra("uid", (m.getUid()));
-                        startActivity(intent);
+
+                        SheetMenu.with(FindUsersActivity.this)
+                                .setTitle(m.getUsername())
+                                .setMenu(R.menu.menu_find)
+                                .setClick(new MenuItem.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem menuItem) {
+                                        switch (menuItem.getItemId()) {
+                                            case R.id.nav_menu_chat:
+                                                Intent intent = new Intent(FindUsersActivity.this, ChatActivity.class);
+                                                intent.putExtra("uid", (m.getUid()));
+                                                startActivity(intent);
+                                                break;
+                                            case R.id.nav_menu_view_profile:
+                                                Intent intentProfile = new Intent(FindUsersActivity.this, ProfileActivity.class);
+                                                intentProfile.putExtra("uid", (m.getUid()));
+                                                startActivity(intentProfile);
+                                                break;
+                                        }
+                                        return false;
+                                    }
+                                });
+
                     }
                 });
             }

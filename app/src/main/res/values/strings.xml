@@ -34,4 +34,6 @@
     <string name="licenses">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="view_profile">View Profile</string>
+    <string name="chat">Chat</string>
 </resources>
