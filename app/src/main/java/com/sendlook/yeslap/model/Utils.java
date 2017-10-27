@@ -33,6 +33,7 @@ public class Utils {
     public static final String UID = "uid";
     public static final String STATUS = "status";
     public static final String SPOTLIGHT = "spotlight";
+    public static final String FAVORITES = "favorites";
 
 
     public static final String MONDAY = "1";

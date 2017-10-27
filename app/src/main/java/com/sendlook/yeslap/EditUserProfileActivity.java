@@ -62,6 +62,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private String downloadURL = "";
     private Integer ImageStatus = 0;
     private Integer Image = 0;
+    private PickImageDialog pickImage;
 
 
     @Override
@@ -118,6 +119,30 @@ public class EditUserProfileActivity extends AppCompatActivity {
             }
         });
 
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EditUserProfileActivity.this, ChatMessagesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EditUserProfileActivity.this, CalendarActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EditUserProfileActivity.this, FindUsersActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //ChangeImage1 Event Button
         btnChangeImage1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +168,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 //.setGalleryIcon(R.drawable.gallery)
                 //.setCameraIcon(R.drawable.photo_camera);
 
-                PickImageDialog.build(setup)
+                pickImage = PickImageDialog.build(setup)
                         .setOnClick(new IPickClick() {
                             @Override
                             public void onGalleryClick() {
@@ -159,6 +184,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 //Toast.makeText(SampleActivity.this, "Camera Click!", Toast.LENGTH_LONG).show();
                             }
                         }).show(EditUserProfileActivity.this);
+
             }
         });
 
@@ -166,6 +192,12 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnChangeImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog = new ProgressDialog(EditUserProfileActivity.this);
+                dialog.setTitle(getString(R.string.uploading_image));
+                dialog.setMessage(getString(R.string.uploading_image_msg));
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+
                 PickSetup setup = new PickSetup()
                         .setTitle("Choose")
                         .setTitleColor(Color.BLACK)
@@ -187,11 +219,11 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 //.setGalleryIcon(R.drawable.gallery)
                 //.setCameraIcon(R.drawable.photo_camera);
 
-                PickImageDialog.build(setup)
+                pickImage = PickImageDialog.build(setup)
                         .setOnClick(new IPickClick() {
                             @Override
                             public void onGalleryClick() {
-                                Image = 2;
+                                ImageStatus = 2;
                                 Intent intentImage2 = new Intent();
                                 intentImage2.setType(Utils.TYPE_IMAGE);
                                 intentImage2.setAction(Intent.ACTION_GET_CONTENT);
@@ -231,16 +263,15 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 //.setGalleryIcon(R.drawable.gallery)
                 //.setCameraIcon(R.drawable.photo_camera);
 
-                PickImageDialog.build(setup)
+                pickImage = PickImageDialog.build(setup)
                         .setOnClick(new IPickClick() {
                             @Override
                             public void onGalleryClick() {
-                                Image = 3;
+                                ImageStatus = 3;
                                 Intent intentImage3 = new Intent();
                                 intentImage3.setType(Utils.TYPE_IMAGE);
                                 intentImage3.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(Intent.createChooser(intentImage3, getString(R.string.select_image)), GALLERY_PICK_IMAGE_3
-                                );
+                                startActivityForResult(Intent.createChooser(intentImage3, getString(R.string.select_image)), GALLERY_PICK_IMAGE_3);
                             }
 
                             @Override
@@ -265,18 +296,17 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 }
 
                 if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-                    dialog = new ProgressDialog(EditUserProfileActivity.this);
-                    dialog.setTitle(getString(R.string.uploading_image));
-                    dialog.setMessage(getString(R.string.uploading_image_msg));
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-
                     CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
                     //Saving Image1
                     if (resultCode == RESULT_OK && ImageStatus == 1) {
                         Uri resultUri = mResult.getUri();
                         if (resultUri != null) {
+
+                            dialog = new ProgressDialog(EditUserProfileActivity.this);
+                            dialog.setTitle(getString(R.string.uploading_image));
+                            dialog.setMessage(getString(R.string.uploading_image_msg));
+                            dialog.setCanceledOnTouchOutside(false);
+                            dialog.show();
 
                             mStorage = FirebaseStorage.getInstance().getReference();
                             StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image1.jpg");
@@ -285,6 +315,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
+                                        pickImage.dismiss();
                                         downloadURL = task.getResult().getDownloadUrl().toString();
                                         Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
@@ -319,12 +350,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                 if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
-                    dialog = new ProgressDialog(EditUserProfileActivity.this);
-                    dialog.setTitle(getString(R.string.uploading_image));
-                    dialog.setMessage(getString(R.string.uploading_image_msg));
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-
                     CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
                     //Saving Image1
                     if (resultCode == RESULT_OK) {
@@ -338,6 +363,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
+                                        pickImage.dismiss();
                                         downloadURL = task.getResult().getDownloadUrl().toString();
                                         Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
@@ -358,6 +384,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                             Exception error = mResult.getError();
                             Utils.toastyError(getApplicationContext(), error.getMessage());
                             dialog.hide();
+                            pickImage.dismiss();
                         }
                         ImageStatus = 0;
                     }
@@ -370,12 +397,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 }
 
                 if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-                    dialog = new ProgressDialog(EditUserProfileActivity.this);
-                    dialog.setTitle(getString(R.string.uploading_image));
-                    dialog.setMessage(getString(R.string.uploading_image_msg));
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
 
                     CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
                     //Saving Image1
@@ -390,6 +411,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
+                                        pickImage.dismiss();
                                         downloadURL = task.getResult().getDownloadUrl().toString();
                                         Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
@@ -410,13 +432,12 @@ public class EditUserProfileActivity extends AppCompatActivity {
                             Exception error = mResult.getError();
                             Utils.toastyError(getApplicationContext(), error.getMessage());
                             dialog.hide();
+                            pickImage.dismiss();
                         }
                         ImageStatus = 0;
                     }
                 }
             }
-
-
 
 
         } catch (Exception e) {
@@ -429,7 +450,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if  (mAuth != null) {
+        if (mAuth != null) {
             setStatusOnline();
         }
     }
@@ -437,7 +458,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if  (mAuth != null) {
+        if (mAuth != null) {
             setStatusOffline();
         }
     }

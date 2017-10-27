@@ -258,7 +258,7 @@ public class FindUsersActivity extends AppCompatActivity {
                                         }
                                         return false;
                                     }
-                                });
+                                }).show();
 
                     }
                 });
