@@ -39,7 +39,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseUser mUser;
     private FloatingActionButton btnEditUserProfile;
-    private ImageView btnGotoProfile, btnGoToSettings;
+    private ImageView btnGotoProfile, btnGoToSettings, btnFavorite;
     private RelativeLayout btnChat, btnCalendar, btnSearch;
     private TextView tvUsername;
     private CircleImageView cvImageUser;
@@ -62,6 +62,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnChat = (RelativeLayout) findViewById(R.id.btnChat);
         btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
+        btnFavorite = (ImageView) findViewById(R.id.btnFavorite);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +111,15 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //btnFavorite Event Button
+        btnFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserProfileActivity.this, FavoritesActivity.class);
                 startActivity(intent);
             }
         });

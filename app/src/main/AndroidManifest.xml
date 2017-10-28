@@ -74,7 +74,8 @@
             android:name=".ChatMessagesActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".ReportActivity"></activity>
+        <activity android:name=".ReportActivity" />
+        <activity android:name=".FavoritesActivity"></activity>
     </application>
 
 </manifest>
