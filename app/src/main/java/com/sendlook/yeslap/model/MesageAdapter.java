@@ -94,24 +94,6 @@ public class MesageAdapter extends ArrayAdapter<Message>{
                 Utils.toastyError(context, e.getMessage());
             }
 
-            /**
-             final CircleImageView cvUserImage = view.findViewById(R.id.cvImageUser);
-             mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(messages.getUid());
-             mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-            String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
-            if (image != null | image != "") {
-            Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvUserImage);
-            }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-            });*/
-
         }
 
         return view;

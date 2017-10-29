@@ -26,7 +26,19 @@
         android:layout_marginTop="15sp"
         android:src="@drawable/gotosetting" />
 
+    <GridView
+        android:id="@+id/gvFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/wave"
+        android:layout_below="@id/btnGoToSettings"
+        android:columnWidth="100sp"
+        android:gravity="center"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth" />
+
     <ImageView
+        android:id="@+id/wave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
