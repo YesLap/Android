@@ -26,7 +26,7 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FavoritesAdapter extends ArrayAdapter<Favorites>{
+public class FavoritesAdapter extends ArrayAdapter<Favorites> {
 
     private Context context;
     private ArrayList<Favorites> favorites;
@@ -43,23 +43,21 @@ public class FavoritesAdapter extends ArrayAdapter<Favorites>{
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = null;
+
         mAuth = FirebaseAuth.getInstance();
 
         if (favorites != null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.list_favorites, parent, false);
 
-            Favorites favorite =  favorites.get(position);
-
-            String uid = favorite.getUid();
-            Utils.toastyError(context, uid);
-
-            final CircleImageView cvImageUser = (CircleImageView) view.findViewById(R.id.cvImageUser);
+            final CircleImageView cvImageUser = (CircleImageView) view.findViewById(R.id.cvUserImageFav);
             final ImageView ivStatus = (ImageView) view.findViewById(R.id.ivStatus);
             final TextView tvUsername = (TextView) view.findViewById(R.id.tvUsername);
 
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
-            mDatabase.addValueEventListener(new ValueEventListener() {
+            Favorites favorite = favorites.get(position);
+
+            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(favorite.getUid());
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String username = dataSnapshot.child("username").getValue(String.class);
@@ -74,11 +72,11 @@ public class FavoritesAdapter extends ArrayAdapter<Favorites>{
                         ivStatus.setImageResource(R.drawable.off_user);
                     }
 
-                    if (Objects.equals(image, "") || image == null) {
-                        cvImageUser.setImageResource(R.drawable.img_profile);
-                    } else {
-                        Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
-                    }
+                    //if (Objects.equals(image, "") || image == null) {
+                    //    cvImageUser.setImageResource(R.drawable.img_profile);
+                    //} else {
+                    //    Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
+                    //}
 
                 }
 

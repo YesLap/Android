@@ -1,6 +1,8 @@
 package com.sendlook.yeslap;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -10,7 +12,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -465,49 +469,58 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
     private void updateUsername() {
         //Dialog to change the user name
-        new LovelyTextInputDialog(EditUserProfileActivity.this, R.style.EditTextTintTheme)
-                .setTopColorRes(R.color.colorLightBlue)
-                .setTitle(R.string.change_username)
-                //.setMessage("Change your username")
-                .setIcon(R.drawable.ic_create_white_24dp)
-                .setInputFilter(R.string.text_input_error_message, new LovelyTextInputDialog.TextFilter() {
-                    @Override
-                    public boolean check(String text) {
-                        return text.matches("\\w+");
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+        View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        if (Objects.equals(userInputDialogEditText.getText().toString(), "")) {
+                            Utils.toastyInfo(getApplicationContext(), "Please, insert a Username!");
+                        } else {
+                            //Progress Dialog
+                            dialog = new ProgressDialog(EditUserProfileActivity.this);
+                            dialog.setTitle(getString(R.string.loading));
+                            dialog.setMessage(getString(R.string.loading_msg));
+                            dialog.setCanceledOnTouchOutside(false);
+                            dialog.show();
+
+                            //Function to save the user data at Firebase: Users > UID > user data
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                            Map<String, Object> user = new HashMap<>();
+                            user.put(Utils.USERNAME, userInputDialogEditText.getText().toString());
+                            mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        dialog.dismiss();
+                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.username_changed));
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    dialog.dismiss();
+                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                }
+                            });
+                        }
                     }
                 })
-                .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
-                    @Override
-                    public void onTextInputConfirmed(String text) {
-                        //Progress Dialog
-                        dialog = new ProgressDialog(EditUserProfileActivity.this);
-                        dialog.setTitle(getString(R.string.loading));
-                        dialog.setMessage(getString(R.string.loading_msg));
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.show();
 
-                        //Function to save the user data at Firebase: Users > UID > user data
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                        Map<String, Object> user = new HashMap<>();
-                        user.put(Utils.USERNAME, text);
-                        mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    dialog.dismiss();
-                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.username_changed));
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                dialog.dismiss();
-                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
                             }
                         });
-                    }
-                })
-                .show();
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
     }
 
     private void getUserData() {
@@ -570,5 +583,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
         status.put("status", "offline");
         mDatabase.updateChildren(status);
     }
+
 
 }

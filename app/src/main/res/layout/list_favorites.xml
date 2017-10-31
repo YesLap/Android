@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
+    android:padding="5sp"
     android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100sp"
         android:layout_height="100sp"
         android:src="@drawable/img_profile"
-        android:id="@+id/cvUserImage" />
+        android:id="@+id/cvUserImageFav" />
 
     <ImageView
         android:id="@+id/ivStatus"
         android:layout_width="20sp"
         android:layout_height="20sp"
-        android:layout_alignBottom="@+id/cvUserImage"
-        android:layout_alignEnd="@+id/cvUserImage"
+        android:layout_alignBottom="@+id/cvUserImageFav"
+        android:layout_alignEnd="@+id/cvUserImageFav"
         android:layout_marginBottom="7dp"
         android:layout_marginEnd="7dp"
         android:background="@drawable/on_user" />
@@ -26,7 +27,7 @@
         android:layout_width="100sp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/cvUserImage"
+        android:layout_below="@+id/cvUserImageFav"
         android:text="Username"
         android:textStyle="bold" />
 

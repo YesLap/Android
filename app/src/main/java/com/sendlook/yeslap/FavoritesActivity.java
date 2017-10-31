@@ -18,6 +18,7 @@ import com.sendlook.yeslap.model.FavoritesAdapter;
 import com.sendlook.yeslap.model.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FavoritesActivity extends AppCompatActivity {
 
@@ -42,7 +43,7 @@ public class FavoritesActivity extends AppCompatActivity {
         adapter = new FavoritesAdapter(getApplicationContext(), arrayFavorites);
         gvFavorite.setAdapter(adapter);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("favorites").child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid());
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -66,4 +67,47 @@ public class FavoritesActivity extends AppCompatActivity {
 
 
     }
+
+    private void setStatusOnline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "online");
+        mDatabase.updateChildren(status);
+    }
+
+    private void setStatusOffline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "offline");
+        mDatabase.updateChildren(status);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Stop the EventListener
+        mDatabase.removeEventListener(valueEventListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setStatusOffline();
+        mDatabase.removeEventListener(valueEventListener);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Iniciate the EventListener
+        mDatabase.addValueEventListener(valueEventListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setStatusOnline();
+        mDatabase.addValueEventListener(valueEventListener);
+    }
+
 }
