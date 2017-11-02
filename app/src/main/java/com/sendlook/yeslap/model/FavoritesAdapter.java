@@ -72,11 +72,8 @@ public class FavoritesAdapter extends ArrayAdapter<Favorites> {
                         ivStatus.setImageResource(R.drawable.off_user);
                     }
 
-                    //if (Objects.equals(image, "") || image == null) {
-                    //    cvImageUser.setImageResource(R.drawable.img_profile);
-                    //} else {
-                    //    Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
-                    //}
+                    Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
+
 
                 }
 

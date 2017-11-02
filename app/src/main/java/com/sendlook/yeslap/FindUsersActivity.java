@@ -217,6 +217,11 @@ public class FindUsersActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<FindUsers, FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<FindUsers, FindUsersViewHolder>(FindUsers.class, R.layout.list_users, FindUsersViewHolder.class, mDatabase) {
             @Override
             protected void populateViewHolder(final FindUsersViewHolder v, final FindUsers m, int position) {
+                //if (Objects.equals(m.getUid(), mAuth.getCurrentUser().getUid())){
+                //arrayUsers.remove(position);
+                //notifyDataSetChanged();
+                //Utils.toastyInfo(getApplicationContext(), "m.getUid(): " + m.getUid() + "\n" + "Current User: " + mAuth.getCurrentUser().getUid() +  "ArraySize: " + arrayUsers.size());
+                //} else {
                 v.setName(m.getUsername());
                 v.setImage(m.getImage1(), getApplicationContext());
 
@@ -233,6 +238,7 @@ public class FindUsersActivity extends AppCompatActivity {
 
                     }
                 });
+                //}
 
                 v.mView.setOnClickListener(new View.OnClickListener() {
                     @Override

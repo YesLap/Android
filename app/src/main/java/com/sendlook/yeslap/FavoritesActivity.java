@@ -3,6 +3,7 @@ package com.sendlook.yeslap;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
@@ -24,6 +25,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private DatabaseReference database;
     private GridView gvFavorite;
     private ArrayAdapter<Favorites> adapter;
     private ArrayList<Favorites> arrayFavorites;
@@ -37,18 +39,20 @@ public class FavoritesActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        String uid = mAuth.getCurrentUser().getUid();
+
         gvFavorite = (GridView) findViewById(R.id.gvFavorites);
 
         arrayFavorites = new ArrayList<>();
         adapter = new FavoritesAdapter(getApplicationContext(), arrayFavorites);
         gvFavorite.setAdapter(adapter);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(uid);
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arrayFavorites.clear();
-                for (DataSnapshot favorite: dataSnapshot.getChildren()) {
+                for (DataSnapshot favorite : dataSnapshot.getChildren()) {
                     try {
                         Favorites favorites = favorite.getValue(Favorites.class);
                         arrayFavorites.add(favorites);
@@ -61,7 +65,6 @@ public class FavoritesActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         };
 
@@ -69,24 +72,17 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     private void setStatusOnline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
         status.put("status", "online");
-        mDatabase.updateChildren(status);
+        database.updateChildren(status);
     }
 
     private void setStatusOffline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
         status.put("status", "offline");
-        mDatabase.updateChildren(status);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //Stop the EventListener
-        mDatabase.removeEventListener(valueEventListener);
+        database.updateChildren(status);
     }
 
     @Override
@@ -94,13 +90,6 @@ public class FavoritesActivity extends AppCompatActivity {
         super.onPause();
         setStatusOffline();
         mDatabase.removeEventListener(valueEventListener);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //Iniciate the EventListener
-        mDatabase.addValueEventListener(valueEventListener);
     }
 
     @Override

@@ -74,6 +74,8 @@
         <activity
             android:name=".FavoritesActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".PinLockActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

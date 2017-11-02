@@ -33,6 +33,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     private RelativeLayout btnChat, btnCalendar, btnSearch;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private DatabaseReference database;
     private ValueEventListener valueEventListener;
     private ArrayAdapter<ChatMessage> adapter;
     private ArrayList<ChatMessage> arrayChatMessages;
@@ -182,17 +183,17 @@ public class ChatMessagesActivity extends AppCompatActivity {
     }
 
     private void setStatusOnline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
         status.put("status", "online");
-        mDatabase.updateChildren(status);
+        database.updateChildren(status);
     }
 
     private void setStatusOffline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
         status.put("status", "offline");
-        mDatabase.updateChildren(status);
+        database.updateChildren(status);
     }
 
 }

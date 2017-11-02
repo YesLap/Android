@@ -63,6 +63,7 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String status = dataSnapshot.child(Utils.STATUS).getValue(String.class);
                         String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
+
                         if (Objects.equals(status, "online")) {
                             ivStatus.setImageResource(R.drawable.on_user);
                         } else {

@@ -23,6 +23,9 @@ import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
 import com.vansuita.pickimage.util.Util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -65,8 +68,12 @@ public class ProfileActivity extends AppCompatActivity {
         btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid()).push();
+                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid()).child(uid);
                 HashMap<String, String> favorite = new HashMap<>();
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                Date hora = Calendar.getInstance().getTime();
+                String date = sdf.format(hora);
+                favorite.put("date", date);
                 favorite.put("uid", uid);
                 mDatabase.setValue(favorite).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
