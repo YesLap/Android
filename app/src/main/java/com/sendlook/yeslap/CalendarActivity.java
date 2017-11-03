@@ -19,9 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.sendlook.yeslap.model.Base64Custom;
 import com.sendlook.yeslap.model.Utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -36,6 +36,8 @@ public class CalendarActivity extends AppCompatActivity {
     private ImageView btnGoToProfile, btnGoToSettings;
     private RelativeLayout btnCalendar, btnChat, btnSearch;
     private ProgressDialog dialog;
+    private ArrayList<String> arraySundayMorning, arraySundayAfternoon, arraySundayNight, arrayMondayMorning, arrayMondayAfternoon, arrayMondayNight, arrayTuesdayMorning, arrayTuesdayAfternoon, arrayTuesdayNight, arrayWednesdayMorning, arrayWednesdayAfternoon, arrayWednesdayNight,arrayThursdayMorning, arrayThursdayAfternoon, arrayThursdayNight,arrayFridayMorning, arrayFridayAfternoon, arrayFridayNight, arraySaturdayMorning, arraySaturdayAfternoon, arraySaturdayNight;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         mAuth = FirebaseAuth.getInstance();
+        uid = mAuth.getCurrentUser().getUid();
 
         btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
         btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
@@ -82,6 +85,30 @@ public class CalendarActivity extends AppCompatActivity {
         tbAvailabilityThu = (ToggleButton) findViewById(R.id.tbAvailabilityThu);
         tbAvailabilityFri = (ToggleButton) findViewById(R.id.tbAvailabilityFri);
         tbAvailabilitySat = (ToggleButton) findViewById(R.id.tbAvailabilitySat);
+
+        arraySundayMorning = new ArrayList<String>();
+        arraySundayAfternoon = new ArrayList<String>();
+        arraySundayNight = new ArrayList<String>();
+        arrayMondayMorning = new ArrayList<String>();
+        arrayMondayAfternoon = new ArrayList<String>();
+        arrayMondayNight = new ArrayList<String>();
+        arrayTuesdayMorning = new ArrayList<String>();
+        arrayTuesdayAfternoon = new ArrayList<String>();
+        arrayTuesdayNight = new ArrayList<String>();
+        arrayWednesdayMorning = new ArrayList<String>();
+        arrayWednesdayAfternoon = new ArrayList<String>();
+        arrayWednesdayNight = new ArrayList<String>();
+        arrayThursdayMorning = new ArrayList<String>();
+        arrayThursdayAfternoon = new ArrayList<String>();
+        arrayThursdayNight = new ArrayList<String>();
+        arrayFridayMorning = new ArrayList<String>();
+        arrayFridayAfternoon = new ArrayList<String>();
+        arrayFridayNight = new ArrayList<String>();
+        arraySaturdayMorning = new ArrayList<String>();
+        arraySaturdayAfternoon = new ArrayList<String>();
+        arraySaturdayNight = new ArrayList<String>();
+
+        getCalendar();
 
         btnGoToProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,9 +332,9 @@ public class CalendarActivity extends AppCompatActivity {
             dialog.show();
 
             //Saving at the Firebase
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("calendar").child(week).child(state);
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("calendar").child(week).child(state).push();
             HashMap<String, String> uid = new HashMap<>();
-            uid.put("uid", Base64Custom.encodeBase64(mAuth.getCurrentUser().getUid()));
+            uid.put("uid", mAuth.getCurrentUser().getUid());
             mDatabase.setValue(uid).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -362,6 +389,88 @@ public class CalendarActivity extends AppCompatActivity {
         HashMap<String, Object> status = new HashMap<>();
         status.put("status", "offline");
         mDatabase.updateChildren(status);
+    }
+
+    private void getCalendar() {
+        getCalendar(Utils.SUNDAY, arraySundayMorning, arraySundayAfternoon, arraySundayNight, ivMorningSun, ivAfternoonSun, ivNightSun);
+        getCalendar(Utils.MONDAY, arrayMondayMorning, arrayMondayAfternoon, arrayMondayNight, ivMorningMon, ivAfternoonMon, ivNightMon);
+        getCalendar(Utils.TUESDAY, arrayTuesdayMorning, arrayTuesdayAfternoon, arrayTuesdayNight, ivMorningTue, ivAfternoonTue, ivNightTue);
+        getCalendar(Utils.WEDNESDAY, arrayWednesdayMorning, arrayWednesdayAfternoon, arrayWednesdayNight, ivMorningWed, ivAfternoonWed, ivNightWed);
+        getCalendar(Utils.THURSDAY, arrayThursdayMorning, arrayThursdayAfternoon, arrayThursdayNight, ivMorningThu, ivAfternoonThu, ivNightThu);
+        getCalendar(Utils.FRIDAY, arrayFridayMorning, arrayFridayAfternoon, arrayFridayNight, ivMorningFri, ivAfternoonFri, ivNightFri);
+        getCalendar(Utils.SATURDAY, arraySaturdayMorning, arraySaturdayAfternoon, arraySaturdayNight, ivMorningSat, ivAfternoonSat, ivNightSat);
+    }
+
+    private void getCalendar(String week, final ArrayList<String> arrayMorning, final ArrayList<String> arrayAfternoon, final ArrayList<String> arrayNight, final ImageView ivMorning, final ImageView ivAfternoon, final ImageView ivNight) {
+        //Morning
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child("morning");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot i: dataSnapshot.getChildren()) {
+                    String r1 = i.getValue().toString().replace("{uid=", "");
+                    String r2 = r1.replace("}","");
+                    arrayMorning.add(r2);
+                }
+
+                if (arrayMorning.contains(uid)) {
+                    ivMorning.setImageResource(R.drawable.iconmorningon);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //Afternoon
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child("afternoon");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot i: dataSnapshot.getChildren()) {
+                    String r1 = i.getValue().toString().replace("{uid=", "");
+                    String r2 = r1.replace("}","");
+                    arrayAfternoon.add(r2);
+                }
+
+                if (arrayAfternoon.contains(uid)) {
+                    ivAfternoon.setImageResource(R.drawable.iconafternoonon);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //Night
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child("night");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot i: dataSnapshot.getChildren()) {
+                    String r1 = i.getValue().toString().replace("{uid=", "");
+                    String r2 = r1.replace("}","");
+                    arrayNight.add(r2);
+                }
+
+                if (arrayNight.contains(uid)) {
+                    ivNight.setImageResource(R.drawable.iconnighton);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 }

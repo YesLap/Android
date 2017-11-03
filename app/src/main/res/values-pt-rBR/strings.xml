@@ -65,4 +65,7 @@
     <string name="settings_msg">Aqui você pode alterar suas configurações</string>
     <string name="favorite_users_msg">Aqui você pode ver seus usuários favoritos</string>
     <string name="find_users_msg">Aqui você pode encontrar usuários para conversar</string>
+    <string name="weak_password">Digite uma senha forte, que contenha letras e números</string>
+    <string name="invalid_credential">E-mail Inválido</string>
+    <string name="email_used">Este E-mail já está sendo usado</string>
 </resources>

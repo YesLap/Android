@@ -119,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // implementar
-                Utils.toastyInfo(getApplicationContext(), "Buinding");
+                Utils.toastyInfo(getApplicationContext(), "Building");
             }
         });
 
