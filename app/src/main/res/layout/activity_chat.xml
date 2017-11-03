@@ -33,7 +33,7 @@
         android:layout_alignTop="@+id/cvImageUser"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Username"
+        android:text="@string/username"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorLightBlue"
         android:textStyle="bold" />

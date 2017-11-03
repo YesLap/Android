@@ -480,7 +480,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 .setPositiveButton("Send", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
                         if (Objects.equals(userInputDialogEditText.getText().toString(), "")) {
-                            Utils.toastyInfo(getApplicationContext(), "Please, insert a Username!");
+                            Utils.toastyInfo(getApplicationContext(), getString(R.string.insert_username));
                         } else {
                             //Progress Dialog
                             dialog = new ProgressDialog(EditUserProfileActivity.this);

@@ -116,7 +116,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.toastyInfo(getApplicationContext(), "Are you already here!");
+                Utils.toastyInfo(getApplicationContext(), getString(R.string.are_you_already_here));
             }
         });
 
@@ -166,7 +166,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
                 if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
                     dialog.dismiss();
-                    Utils.toastyInfo(getApplicationContext(), "Please, change your username and add a profile photo to look for someone!");
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.please_change_image_username));
                 } else {
                     dialog.dismiss();
                     Intent intent = new Intent(ChatMessagesActivity.this, FindUsersActivity.class);

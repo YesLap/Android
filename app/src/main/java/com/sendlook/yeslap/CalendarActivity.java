@@ -101,7 +101,7 @@ public class CalendarActivity extends AppCompatActivity {
         btnCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.toastyInfo(getApplicationContext(), "Are you already here!");
+                Utils.toastyInfo(getApplicationContext(), getString(R.string.are_you_already_here));
             }
         });
 
@@ -335,7 +335,7 @@ public class CalendarActivity extends AppCompatActivity {
                 String image = dataSnapshot.child("image1").getValue(String.class);
 
                 if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
-                    Utils.toastyInfo(getApplicationContext(), "Please, change your username and add a profile photo to look for someone!");
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.please_change_image_username));
                 } else {
                     Intent intent = new Intent(CalendarActivity.this, FindUsersActivity.class);
                     startActivity(intent);

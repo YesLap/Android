@@ -29,12 +29,43 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app">Version 1.0.22</string>
-    <string name="legal">LEGAL</string>
-    <string name="licenses">Licenses</string>
+    <string name="version_app" translatable="false">Version 1.0.22</string>
+    <string name="legal" translatable="false">LEGAL</string>
+    <string name="licenses" translatable="false">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="view_profile">View Profile</string>
     <string name="chat">Chat</string>
     <string name="addeedd_favorite">Favorite Addeedd</string>
+    <string name="report_one">Does this profile appear to be fake</string>
+    <string name="report_two">This profile appears to be under 18 years old</string>
+    <string name="report_three">Report abuse of this Person</string>
+    <string name="report_four">I want to block this person</string>
+    <string name="send_a_message_about_this_person">Send a message about this person</string>
+    <string name="send">Send</string>
+    <string name="change_your_username">Change Your Username</string>
+    <string name="are_you_already_here">Are you already here!</string>
+    <string name="please_change_image_username">Please, change your username and add a profile photo to look for someone!</string>
+    <string name="enter_a_messege_to_send">Enter a message to send</string>
+    <string name="error_send_message">Error sending message</string>
+    <string name="error_saving_conversation">Error saving conversation</string>
+    <string name="insert_username">Please, insert a Username!</string>
+    <string name="select_option_to_send_message">Please, select a option to send your report!</string>
+    <string name="report_sended">Report Sended!</string>
+    <string name="welcome_yeslap">Welcome to YesLap!</string>
+    <string name="click_edit_profile">Click here to edit your profile</string>
+    <string name="chat_messages">Chat Messages</string>
+    <string name="chat_messages_mgs">Here you can see your chat messages</string>
+    <string name="appointment_book">Appointment Book</string>
+    <string name="appointment_book_msg">Here you can change when you are free or busy</string>
+    <string name="find_users">Find Users</string>
+    <string name="find_users_msg">Here you can find users to chat</string>
+    <string name="favorite_users">Favorite Users</string>
+    <string name="favorite_users_msg">Here you can see your favorite users</string>
+    <string name="settings">Settings</string>
+    <string name="settings_msg">Here you can change your settings</string>
+    <string name="enjoy_yeslap">Enjoy the YesLap</string>
+    <string name="enjoy_yeslap_msg">Now you already know how the app works, enjoy it to the fullest. Sincerely, YesLap Team!</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="no_internet_connection_msg">You are offline please check your internet connection and try again</string>
 </resources>

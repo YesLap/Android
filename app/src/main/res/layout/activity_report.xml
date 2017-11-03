@@ -51,7 +51,7 @@
         android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Username"/>
+        android:text="@string/username"/>
 
     <RadioGroup
         android:layout_below="@id/tvUsername"
@@ -66,27 +66,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Does this profile appear to be fake" />
+            android:text="@string/report_one" />
 
         <RadioButton
             android:id="@+id/rbTwo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="This profile appears to be under 18 years old" />
+            android:text="@string/report_two" />
 
         <RadioButton
             android:id="@+id/rbThree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Report abuse of this Person"/>
+            android:text="@string/report_three"/>
 
         <RadioButton
             android:id="@+id/rbFour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="I want to block this person" />
+            android:text="@string/report_four" />
 
     </RadioGroup>
 
@@ -94,7 +94,7 @@
         android:id="@+id/etMsgReport"
         android:layout_width="250sp"
         android:layout_height="120sp"
-        android:hint="Send a message about this person"
+        android:hint="@string/send_a_message_about_this_person"
         android:gravity="center"
         android:layout_marginTop="5sp"
         android:background="@drawable/input_outline_chat"
@@ -109,7 +109,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10sp"
         android:background="@drawable/input_outline_button_blue"
-        android:text="Send"
+        android:text="@string/send"
         android:textColor="@android:color/white" />
 
     <ImageView

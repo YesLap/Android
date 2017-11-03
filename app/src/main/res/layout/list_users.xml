@@ -41,7 +41,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/imageView4"
-        android:text="Username"
+        android:text="@string/username"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorLightBlue"
         android:textStyle="bold" />

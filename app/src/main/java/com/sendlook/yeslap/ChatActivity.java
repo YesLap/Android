@@ -59,7 +59,7 @@ public class ChatActivity extends AppCompatActivity {
                 String message = etChat.getText().toString().trim();
 
                 if (message.isEmpty()) {
-                    Utils.toastyInfo(getApplicationContext(), "Enter a message to send");
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.enter_a_messege_to_send));
                 } else {
 
                     Message msg = new Message();
@@ -69,12 +69,12 @@ public class ChatActivity extends AppCompatActivity {
                     //salva para o remetente
                     Boolean returnSender = saveMessage(uidSender, uidAddressee, msg);
                     if (!returnSender) {
-                        Utils.toastyError(getApplicationContext(), "Error sending message");
+                        Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
                     } else {
                         //salva para o destinatario
                         Boolean returnAddressee = saveMessage(uidAddressee, uidSender, msg);
                         if (!returnAddressee) {
-                            Utils.toastyError(getApplicationContext(), "Error sending message");
+                            Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
                         } else {
                             etChat.setText("");
                         }
@@ -87,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
                     chatSender.setMessage(message);
                     Boolean returnSaveChatSender = saveChat(uidSender, uidAddressee, chatSender);
                     if (!returnSaveChatSender) {
-                        Utils.toastyError(getApplicationContext(), "Error saving conversation");
+                        Utils.toastyError(getApplicationContext(), getString(R.string.error_saving_conversation));
                     } else {
                         //Salva a Conversa para o Remetente
                         ChatMessage chatAddressee = new ChatMessage();
@@ -96,7 +96,7 @@ public class ChatActivity extends AppCompatActivity {
                         chatAddressee.setMessage(message);
                         Boolean returnSaveChatAdressee = saveChat(uidAddressee, uidSender, chatAddressee);
                         if (!returnSaveChatAdressee) {
-                            Utils.toastyError(getApplicationContext(), "Error saving conversation");
+                            Utils.toastyError(getApplicationContext(), getString(R.string.error_saving_conversation));
                         }
                     }
 

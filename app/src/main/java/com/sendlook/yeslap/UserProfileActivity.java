@@ -136,50 +136,50 @@ public class UserProfileActivity extends AppCompatActivity {
         SimpleTarget targetEditProfile = new SimpleTarget.Builder(this)
                 .setPoint(440f, 343f)
                 .setRadius(50f)
-                .setTitle("Welcome to YesLap!")
-                .setDescription("Click here to edit your profile")
+                .setTitle(getString(R.string.welcome_yeslap))
+                .setDescription(getString(R.string.click_edit_profile))
                 .build();
 
         SimpleTarget targetChatMessages = new SimpleTarget.Builder(this)
                 .setPoint(160f, 600f)
                 .setRadius(90f)
-                .setTitle("Chat Messages")
-                .setDescription("Here you can see your chat messages")
+                .setTitle(getString(R.string.chat_messages))
+                .setDescription(getString(R.string.chat_messages_mgs))
                 .build();
 
         SimpleTarget targetCalendar = new SimpleTarget.Builder(this)
                 .setPoint(360f, 600f)
                 .setRadius(90f)
-                .setTitle("Appointment Book")
-                .setDescription("Here you can change when you are free or busy")
+                .setTitle(getString(R.string.appointment_book))
+                .setDescription(getString(R.string.appointment_book_msg))
                 .build();
 
         SimpleTarget targetFind = new SimpleTarget.Builder(this)
                 .setPoint(565f, 600f)
                 .setRadius(90f)
-                .setTitle("Find Users")
-                .setDescription("Here you can find users to chat")
+                .setTitle(getString(R.string.find_users))
+                .setDescription(getString(R.string.find_users_msg))
                 .build();
 
         SimpleTarget targetFavorite = new SimpleTarget.Builder(this)
                 .setPoint(360f, 820f)
                 .setRadius(90f)
-                .setTitle("Favorite Users")
-                .setDescription("Here you can see your favorite users")
+                .setTitle(getString(R.string.favorite_users))
+                .setDescription(getString(R.string.favorite_users_msg))
                 .build();
 
         SimpleTarget targetSettings = new SimpleTarget.Builder(this)
                 .setPoint(618f, 120f)
                 .setRadius(50f)
-                .setTitle("Settings")
-                .setDescription("Here you can change your settings")
+                .setTitle(getString(R.string.settings))
+                .setDescription(getString(R.string.settings_msg))
                 .build();
 
         SimpleTarget targetEnd = new SimpleTarget.Builder(this)
                 .setPoint(300f, 300f)
                 .setRadius(1f)
-                .setTitle("Enjoy the YesLap")
-                .setDescription("Now you already know how the app works, enjoy it to the fullest. Sincerely, YesLap Team!")
+                .setTitle(getString(R.string.enjoy_yeslap))
+                .setDescription(getString(R.string.enjoy_yeslap_msg))
                 .build();
 
         Spotlight.with(this)
@@ -225,7 +225,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     if (!(username == null || Objects.equals(username, ""))) {
                         tvUsername.setText((username));
                     } else {
-                        tvUsername.setText("Username");
+                        tvUsername.setText(getString(R.string.username));
                     }
 
                     if (image != null && !Objects.equals(image, "")) {
@@ -270,8 +270,8 @@ public class UserProfileActivity extends AppCompatActivity {
         if (!haveNetworkConnection()) {
             // Display message in dialog box if you have not internet connection
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("No Internet Connection");
-            alertDialogBuilder.setMessage("You are offline please check your internet connection and try again");
+            alertDialogBuilder.setTitle(R.string.no_internet_connection);
+            alertDialogBuilder.setMessage(R.string.no_internet_connection_msg);
             alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
@@ -336,7 +336,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
                     dialog.dismiss();
-                    Utils.toastyInfo(getApplicationContext(), "Please, change your username and add a profile photo to look for someone!");
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.please_change_image_username));
                 } else {
                     dialog.dismiss();
                     Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);

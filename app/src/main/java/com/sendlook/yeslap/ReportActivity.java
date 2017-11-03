@@ -67,7 +67,7 @@ public class ReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (Objects.equals(answer, null)) {
-                    Utils.toastyInfo(getApplicationContext(), "Please, select a option to send your report!");
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.select_option_to_send_message));
                 } else {
                     String message = etMsgReport.getText().toString().trim();
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("reports").child(uid).push();
@@ -79,7 +79,7 @@ public class ReportActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
-                                Utils.toastySuccess(getApplicationContext(), "Report Sended!");
+                                Utils.toastySuccess(getApplicationContext(), getString(R.string.report_sended));
                                 finish();
                             }
                         }
