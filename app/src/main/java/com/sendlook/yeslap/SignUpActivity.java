@@ -15,6 +15,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sendlook.yeslap.model.Utils;
@@ -75,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
                     //Function to create a new user account with email and password
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                        public void onComplete(@NonNull final Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 //Fucntion to put the user data at Firebase Database
                                 mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
@@ -99,19 +102,25 @@ public class SignUpActivity extends AppCompatActivity {
                                             startActivity(intent);
                                         }
                                     }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                                    }
                                 });
+                            } else {
+                                //Errors Messages
+                                try {
+                                    throw task.getException();
+                                } catch (FirebaseAuthWeakPasswordException f) {
+                                    dialog.dismiss();
+                                    Utils.toastyError(getApplicationContext(), getString(R.string.weak_password));
+                                } catch (FirebaseAuthInvalidCredentialsException g) {
+                                    dialog.dismiss();
+                                    Utils.toastyError(getApplicationContext(), getString(R.string.invalid_credential));
+                                } catch (FirebaseAuthUserCollisionException h) {
+                                    dialog.dismiss();
+                                    Utils.toastyError(getApplicationContext(), getString(R.string.email_used));
+                                } catch (Exception i) {
+                                    dialog.dismiss();
+                                    Utils.toastyError(getApplicationContext(), i.getMessage());
+                                }
                             }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            dialog.dismiss();
-                            Utils.toastyError(getApplicationContext(), e.getMessage());
                         }
                     });
 
