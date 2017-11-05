@@ -36,8 +36,11 @@ public class CalendarActivity extends AppCompatActivity {
     private ImageView btnGoToProfile, btnGoToSettings;
     private RelativeLayout btnCalendar, btnChat, btnSearch;
     private ProgressDialog dialog;
-    private ArrayList<String> arraySundayMorning, arraySundayAfternoon, arraySundayNight, arrayMondayMorning, arrayMondayAfternoon, arrayMondayNight, arrayTuesdayMorning, arrayTuesdayAfternoon, arrayTuesdayNight, arrayWednesdayMorning, arrayWednesdayAfternoon, arrayWednesdayNight,arrayThursdayMorning, arrayThursdayAfternoon, arrayThursdayNight,arrayFridayMorning, arrayFridayAfternoon, arrayFridayNight, arraySaturdayMorning, arraySaturdayAfternoon, arraySaturdayNight;
+    private ArrayList<String> arraySundayMorning, arraySundayAfternoon, arraySundayNight, arrayMondayMorning, arrayMondayAfternoon, arrayMondayNight, arrayTuesdayMorning, arrayTuesdayAfternoon, arrayTuesdayNight, arrayWednesdayMorning, arrayWednesdayAfternoon, arrayWednesdayNight, arrayThursdayMorning, arrayThursdayAfternoon, arrayThursdayNight, arrayFridayMorning, arrayFridayAfternoon, arrayFridayNight, arraySaturdayMorning, arraySaturdayAfternoon, arraySaturdayNight;
     private String uid;
+    private Boolean morningSun = false, morningMon = false, morningTue = false, morningWed = false, morningThu = false, morningFri = false, morningSat = false;
+    private Boolean afternoonSun = false, afternoonMon = false, afternoonTue = false, afternoonWed = false, afternoonThu = false, afternoonFri = false, afternoonSat = false;
+    private Boolean nightSun = false, nightMon = false, nightTue = false, nightWed = false, nightThu = false, nightFri = false, nightSat = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,21 +154,39 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SUNDAY, Utils.MORNING, tbAvailabilitySun);
+                if (!morningSun) {
+                    setCalendar(Utils.SUNDAY, Utils.MORNING, tbAvailabilitySun);
+                } else {
+                    removeCalendar(Utils.SUNDAY, Utils.MORNING, uid);
+                    ivMorningSun.setImageResource(R.drawable.iconmorningoff);
+                    morningSun = false;
+                }
             }
         });
 
         ivAfternoonSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SUNDAY, Utils.AFTERNOON, tbAvailabilitySun);
+                if (!afternoonSun) {
+                    setCalendar(Utils.SUNDAY, Utils.AFTERNOON, tbAvailabilitySun);
+                } else {
+                    removeCalendar(Utils.SUNDAY, Utils.AFTERNOON, uid);
+                    ivAfternoonSun.setImageResource(R.drawable.iconafternoonoff);
+                    afternoonSun = false;
+                }
             }
         });
 
         ivNightSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SUNDAY, Utils.NIGHT, tbAvailabilitySun);
+                if (!nightSun) {
+                    setCalendar(Utils.SUNDAY, Utils.NIGHT, tbAvailabilitySun);
+                } else {
+                    removeCalendar(Utils.SUNDAY, Utils.NIGHT, uid);
+                    ivNightSun.setImageResource(R.drawable.iconnightoff);
+                    nightSun = false;
+                }
             }
         });
 
@@ -173,21 +194,39 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.MONDAY, Utils.MORNING, tbAvailabilityMon);
+                if (!morningMon) {
+                    setCalendar(Utils.MONDAY, Utils.MORNING, tbAvailabilityMon);
+                } else {
+                    removeCalendar(Utils.MONDAY, Utils.MORNING, uid);
+                    ivMorningMon.setImageResource(R.drawable.iconmorningoff);
+                    morningMon = false;
+                }
             }
         });
 
         ivAfternoonMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.MONDAY, Utils.AFTERNOON, tbAvailabilityMon);
+                if (!afternoonMon) {
+                    setCalendar(Utils.MONDAY, Utils.AFTERNOON, tbAvailabilityMon);
+                } else {
+                    removeCalendar(Utils.MONDAY, Utils.AFTERNOON, uid);
+                    ivAfternoonMon.setImageResource(R.drawable.iconafternoonoff);
+                    afternoonMon = false;
+                }
             }
         });
 
         ivNightMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.MONDAY, Utils.NIGHT, tbAvailabilityMon);
+                if (!nightMon) {
+                    setCalendar(Utils.MONDAY, Utils.NIGHT, tbAvailabilityMon);
+                } else {
+                    removeCalendar(Utils.MONDAY, Utils.NIGHT, uid);
+                    ivNightMon.setImageResource(R.drawable.iconnightoff);
+                    nightMon = false;
+                }
             }
         });
 
@@ -195,21 +234,39 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningTue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.TUESDAY, Utils.MORNING, tbAvailabilityTue);
+                if (!morningTue) {
+                    setCalendar(Utils.TUESDAY, Utils.MORNING, tbAvailabilityTue);
+                } else {
+                    removeCalendar(Utils.TUESDAY, Utils.MORNING, uid);
+                    ivMorningTue.setImageResource(R.drawable.iconmorningoff);
+                    morningTue = false;
+                }
             }
         });
 
         ivAfternoonTue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.TUESDAY, Utils.AFTERNOON, tbAvailabilityTue);
+                if (!afternoonTue) {
+                    setCalendar(Utils.TUESDAY, Utils.AFTERNOON, tbAvailabilityTue);
+                } else {
+                    removeCalendar(Utils.TUESDAY, Utils.AFTERNOON, uid);
+                    ivAfternoonTue.setImageResource(R.drawable.iconafternoonoff);
+                    afternoonTue = false;
+                }
             }
         });
 
         ivNightTue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.TUESDAY, Utils.NIGHT, tbAvailabilityTue);
+                if (!nightTue) {
+                    setCalendar(Utils.TUESDAY, Utils.NIGHT, tbAvailabilityTue);
+                } else {
+                    removeCalendar(Utils.TUESDAY, Utils.NIGHT, uid);
+                    ivNightTue.setImageResource(R.drawable.iconnightoff);
+                    nightTue = false;
+                }
             }
         });
 
@@ -217,21 +274,39 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningWed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.WEDNESDAY, Utils.MORNING, tbAvailabilityWed);
+                if (!morningWed) {
+                    setCalendar(Utils.WEDNESDAY, Utils.MORNING, tbAvailabilityWed);
+                } else {
+                    removeCalendar(Utils.WEDNESDAY, Utils.MORNING, uid);
+                    ivMorningWed.setImageResource(R.drawable.iconmorningoff);
+                    morningWed = false;
+                }
             }
         });
 
         ivAfternoonWed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.WEDNESDAY, Utils.AFTERNOON, tbAvailabilityWed);
+                if (!afternoonWed) {
+                    setCalendar(Utils.WEDNESDAY, Utils.AFTERNOON, tbAvailabilityWed);
+                } else {
+                    removeCalendar(Utils.WEDNESDAY, Utils.AFTERNOON, uid);
+                    ivAfternoonWed.setImageResource(R.drawable.iconafternoonoff);
+                    afternoonWed = false;
+                }
             }
         });
 
         ivNightWed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.WEDNESDAY, Utils.NIGHT, tbAvailabilityWed);
+                if (!nightWed) {
+                    setCalendar(Utils.WEDNESDAY, Utils.NIGHT, tbAvailabilityWed);
+                } else {
+                    removeCalendar(Utils.WEDNESDAY, Utils.NIGHT, uid);
+                    ivNightWed.setImageResource(R.drawable.iconnightoff);
+                    nightWed = false;
+                }
             }
         });
 
@@ -239,21 +314,39 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.THURSDAY, Utils.MORNING, tbAvailabilityThu);
+                if (!morningThu) {
+                    setCalendar(Utils.THURSDAY, Utils.MORNING, tbAvailabilityThu);
+                } else {
+                    removeCalendar(Utils.THURSDAY, Utils.MORNING, uid);
+                    ivMorningThu.setImageResource(R.drawable.iconmorningoff);
+                    morningThu = false;
+                }
             }
         });
 
         ivAfternoonThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.THURSDAY, Utils.AFTERNOON, tbAvailabilityThu);
+                if (!afternoonThu) {
+                    setCalendar(Utils.THURSDAY, Utils.AFTERNOON, tbAvailabilityThu);
+                } else {
+                    removeCalendar(Utils.THURSDAY, Utils.AFTERNOON, uid);
+                    ivAfternoonThu.setImageResource(R.drawable.iconafternoonoff);
+                    afternoonThu = false;
+                }
             }
         });
 
         ivNightThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.THURSDAY, Utils.NIGHT, tbAvailabilityThu);
+                if (!nightThu) {
+                    setCalendar(Utils.THURSDAY, Utils.NIGHT, tbAvailabilityThu);
+                } else {
+                    removeCalendar(Utils.THURSDAY, Utils.NIGHT, uid);
+                    ivNightThu.setImageResource(R.drawable.iconnightoff);
+                    nightThu = false;
+                }
             }
         });
 
@@ -261,21 +354,39 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningFri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.FRIDAY, Utils.MORNING, tbAvailabilityFri);
+                if (!morningFri) {
+                    setCalendar(Utils.FRIDAY, Utils.MORNING, tbAvailabilityFri);
+                } else {
+                    removeCalendar(Utils.FRIDAY, Utils.MORNING, uid);
+                    ivMorningFri.setImageResource(R.drawable.iconmorningoff);
+                    morningFri = false;
+                }
             }
         });
 
         ivAfternoonFri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.FRIDAY, Utils.AFTERNOON, tbAvailabilityFri);
+                if (!afternoonFri) {
+                    setCalendar(Utils.FRIDAY, Utils.AFTERNOON, tbAvailabilityFri);
+                } else {
+                    removeCalendar(Utils.FRIDAY, Utils.AFTERNOON, uid);
+                    ivAfternoonFri.setImageResource(R.drawable.iconafternoonoff);
+                    afternoonFri = false;
+                }
             }
         });
 
         ivNightFri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.FRIDAY, Utils.NIGHT, tbAvailabilityFri);
+                if (!nightFri) {
+                    setCalendar(Utils.FRIDAY, Utils.NIGHT, tbAvailabilityFri);
+                } else {
+                    removeCalendar(Utils.FRIDAY, Utils.NIGHT, uid);
+                    ivNightFri.setImageResource(R.drawable.iconnightoff);
+                    nightFri = false;
+                }
             }
         });
 
@@ -283,30 +394,64 @@ public class CalendarActivity extends AppCompatActivity {
         ivMorningSat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SATURDAY, Utils.MORNING, tbAvailabilitySat);
+                if (!morningSat) {
+                    setCalendar(Utils.SATURDAY, Utils.MORNING, tbAvailabilitySat);
+                } else {
+                    removeCalendar(Utils.SATURDAY, Utils.MORNING, uid);
+                    ivMorningSat.setImageResource(R.drawable.iconmorningoff);
+                    morningSat = false;
+                }
             }
         });
 
         ivAfternoonSat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SATURDAY, Utils.AFTERNOON, tbAvailabilitySat);
+                if (!afternoonSat) {
+                    setCalendar(Utils.SATURDAY, Utils.AFTERNOON, tbAvailabilitySat);
+                } else {
+                    removeCalendar(Utils.SATURDAY, Utils.AFTERNOON, uid);
+                    ivAfternoonSat.setImageResource(R.drawable.iconafternoonoff);
+                    afternoonSat = false;
+                }
             }
         });
 
         ivNightSat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCalendar(Utils.SATURDAY, Utils.NIGHT, tbAvailabilitySat);
+                if (!nightSat) {
+                    setCalendar(Utils.SATURDAY, Utils.NIGHT, tbAvailabilitySat);
+                } else {
+                    removeCalendar(Utils.SATURDAY, Utils.NIGHT, uid);
+                    ivNightSat.setImageResource(R.drawable.iconnightoff);
+                    nightSat = false;
+                }
             }
         });
 
     }
 
+    private void removeCalendar(String week, final String state, String uid) {
+        dialog = new ProgressDialog(CalendarActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child(state);
+        mDatabase.child(uid).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                getCalendar();
+                dialog.dismiss();
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        if  (mAuth != null) {
+        if (mAuth != null) {
             setStatusOnline();
         }
 
@@ -315,12 +460,12 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if  (mAuth != null) {
+        if (mAuth != null) {
             setStatusOffline();
         }
     }
 
-    private void setCalendar(String week, String state, ToggleButton toogle) {
+    private void setCalendar(final String week, final String state, ToggleButton toogle) {
         //Check if the button is activated
         if (!toogle.isChecked()) {
             Utils.toastyInfo(getApplicationContext(), "Please, active the button");
@@ -332,7 +477,7 @@ public class CalendarActivity extends AppCompatActivity {
             dialog.show();
 
             //Saving at the Firebase
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("calendar").child(week).child(state).push();
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("calendar").child(week).child(state).child(uid);
             HashMap<String, String> uid = new HashMap<>();
             uid.put("uid", mAuth.getCurrentUser().getUid());
             mDatabase.setValue(uid).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -340,6 +485,53 @@ public class CalendarActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         dialog.dismiss();
+
+                        if (Objects.equals(week, "1") && Objects.equals(state, "morning")) {
+                            morningSun = true;
+                        } else if (Objects.equals(week, "1") && Objects.equals(state, "afternoon")) {
+                            afternoonSun = true;
+                        } else if (Objects.equals(week, "1") && Objects.equals(state, "night")) {
+                            nightSun = true;
+                        } else if (Objects.equals(week, "2") && Objects.equals(state, "morning")) {
+                            morningMon = true;
+                        } else if (Objects.equals(week, "2") && Objects.equals(state, "afternoon")) {
+                            afternoonMon = true;
+                        } else if (Objects.equals(week, "2") && Objects.equals(state, "night")) {
+                            nightMon = true;
+                        } else if (Objects.equals(week, "3") && Objects.equals(state, "morning")) {
+                            morningTue = true;
+                        } else if (Objects.equals(week, "3") && Objects.equals(state, "afternoon")) {
+                            afternoonTue = true;
+                        } else if (Objects.equals(week, "3") && Objects.equals(state, "night")) {
+                            nightTue = true;
+                        } else if (Objects.equals(week, "4") && Objects.equals(state, "morning")) {
+                            morningWed = true;
+                        } else if (Objects.equals(week, "4") && Objects.equals(state, "afternoon")) {
+                            afternoonWed = true;
+                        } else if (Objects.equals(week, "4") && Objects.equals(state, "night")) {
+                            nightWed = true;
+                        } else if (Objects.equals(week, "5") && Objects.equals(state, "morning")) {
+                            morningThu = true;
+                        } else if (Objects.equals(week, "5") && Objects.equals(state, "afternoon")) {
+                            afternoonThu = true;
+                        } else if (Objects.equals(week, "5") && Objects.equals(state, "night")) {
+                            nightThu = true;
+                        } else if (Objects.equals(week, "6") && Objects.equals(state, "morning")) {
+                            morningFri = true;
+                        } else if (Objects.equals(week, "6") && Objects.equals(state, "afternoon")) {
+                            afternoonFri = true;
+                        } else if (Objects.equals(week, "6") && Objects.equals(state, "night")) {
+                            nightFri = true;
+                        } else if (Objects.equals(week, "7") && Objects.equals(state, "morning")) {
+                            morningSat = true;
+                        } else if (Objects.equals(week, "7") && Objects.equals(state, "afternoon")) {
+                            afternoonSat = true;
+                        } else if (Objects.equals(week, "7") && Objects.equals(state, "night")) {
+                            nightSat = true;
+                        }
+
+                        getCalendar();
+
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -392,6 +584,7 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void getCalendar() {
+        //cleanImages();
         getCalendar(Utils.SUNDAY, arraySundayMorning, arraySundayAfternoon, arraySundayNight, ivMorningSun, ivAfternoonSun, ivNightSun);
         getCalendar(Utils.MONDAY, arrayMondayMorning, arrayMondayAfternoon, arrayMondayNight, ivMorningMon, ivAfternoonMon, ivNightMon);
         getCalendar(Utils.TUESDAY, arrayTuesdayMorning, arrayTuesdayAfternoon, arrayTuesdayNight, ivMorningTue, ivAfternoonTue, ivNightTue);
@@ -401,20 +594,46 @@ public class CalendarActivity extends AppCompatActivity {
         getCalendar(Utils.SATURDAY, arraySaturdayMorning, arraySaturdayAfternoon, arraySaturdayNight, ivMorningSat, ivAfternoonSat, ivNightSat);
     }
 
-    private void getCalendar(String week, final ArrayList<String> arrayMorning, final ArrayList<String> arrayAfternoon, final ArrayList<String> arrayNight, final ImageView ivMorning, final ImageView ivAfternoon, final ImageView ivNight) {
+    private void getCalendar(final String week, final ArrayList<String> arrayMorning, final ArrayList<String> arrayAfternoon, final ArrayList<String> arrayNight, final ImageView ivMorning, final ImageView ivAfternoon, final ImageView ivNight) {
         //Morning
+        clearObjects();
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child("morning");
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot i: dataSnapshot.getChildren()) {
+                for (DataSnapshot i : dataSnapshot.getChildren()) {
                     String r1 = i.getValue().toString().replace("{uid=", "");
-                    String r2 = r1.replace("}","");
+                    String r2 = r1.replace("}", "");
                     arrayMorning.add(r2);
                 }
 
                 if (arrayMorning.contains(uid)) {
                     ivMorning.setImageResource(R.drawable.iconmorningon);
+
+                    if (Objects.equals(week, "1")) {
+                        morningSun = true;
+                    }
+                    if (Objects.equals(week, "2")) {
+                        morningMon = true;
+                    }
+                    if (Objects.equals(week, "3")) {
+                        morningTue = true;
+                    }
+                    if (Objects.equals(week, "4")) {
+                        morningWed = true;
+                    }
+                    if (Objects.equals(week, "5")) {
+                        morningThu = true;
+                    }
+                    if (Objects.equals(week, "6")) {
+                        morningFri = true;
+                    }
+                    if (Objects.equals(week, "7")) {
+                        morningSat = true;
+                    }
+
+                    arrayMorning.clear();
+
                 }
 
             }
@@ -430,14 +649,39 @@ public class CalendarActivity extends AppCompatActivity {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot i: dataSnapshot.getChildren()) {
+                for (DataSnapshot i : dataSnapshot.getChildren()) {
                     String r1 = i.getValue().toString().replace("{uid=", "");
-                    String r2 = r1.replace("}","");
+                    String r2 = r1.replace("}", "");
                     arrayAfternoon.add(r2);
                 }
 
                 if (arrayAfternoon.contains(uid)) {
                     ivAfternoon.setImageResource(R.drawable.iconafternoonon);
+
+                    if (Objects.equals(week, "1")) {
+                        afternoonSun = true;
+                    }
+                    if (Objects.equals(week, "2")) {
+                        afternoonMon = true;
+                    }
+                    if (Objects.equals(week, "3")) {
+                        afternoonTue = true;
+                    }
+                    if (Objects.equals(week, "4")) {
+                        afternoonWed = true;
+                    }
+                    if (Objects.equals(week, "5")) {
+                        afternoonThu = true;
+                    }
+                    if (Objects.equals(week, "6")) {
+                        afternoonFri = true;
+                    }
+                    if (Objects.equals(week, "7")) {
+                        afternoonSat = true;
+                    }
+
+                    arrayAfternoon.clear();
+
                 }
 
             }
@@ -453,14 +697,39 @@ public class CalendarActivity extends AppCompatActivity {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot i: dataSnapshot.getChildren()) {
+                for (DataSnapshot i : dataSnapshot.getChildren()) {
                     String r1 = i.getValue().toString().replace("{uid=", "");
-                    String r2 = r1.replace("}","");
+                    String r2 = r1.replace("}", "");
                     arrayNight.add(r2);
                 }
 
                 if (arrayNight.contains(uid)) {
                     ivNight.setImageResource(R.drawable.iconnighton);
+
+                    if (Objects.equals(week, "1")) {
+                        nightSun = true;
+                    }
+                    if (Objects.equals(week, "2")) {
+                        nightMon = true;
+                    }
+                    if (Objects.equals(week, "3")) {
+                        nightTue = true;
+                    }
+                    if (Objects.equals(week, "4")) {
+                        nightWed = true;
+                    }
+                    if (Objects.equals(week, "5")) {
+                        nightThu = true;
+                    }
+                    if (Objects.equals(week, "6")) {
+                        nightFri = true;
+                    }
+                    if (Objects.equals(week, "7")) {
+                        nightSat = true;
+                    }
+
+                    arrayNight.clear();
+
                 }
 
             }
@@ -470,6 +739,55 @@ public class CalendarActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void clearObjects() {
+        morningSun = false;
+        morningMon = false;
+        morningTue = false;
+        morningWed = false;
+        morningThu = false;
+        morningFri = false;
+        morningSat = false;
+        afternoonSun = false;
+        afternoonMon = false;
+        afternoonTue = false;
+        afternoonWed = false;
+        afternoonThu = false;
+        afternoonFri = false;
+        afternoonSat = false;
+        nightSun = false;
+        nightMon = false;
+        nightTue = false;
+        nightWed = false;
+        nightThu = false;
+        nightFri = false;
+        nightSat = false;
+
+        ivMorningSun.setImageResource(R.drawable.iconmorningoff);
+        ivMorningMon.setImageResource(R.drawable.iconmorningoff);
+        ivMorningTue.setImageResource(R.drawable.iconmorningoff);
+        ivMorningWed.setImageResource(R.drawable.iconmorningoff);
+        ivMorningThu.setImageResource(R.drawable.iconmorningoff);
+        ivMorningFri.setImageResource(R.drawable.iconmorningoff);
+        ivMorningSat.setImageResource(R.drawable.iconmorningoff);
+
+        ivAfternoonSun.setImageResource(R.drawable.iconafternoonoff);
+        ivAfternoonMon.setImageResource(R.drawable.iconafternoonoff);
+        ivAfternoonTue.setImageResource(R.drawable.iconafternoonoff);
+        ivAfternoonWed.setImageResource(R.drawable.iconafternoonoff);
+        ivAfternoonThu.setImageResource(R.drawable.iconafternoonoff);
+        ivAfternoonFri.setImageResource(R.drawable.iconafternoonoff);
+        ivAfternoonSat.setImageResource(R.drawable.iconafternoonoff);
+
+        ivNightSun.setImageResource(R.drawable.iconnightoff);
+        ivNightMon.setImageResource(R.drawable.iconnightoff);
+        ivNightTue.setImageResource(R.drawable.iconnightoff);
+        ivNightWed.setImageResource(R.drawable.iconnightoff);
+        ivNightThu.setImageResource(R.drawable.iconnightoff);
+        ivNightFri.setImageResource(R.drawable.iconnightoff);
+        ivNightSat.setImageResource(R.drawable.iconnightoff);
 
     }
 
