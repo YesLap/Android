@@ -1,22 +1,27 @@
 package com.sendlook.yeslap;
 
+import android.*;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,14 +31,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sendlook.yeslap.model.Utils;
+import com.sendlook.yeslap.model.gps;
 import com.squareup.picasso.Picasso;
 import com.takusemba.spotlight.OnSpotlightEndedListener;
 import com.takusemba.spotlight.OnSpotlightStartedListener;
-import com.takusemba.spotlight.OnTargetStateChangedListener;
 import com.takusemba.spotlight.SimpleTarget;
 import com.takusemba.spotlight.Spotlight;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,6 +59,13 @@ public class UserProfileActivity extends AppCompatActivity {
     private CircleImageView cvImageUser;
     private ProgressDialog dialog;
 
+    private Location location;
+    private LocationManager locationManager;
+    private Address address;
+
+    double latitude = 0.0;
+    double longitude = 0.0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +73,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
         //Instantiate Firebase
         mAuth = FirebaseAuth.getInstance();
+
+        try {
+            getLocation();
+        } catch (IOException e) {
+            Utils.toastyError(getApplicationContext(), e.getMessage());
+        }
 
         //Cast
         btnEditUserProfile = (FloatingActionButton) findViewById(R.id.btnEditUserProfile);
@@ -364,6 +385,51 @@ public class UserProfileActivity extends AppCompatActivity {
         HashMap<String, Object> status = new HashMap<>();
         status.put("status", "offline");
         mDatabase.updateChildren(status);
+    }
+
+    public void getLocation() throws IOException {
+        try {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Utils.toastyInfo(getApplicationContext(), "No Permissions to Access the Location!");
+            } else {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                if (location != null) {
+                    longitude = location.getLongitude();
+                    latitude = location.getLatitude();
+                    Utils.toastyInfo(getApplicationContext(), "Latitude: " + latitude + "\nLongitude: " + longitude);
+                }
+
+                address = getAddress(latitude, longitude);
+
+                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                Map<String, Object> location = new HashMap<>();
+                location.put("city", address.getLocality());
+                location.put("state", address.getAdminArea());
+                location.put("country", address.getCountryName());
+                mDatabase.updateChildren(location);
+            }
+
+        } catch (Exception e) {
+            Utils.toastyError(getApplicationContext(), e.getMessage());
+        }
+
+    }
+
+    public Address getAddress(double latitude, double longitude) throws IOException {
+        Geocoder geocoder;
+        Address addres = null;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(getApplicationContext());
+
+        addresses = geocoder.getFromLocation(latitude, longitude, 1);
+        if (addresses.size() > 0) {
+            addres = addresses.get(0);
+        }
+
+        return addres;
     }
 
 }

@@ -1,7 +1,13 @@
 package com.sendlook.yeslap.model;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -12,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
