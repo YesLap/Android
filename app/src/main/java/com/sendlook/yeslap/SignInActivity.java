@@ -25,12 +25,17 @@ public class SignInActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private TextView tvForgotPassword, tvNewAccount;
     private ImageView btnSignIn;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        //Instantiate Firebase
+        mAuth = FirebaseAuth.getInstance();
 
         //Cast
         etEmail = (EditText) findViewById(R.id.etEmail);
@@ -62,7 +67,23 @@ public class SignInActivity extends AppCompatActivity {
                     dialog.show();
 
                     //Login in
-
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(SignInActivity.this, UserProfileActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            dialog.dismiss();
+                            Utils.toastyError(getApplicationContext(), e.getMessage());
+                        }
+                    });
                 }
 
             }

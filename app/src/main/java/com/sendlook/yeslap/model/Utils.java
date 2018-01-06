@@ -1,13 +1,7 @@
 package com.sendlook.yeslap.model;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -18,8 +12,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
@@ -42,16 +34,15 @@ public class Utils {
     public static final String STATUS = "status";
     public static final String SPOTLIGHT = "spotlight";
     public static final String FAVORITES = "favorites";
-    public static final String CALENDAR = "calendar";
 
 
-    public static final String SUNDAY = "1";
-    public static final String MONDAY = "2";
-    public static final String TUESDAY = "3";
-    public static final String WEDNESDAY = "4";
-    public static final String THURSDAY = "5";
-    public static final String FRIDAY = "6";
-    public static final String SATURDAY = "7";
+    public static final String MONDAY = "1";
+    public static final String TUESDAY = "2";
+    public static final String WEDNESDAY = "3";
+    public static final String THURSDAY = "4";
+    public static final String FRIDAY = "5";
+    public static final String SATURDAY = "6";
+    public static final String SUNDAY = "7";
 
     public static final String MORNING = "morning";
     public static final String AFTERNOON = "afternoon";

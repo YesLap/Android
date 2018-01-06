@@ -1,12 +1,9 @@
 package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
@@ -70,16 +67,6 @@ public class FavoritesActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-
-        gvFavorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Favorites favorites = arrayFavorites.get(i);
-                Intent intent = new Intent(FavoritesActivity.this, ProfileActivity.class);
-                intent.putExtra("uid", favorites.getUid());
-                startActivity(intent);
-            }
-        });
 
 
     }
