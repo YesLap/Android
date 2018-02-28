@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".ImageUsernameProfileActivity">
+
+    <ImageView
+        android:id="@+id/ivWaveTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:src="@drawable/wavetop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ivWaveBottom"
+        android:layout_below="@id/ivWaveTop"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/maskphotoprofileprincipal" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/cvImageUser"
+                android:layout_width="100dp"
+                android:layout_height="100sp"
+                android:layout_marginTop="25dp"
+                android:layout_alignTop="@+id/btnGoToSettings"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/img_profile" />
+
+        </RelativeLayout>
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/btnChangeImage"
+            android:layout_marginBottom="8dp"
+            android:text="@string/change_image"
+            android:textColor="@color/colorAccent" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tlUsername"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/username"
+                android:id="@+id/etUsername"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/btnSave"
+            android:layout_marginBottom="8dp"
+            android:text="@string/save"
+            android:background="@drawable/input_outline_button_blue"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/ivWaveBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:src="@drawable/wavebottom" />
+
+</RelativeLayout>

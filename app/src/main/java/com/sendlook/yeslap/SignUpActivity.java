@@ -83,7 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 //Fucntion to put the user data at Firebase Database
                                 mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                                 final HashMap<String, String> user = new HashMap<>();
-                                user.put(Utils.USERNAME, "Username");
+                                user.put(Utils.USERNAME, "");
                                 user.put(Utils.EMAIL, (email));
                                 user.put(Utils.IMAGE_1, "");
                                 user.put(Utils.IMAGE_2, "");
@@ -97,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             dialog.dismiss();
                                             Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
-                                            Intent intent = new Intent(SignUpActivity.this, UserProfileActivity.class);
+                                            Intent intent = new Intent(SignUpActivity.this, ImageUsernameProfileActivity.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(intent);
                                         }

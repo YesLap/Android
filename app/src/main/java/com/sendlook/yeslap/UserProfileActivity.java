@@ -297,7 +297,10 @@ public class UserProfileActivity extends AppCompatActivity {
         if (mUser == null) {
             sendToStart();
         } else {
+            //Check Internet Connection
             checkConnection();
+            //Check if the user profile is complete
+            checkIfProfileIsComplete();
         }
     }
 
@@ -341,6 +344,37 @@ public class UserProfileActivity extends AppCompatActivity {
                     dialog.dismiss();
                     Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
                     startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void checkIfProfileIsComplete() {
+        dialog = new ProgressDialog(UserProfileActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String username = dataSnapshot.child("username").getValue(String.class);
+                String image = dataSnapshot.child("image1").getValue(String.class);
+
+                if (Objects.equals(username, "") || Objects.equals(image, "")) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(UserProfileActivity.this, ImageUsernameProfileActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else {
+                    dialog.dismiss();
                 }
 
             }

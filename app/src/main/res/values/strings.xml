@@ -71,4 +71,7 @@
     <string name="weak_password">Enter a stronger password, containing numbers and letters</string>
     <string name="invalid_credential">Invalid E-mail</string>
     <string name="email_used">This email is already being used</string>
+    <string name="change_image">Change Image</string>
+    <string name="save">Save</string>
+    <string name="select_image_to_your_profile">Select a image to your profile</string>
 </resources>
