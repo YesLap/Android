@@ -81,6 +81,12 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 } else if (username.equals("")) {
                     Utils.toastyInfo(getApplicationContext(), "Fill in the Username Field");
                 } else {
+                    dialog = new ProgressDialog(ImageUsernameProfileActivity.this);
+                    dialog.setTitle(getString(R.string.loading));
+                    dialog.setMessage(getString(R.string.loading_msg));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
                     CheckUsernameAndUpdateProfile(username);
                 }
             }
@@ -104,34 +110,27 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     Uri resultUri = mResult.getUri();
                     if (resultUri != null) {
-
-                        dialog = new ProgressDialog(ImageUsernameProfileActivity.this);
-                        dialog.setTitle(getString(R.string.uploading_image));
-                        dialog.setMessage(getString(R.string.uploading_image_msg));
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.show();
+                        Utils.toastyInfo(getApplicationContext(), getString(R.string.uploading_image_msg));
 
                         mStorage = FirebaseStorage.getInstance().getReference();
-                        StorageReference filePath = mStorage.child(Utils.IMAGE_1).child(mAuth.getCurrentUser().getUid()).child(Utils.IMAGE_1 + ".jpg");
+                        StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child(Utils.IMAGE_1 + ".jpg");
 
                         filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
                                 if (task.isSuccessful()) {
-                                    dialog.dismiss();
                                     downloadURL = task.getResult().getDownloadUrl().toString();
                                     Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
                                     Picasso.with(ImageUsernameProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
                                 } else {
                                     Utils.toastyError(getApplicationContext(), task.getException().getMessage());
-                                    dialog.hide();
                                 }
                             }
                         });
                     } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                         Exception error = mResult.getError();
                         Utils.toastyError(getApplicationContext(), error.getMessage());
-                        dialog.hide();
                     }
                 }
             }
@@ -152,7 +151,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
                     mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                     HashMap<String, Object> profile = new HashMap<>();
-                    profile.put("image_profile", downloadURL);
+                    profile.put("image1", downloadURL);
                     profile.put("username", username);
                     mDatabase.updateChildren(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -216,13 +215,12 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 String image = dataSnapshot.child("image1").getValue(String.class);
                 downloadURL = image;
 
-                if (Objects.equals(username, "") || Objects.equals(image, "")) {
+                if (Objects.equals(username, "") || Objects.equals(downloadURL, "") || downloadURL == null) {
                     try {
                         etUsername.setText(username);
-                        Picasso.with(ImageUsernameProfileActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
+                        Picasso.with(ImageUsernameProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
                     }catch (Exception e) {
                         dialog.dismiss();
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
                     } finally {
                         dialog.dismiss();
                     }

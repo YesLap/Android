@@ -108,7 +108,9 @@ public class UserProfileActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkUsernameAndImage();
+                //checkUsernameAndImage();
+                Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -209,11 +211,11 @@ public class UserProfileActivity extends AppCompatActivity {
         if (mAuth != null && mAuth.getCurrentUser() != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
 
-            dialog = new ProgressDialog(this);
-            dialog.setTitle(getString(R.string.loading));
-            dialog.setMessage(getString(R.string.loading_msg));
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
+            //dialog = new ProgressDialog(this);
+            //dialog.setTitle(getString(R.string.loading));
+            //dialog.setMessage(getString(R.string.loading_msg));
+            //dialog.setCanceledOnTouchOutside(false);
+            //dialog.show();
 
             mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -222,27 +224,28 @@ public class UserProfileActivity extends AppCompatActivity {
                     String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
                     String spotlight = dataSnapshot.child(Utils.SPOTLIGHT).getValue(String.class);
 
-                    if (!(username == null || Objects.equals(username, ""))) {
-                        tvUsername.setText((username));
-                    } else {
-                        tvUsername.setText(getString(R.string.username));
-                    }
-
-                    if (image != null && !Objects.equals(image, "")) {
+                    try {
+                        //if (!(username == null || Objects.equals(username, ""))) {
+                        tvUsername.setText(username);
+                        //} else {
+                        //tvUsername.setText(getString(R.string.username));
+                        //}
+                        //if (image != null && !Objects.equals(image, "")) {
                         Picasso.with(UserProfileActivity.this).load((image)).placeholder(R.drawable.img_profile).into(cvImageUser);
+                        //}
+                    } catch (Exception e) {
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                    } finally {
+                        //dialog.dismiss();
                     }
 
-                    dialog.dismiss();
-
-                    if (!Objects.equals(spotlight, "true")) {
-                        showSpotlight();
-                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
+
             });
 
         }
@@ -266,29 +269,6 @@ public class UserProfileActivity extends AppCompatActivity {
         return haveConnectedWifi || haveConnectedMobile;
     }
 
-    private void checkConnection() {
-        if (!haveNetworkConnection()) {
-            // Display message in dialog box if you have not internet connection
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(R.string.no_internet_connection);
-            alertDialogBuilder.setMessage(R.string.no_internet_connection_msg);
-            alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-                    finish();
-                }
-            });
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        } else {
-            //Get the user data
-            getUserData();
-            //Set status Online
-            setStatusOnline();
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -298,9 +278,28 @@ public class UserProfileActivity extends AppCompatActivity {
             sendToStart();
         } else {
             //Check Internet Connection
-            checkConnection();
-            //Check if the user profile is complete
-            checkIfProfileIsComplete();
+            if (!haveNetworkConnection()) {
+                // Display message in dialog box if you have not internet connection
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(R.string.no_internet_connection);
+                alertDialogBuilder.setMessage(R.string.no_internet_connection_msg);
+                alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        finish();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            } else {
+                //Get the user data
+                getUserData();
+                //Set status Online
+                setStatusOnline();
+                //Check if the user profile is complete
+                checkIfProfileIsComplete();
+            }
         }
     }
 
@@ -324,37 +323,6 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     //Check if the username and image profile isn't null
-    private void checkUsernameAndImage() {
-        dialog = new ProgressDialog(this);
-        dialog.setMessage(getString(R.string.loading));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                String image = dataSnapshot.child("image1").getValue(String.class);
-
-                if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
-                    dialog.dismiss();
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.please_change_image_username));
-                } else {
-                    dialog.dismiss();
-                    Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
-                    startActivity(intent);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     private void checkIfProfileIsComplete() {
         dialog = new ProgressDialog(UserProfileActivity.this);
         dialog.setMessage(getString(R.string.loading));
