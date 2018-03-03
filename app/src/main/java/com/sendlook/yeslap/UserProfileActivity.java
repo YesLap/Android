@@ -5,9 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -225,14 +227,12 @@ public class UserProfileActivity extends AppCompatActivity {
                     String spotlight = dataSnapshot.child(Utils.SPOTLIGHT).getValue(String.class);
 
                     try {
-                        //if (!(username == null || Objects.equals(username, ""))) {
-                        tvUsername.setText(username);
-                        //} else {
-                        //tvUsername.setText(getString(R.string.username));
-                        //}
-                        //if (image != null && !Objects.equals(image, "")) {
-                        Picasso.with(UserProfileActivity.this).load((image)).placeholder(R.drawable.img_profile).into(cvImageUser);
-                        //}
+                        if (!(username == null || Objects.equals(username, ""))) {
+                            tvUsername.setText(username);
+                        }
+                        if (image != null && !Objects.equals(image, "")) {
+                            Picasso.with(UserProfileActivity.this).load((image)).placeholder(R.drawable.img_profile).into(cvImageUser);
+                        }
                     } catch (Exception e) {
                         Utils.toastyError(getApplicationContext(), e.getMessage());
                     } finally {

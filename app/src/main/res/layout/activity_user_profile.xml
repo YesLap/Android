@@ -50,7 +50,7 @@
         android:layout_below="@+id/cvImageUser"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="@string/username"
+        android:text="@string/LOADING"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:textStyle="bold" />
 

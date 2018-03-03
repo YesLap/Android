@@ -67,6 +67,8 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private Integer ImageStatus = 0;
     private Integer Image = 0;
     private PickImageDialog pickImage;
+    private Boolean isExistUsername = false;
+    private String oldUsername;
 
 
     @Override
@@ -482,32 +484,102 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         if (Objects.equals(userInputDialogEditText.getText().toString(), "")) {
                             Utils.toastyInfo(getApplicationContext(), getString(R.string.insert_username));
                         } else {
-                            //Progress Dialog
-                            dialog = new ProgressDialog(EditUserProfileActivity.this);
-                            dialog.setTitle(getString(R.string.loading));
-                            dialog.setMessage(getString(R.string.loading_msg));
-                            dialog.setCanceledOnTouchOutside(false);
-                            dialog.show();
 
-                            //Function to save the user data at Firebase: Users > UID > user data
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                            Map<String, Object> user = new HashMap<>();
-                            user.put(Utils.USERNAME, userInputDialogEditText.getText().toString());
-                            mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(userInputDialogEditText.getText().toString());
+                            mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        dialog.dismiss();
-                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.username_changed));
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.getChildrenCount() == 0) {
+
+                                        final String username = userInputDialogEditText.getText().toString();
+                                        //Progress Dialog
+                                        dialog = new ProgressDialog(EditUserProfileActivity.this);
+                                        dialog.setTitle(getString(R.string.loading));
+                                        dialog.setMessage(getString(R.string.loading_msg));
+                                        dialog.setCanceledOnTouchOutside(false);
+                                        dialog.show();
+
+                                        //get the username
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                                        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                oldUsername = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+
+                                                //delete the old username from Firebase: Username
+                                                DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(oldUsername);
+                                                mDatabase1.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+
+                                                            //save the new username in Firebase: Username
+                                                            DatabaseReference mDatabase3 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(username);
+                                                            HashMap<String, String> usernames = new HashMap<>();
+                                                            usernames.put("uid", mAuth.getCurrentUser().getUid());
+                                                            mDatabase3.setValue(usernames).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if (task.isSuccessful()) {
+
+                                                                        //Function to save the user data at Firebase: Users > UID > user data
+                                                                        Map<String, Object> user = new HashMap<>();
+                                                                        user.put(Utils.USERNAME, userInputDialogEditText.getText().toString());
+                                                                        mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                    dialog.dismiss();
+                                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.username_changed));
+                                                                                }
+                                                                            }
+                                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                dialog.dismiss();
+                                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                                            }
+                                                                        });
+
+                                                                    }
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    dialog.dismiss();
+                                                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                                }
+                                                            });
+
+                                                        }
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        dialog.dismiss();
+                                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                    } else if (dataSnapshot.getChildrenCount() >= 1){
+                                        Utils.toastyInfo(getApplicationContext(), "This username is already being used");
                                     }
+
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
+
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    dialog.dismiss();
-                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                public void onCancelled(DatabaseError databaseError) {
+
                                 }
                             });
+
                         }
                     }
                 })

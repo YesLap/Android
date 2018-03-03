@@ -245,4 +245,35 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         CheckIfProfileIsComplete();
         super.onStart();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAuth != null) {
+            setStatusOnline();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuth != null) {
+            setStatusOffline();
+        }
+    }
+
+    private void setStatusOnline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "online");
+        mDatabase.updateChildren(status);
+    }
+
+    private void setStatusOffline() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", "offline");
+        mDatabase.updateChildren(status);
+    }
+
 }
