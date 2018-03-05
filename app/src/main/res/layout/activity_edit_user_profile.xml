@@ -58,7 +58,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="10sp"
-            android:text="@string/username"
+            android:text="@string/LOADING"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textStyle="bold" />
 
@@ -252,6 +252,7 @@
         android:layout_width="300sp"
         android:layout_height="100sp"
         android:layout_marginTop="5sp"
+        android:elevation="8dp"
         android:layout_below="@+id/relativeLayout"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal">

@@ -68,4 +68,13 @@
     <string name="weak_password">Digite uma senha forte, que contenha letras e números</string>
     <string name="invalid_credential">E-mail Inválido</string>
     <string name="email_used">Este E-mail já está sendo usado</string>
+    <string name="change_image">Trocar Imagem</string>
+    <string name="save">Salvar</string>
+    <string name="select_image_to_your_profile">Selecione uma imagem para seu perfil</string>
+    <string name="cancels">Cancelar</string>
+    <string name="username_already_used">Este nome de usuário já está sendo usado</string>
+    <string name="camera">Câmera</string>
+    <string name="gallery">Galeria</string>
+    <string name="choose">Escolha</string>
+    <string name="fill_username_field">Preencha o campo Nome de Usuário</string>
 </resources>

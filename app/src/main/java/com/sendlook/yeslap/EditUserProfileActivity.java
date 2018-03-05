@@ -154,20 +154,20 @@ public class EditUserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 PickSetup setup = new PickSetup()
-                        .setTitle("Choose")
+                        .setTitle(getString(R.string.choose))
                         .setTitleColor(Color.BLACK)
                         //.setBackgroundColor(yourColor)
                         //.setProgressText(yourText)
                         //.setProgressTextColor(yourColor)
-                        .setCancelText("Cancel")
+                        .setCancelText(getString(R.string.cancels))
                         .setCancelTextColor(Color.BLACK)
                         //.setButtonTextColor(yourColor)
                         //.setDimAmount(yourFloat)
                         .setFlip(true)
                         .setMaxSize(500)
                         .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
-                        .setCameraButtonText("Camera")
-                        .setGalleryButtonText("Gallery")
+                        .setCameraButtonText(getString(R.string.camera))
+                        .setGalleryButtonText(getString(R.string.gallery))
                         .setIconGravity(Gravity.LEFT)
                         .setButtonOrientation(LinearLayoutCompat.VERTICAL)
                         .setSystemDialog(false);
@@ -205,20 +205,20 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 dialog.show();
 
                 PickSetup setup = new PickSetup()
-                        .setTitle("Choose")
+                        .setTitle(getString(R.string.choose))
                         .setTitleColor(Color.BLACK)
                         //.setBackgroundColor(yourColor)
                         //.setProgressText(yourText)
                         //.setProgressTextColor(yourColor)
-                        .setCancelText("Cancel")
+                        .setCancelText(getString(R.string.cancels))
                         .setCancelTextColor(Color.BLACK)
                         //.setButtonTextColor(yourColor)
                         //.setDimAmount(yourFloat)
                         .setFlip(true)
                         .setMaxSize(500)
                         .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
-                        .setCameraButtonText("Camera")
-                        .setGalleryButtonText("Gallery")
+                        .setCameraButtonText(getString(R.string.camera))
+                        .setGalleryButtonText(getString(R.string.gallery))
                         .setIconGravity(Gravity.LEFT)
                         .setButtonOrientation(LinearLayoutCompat.VERTICAL)
                         .setSystemDialog(false);
@@ -249,20 +249,20 @@ public class EditUserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 PickSetup setup = new PickSetup()
-                        .setTitle("Choose")
+                        .setTitle(getString(R.string.choose))
                         .setTitleColor(Color.BLACK)
                         //.setBackgroundColor(yourColor)
                         //.setProgressText(yourText)
                         //.setProgressTextColor(yourColor)
-                        .setCancelText("Cancel")
+                        .setCancelText(getString(R.string.cancels))
                         .setCancelTextColor(Color.BLACK)
                         //.setButtonTextColor(yourColor)
                         //.setDimAmount(yourFloat)
                         .setFlip(true)
                         .setMaxSize(500)
                         .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
-                        .setCameraButtonText("Camera")
-                        .setGalleryButtonText("Gallery")
+                        .setCameraButtonText(getString(R.string.camera))
+                        .setGalleryButtonText(getString(R.string.gallery))
                         .setIconGravity(Gravity.LEFT)
                         .setButtonOrientation(LinearLayoutCompat.VERTICAL)
                         .setSystemDialog(false);
@@ -479,7 +479,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
         final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
         alertDialogBuilderUserInput
                 .setCancelable(false)
-                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
                         if (Objects.equals(userInputDialogEditText.getText().toString(), "")) {
                             Utils.toastyInfo(getApplicationContext(), getString(R.string.insert_username));
@@ -569,7 +569,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                         });
 
                                     } else if (dataSnapshot.getChildrenCount() >= 1){
-                                        Utils.toastyInfo(getApplicationContext(), "This username is already being used");
+                                        Utils.toastyInfo(getApplicationContext(), getString(R.string.username_already_used));
                                     }
 
                                 }
@@ -584,7 +584,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                     }
                 })
 
-                .setNegativeButton("Cancel",
+                .setNegativeButton(getString(R.string.cancels),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 dialogBox.cancel();
@@ -614,8 +614,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                 if (!(username == null || Objects.equals(username, ""))) {
                     tvUsername.setText(username);
-                } else {
-                    tvUsername.setText("Username");
                 }
 
                 if (image1 != null && !Objects.equals(image1, "")) {

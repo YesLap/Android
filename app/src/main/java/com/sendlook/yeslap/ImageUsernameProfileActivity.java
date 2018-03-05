@@ -77,9 +77,9 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 username = etUsername.getText().toString().trim();
                 if (downloadURL.equals("")) {
-                    Utils.toastyInfo(getApplicationContext(), "Select a Image Profile");
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.select_image_to_your_profile));
                 } else if (username.equals("")) {
-                    Utils.toastyInfo(getApplicationContext(), "Fill in the Username Field");
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_username_field));
                 } else {
                     dialog = new ProgressDialog(ImageUsernameProfileActivity.this);
                     dialog.setTitle(getString(R.string.loading));
@@ -189,7 +189,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
                 } else {
                     dialog.dismiss();
-                    Utils.toastyInfo(getApplicationContext(), "This username is already being used");
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.username_already_used));
                 }
 
             }

@@ -2,6 +2,7 @@ package com.sendlook.yeslap;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -33,6 +36,8 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        showMessage();
 
         //Instantiate Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -106,6 +111,28 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+
+    private void showMessage() {
+        final SharedPreferences sharedPreferences = getSharedPreferences(Utils.MESSAGE, MODE_PRIVATE);
+        String result = sharedPreferences.getString(Utils.MESSAGE, "");
+
+        if (Objects.equals(result, "")) {
+            new MaterialDialog.Builder(this)
+                    .title(getString(R.string.warning))
+                    .content(getString(R.string.warning_msg))
+                    .positiveText(getString(R.string.iagree))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(Utils.MESSAGE, "checked");
+                            editor.apply();
+                        }
+                    })
+                    .show();
+        }
 
     }
 

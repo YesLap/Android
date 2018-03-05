@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YesLap</string>
+    <string name="app_name">YesLap!</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="create_account">Don\'t have an account? create an account</string>
@@ -42,7 +42,6 @@
     <string name="report_three">Report abuse of this Person</string>
     <string name="report_four">I want to block this person</string>
     <string name="send_a_message_about_this_person">Send a message about this person</string>
-    <string name="send">Send</string>
     <string name="change_your_username">Change Your Username</string>
     <string name="are_you_already_here">Are you already here!</string>
     <string name="please_change_image_username">Please, change your username and add a profile photo to look for someone!</string>
@@ -74,4 +73,14 @@
     <string name="change_image">Change Image</string>
     <string name="save">Save</string>
     <string name="select_image_to_your_profile">Select a image to your profile</string>
+    <string name="cancels">Cancel</string>
+    <string name="username_already_used">This username is already being used</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="choose">Choose</string>
+    <string name="send">Send</string>
+    <string name="fill_username_field">Fill in the Username Field</string>
+    <string name="warning">Warning</string>
+    <string name="warning_msg">The YesLap! is in the development phase, so that we can improve our application more and more, sometimes the accounts of our database will be excluded, we are currently in the test phase, okay?</string>
+    <string name="iagree">I Agree</string>
 </resources>
