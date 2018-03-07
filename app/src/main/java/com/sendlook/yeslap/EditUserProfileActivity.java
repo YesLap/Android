@@ -183,11 +183,12 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 intentImage1.setType(Utils.TYPE_IMAGE);
                                 intentImage1.setAction(Intent.ACTION_GET_CONTENT);
                                 startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_1);
+                                pickImage.dismiss();
                             }
 
                             @Override
                             public void onCameraClick() {
-                                //Toast.makeText(SampleActivity.this, "Camera Click!", Toast.LENGTH_LONG).show();
+                                Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
                             }
                         }).show(EditUserProfileActivity.this);
 
@@ -234,11 +235,12 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 intentImage2.setType(Utils.TYPE_IMAGE);
                                 intentImage2.setAction(Intent.ACTION_GET_CONTENT);
                                 startActivityForResult(Intent.createChooser(intentImage2, getString(R.string.select_image)), GALLERY_PICK_IMAGE_2);
+                                pickImage.dismiss();
                             }
 
                             @Override
                             public void onCameraClick() {
-                                //Toast.makeText(SampleActivity.this, "Camera Click!", Toast.LENGTH_LONG).show();
+                                Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
                             }
                         }).show(EditUserProfileActivity.this);
             }
@@ -278,11 +280,12 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 intentImage3.setType(Utils.TYPE_IMAGE);
                                 intentImage3.setAction(Intent.ACTION_GET_CONTENT);
                                 startActivityForResult(Intent.createChooser(intentImage3, getString(R.string.select_image)), GALLERY_PICK_IMAGE_3);
+                                pickImage.dismiss();
                             }
 
                             @Override
                             public void onCameraClick() {
-                                //Toast.makeText(SampleActivity.this, "Camera Click!", Toast.LENGTH_LONG).show();
+                                Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
                             }
                         }).show(EditUserProfileActivity.this);
             }
@@ -308,11 +311,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         Uri resultUri = mResult.getUri();
                         if (resultUri != null) {
 
-                            dialog = new ProgressDialog(EditUserProfileActivity.this);
-                            dialog.setTitle(getString(R.string.uploading_image));
-                            dialog.setMessage(getString(R.string.uploading_image_msg));
-                            dialog.setCanceledOnTouchOutside(false);
-                            dialog.show();
+                            Utils.toastyInfo(getApplicationContext(), getString(R.string.uploading_image_msg));
 
                             mStorage = FirebaseStorage.getInstance().getReference();
                             StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image1.jpg");
@@ -321,7 +320,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        pickImage.dismiss();
                                         downloadURL = task.getResult().getDownloadUrl().toString();
                                         Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
@@ -332,17 +330,14 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage1);
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
-                                        dialog.dismiss();
                                     } else {
                                         Utils.toastyError(getApplicationContext(), task.getException().getMessage());
-                                        dialog.hide();
                                     }
                                 }
                             });
                         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                             Exception error = mResult.getError();
                             Utils.toastyError(getApplicationContext(), error.getMessage());
-                            dialog.hide();
                         }
                         ImageStatus = 0;
                     }
@@ -357,10 +352,12 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
                     CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
-                    //Saving Image1
+                    //Saving Image2
                     if (resultCode == RESULT_OK) {
                         Uri resultUri = mResult.getUri();
                         if (resultUri != null) {
+
+                            Utils.toastyInfo(getApplicationContext(), getString(R.string.uploading_image_msg));
 
                             mStorage = FirebaseStorage.getInstance().getReference();
                             StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image2.jpg");
@@ -369,7 +366,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        pickImage.dismiss();
                                         downloadURL = task.getResult().getDownloadUrl().toString();
                                         Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
@@ -379,18 +375,14 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage2);
-                                        dialog.dismiss();
                                     } else {
                                         Utils.toastyError(getApplicationContext(), task.getException().getMessage());
-                                        dialog.hide();
                                     }
                                 }
                             });
                         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                             Exception error = mResult.getError();
                             Utils.toastyError(getApplicationContext(), error.getMessage());
-                            dialog.hide();
-                            pickImage.dismiss();
                         }
                         ImageStatus = 0;
                     }
@@ -405,10 +397,12 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
                     CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
-                    //Saving Image1
+                    //Saving Image3
                     if (resultCode == RESULT_OK) {
                         Uri resultUri = mResult.getUri();
                         if (resultUri != null) {
+
+                            Utils.toastyInfo(getApplicationContext(), getString(R.string.uploading_image_msg));
 
                             mStorage = FirebaseStorage.getInstance().getReference();
                             StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image3.jpg");
@@ -417,7 +411,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        pickImage.dismiss();
                                         downloadURL = task.getResult().getDownloadUrl().toString();
                                         Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
 
@@ -427,18 +420,14 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                         mDatabase.updateChildren(user);
 
                                         Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage3);
-                                        dialog.dismiss();
                                     } else {
                                         Utils.toastyError(getApplicationContext(), task.getException().getMessage());
-                                        dialog.hide();
                                     }
                                 }
                             });
                         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                             Exception error = mResult.getError();
                             Utils.toastyError(getApplicationContext(), error.getMessage());
-                            dialog.hide();
-                            pickImage.dismiss();
                         }
                         ImageStatus = 0;
                     }

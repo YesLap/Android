@@ -35,15 +35,15 @@ public class Utils {
     public static final String SPOTLIGHT = "spotlight";
     public static final String FAVORITES = "favorites";
     public static final String MESSAGE = "message";
+    public static final String CALENDAR = "calendar";
 
-
-    public static final String MONDAY = "1";
-    public static final String TUESDAY = "2";
-    public static final String WEDNESDAY = "3";
-    public static final String THURSDAY = "4";
-    public static final String FRIDAY = "5";
-    public static final String SATURDAY = "6";
-    public static final String SUNDAY = "7";
+    public static final String SUNDAY = "1";
+    public static final String MONDAY = "2";
+    public static final String TUESDAY = "3";
+    public static final String WEDNESDAY = "4";
+    public static final String THURSDAY = "5";
+    public static final String FRIDAY = "6";
+    public static final String SATURDAY = "7";
 
     public static final String MORNING = "morning";
     public static final String AFTERNOON = "afternoon";
