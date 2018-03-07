@@ -71,7 +71,7 @@ dependencies {
             }
         }
     }
-
+    compile 'com.google.firebase:firebase-config:11.8.0'
 }
 
 
