@@ -84,4 +84,7 @@
     <string name="warning_msg">The YesLap! is in the development phase, so that we can improve our application more and more, sometimes the accounts of our database will be excluded, we are currently in the test phase, okay?</string>
     <string name="iagree">I Agree</string>
     <string name="soon">Soon</string>
+    <string name="update_avaliable">Update Avaliable</string>
+    <string name="update_avaliable_msg">Hello, we have something new for you! YesLap has a new version ready for you to upgrade.</string>
+    <string name="update">Update Now</string>
 </resources>

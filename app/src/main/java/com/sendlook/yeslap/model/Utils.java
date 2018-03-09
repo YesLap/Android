@@ -23,6 +23,9 @@ public class Utils {
 
     public static final String USERS = "users";
     public static final String USER_IMAGES = "user_images";
+    public static final String APP_CONFIG = "app_config";
+    public static final String APP_VERSION = "app_version";
+    public static final String CURRENT_VERSION = "current_version";
 
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";

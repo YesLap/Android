@@ -175,6 +175,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setStatusOffline();
                 mAuth.signOut();
                 Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

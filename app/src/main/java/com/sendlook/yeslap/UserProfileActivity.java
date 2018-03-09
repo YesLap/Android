@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +17,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,12 +32,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.sendlook.yeslap.model.ForceUpdateChecker;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
 import com.takusemba.spotlight.OnSpotlightEndedListener;
 import com.takusemba.spotlight.OnSpotlightStartedListener;
-import com.takusemba.spotlight.OnTargetStateChangedListener;
 import com.takusemba.spotlight.SimpleTarget;
 import com.takusemba.spotlight.Spotlight;
 
@@ -47,7 +45,7 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserProfileActivity extends AppCompatActivity implements ForceUpdateChecker.OnUpdateNeededListener {
+public class UserProfileActivity extends AppCompatActivity {
 
     //Variables
     private FirebaseAuth mAuth;
@@ -78,6 +76,8 @@ public class UserProfileActivity extends AppCompatActivity implements ForceUpdat
         btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
         btnFavorite = (ImageView) findViewById(R.id.btnFavorite);
+
+        chekcUpateApplication();
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,27 +141,6 @@ public class UserProfileActivity extends AppCompatActivity implements ForceUpdat
             }
         });
 
-        final FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-
-        // set in-app defaults
-        Map<String, Object> remoteConfigDefaults = new HashMap();
-        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, false);
-        remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "1.0.46");
-        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,
-                "https://play.google.com/store/apps/details?id=com.sendlook.yeslap");
-
-        firebaseRemoteConfig.setDefaults(remoteConfigDefaults);
-        firebaseRemoteConfig.fetch(60) // fetch every minutes
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Update", "remote config is fetched.");
-                            firebaseRemoteConfig.activateFetched();
-                        }
-                    }
-                });
-        ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
     }
 
     private void showSpotlight() {
@@ -276,6 +255,42 @@ public class UserProfileActivity extends AppCompatActivity implements ForceUpdat
 
             });
 
+        }
+    }
+
+    private void chekcUpateApplication() {
+        try {
+            final String currentVersionApp = BuildConfig.VERSION_NAME;
+            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Utils.APP_CONFIG).child(Utils.APP_VERSION);
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String currentVersionPlayStore = dataSnapshot.child(Utils.CURRENT_VERSION).getValue(String.class);
+                    if (!Objects.equals(currentVersionApp, currentVersionPlayStore)) {
+                        new MaterialDialog.Builder(UserProfileActivity.this)
+                                .title(getString(R.string.update_avaliable))
+                                .content(getString(R.string.update_avaliable_msg))
+                                .positiveText(getString(R.string.update))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        String url = "https://play.google.com/store/apps/details?id=com.sendlook.yeslap";
+                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        i.setData(Uri.parse(url));
+                                        startActivity(i);
+                                    }
+                                })
+                                .show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+            Utils.toastyError(getApplicationContext(), e.getMessage());
         }
     }
 
@@ -396,8 +411,4 @@ public class UserProfileActivity extends AppCompatActivity implements ForceUpdat
         mDatabase.updateChildren(status);
     }
 
-    @Override
-    public void onUpdateNeeded(String updateUrl) {
-
-    }
 }

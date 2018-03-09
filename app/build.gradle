@@ -6,8 +6,9 @@ android {
         applicationId "com.sendlook.yeslap"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 4
-        versionName "1.0.46"
+        versionCode 5
+        versionName "1.0.47"
+        //Dont forget to change the version in the Firebase
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

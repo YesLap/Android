@@ -8,6 +8,8 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
@@ -39,6 +41,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
     private CircleImageView cvImageUser;
     private Button btnChangeImage, btnSave;
 
+    private String usernameWatcher = "";
     private String username = "";
     private String downloadURL = "";
     private static final int GALLERY_PICK = 1;
@@ -65,6 +68,8 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         btnChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                usernameWatcher = etUsername.getText().toString().trim();
+
                 Intent intentGalery = new Intent();
                 intentGalery.setType(Utils.TYPE_IMAGE);
                 intentGalery.setAction(Intent.ACTION_GET_CONTENT);
@@ -97,7 +102,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        Utils.toastySuccess(getApplicationContext(), usernameWatcher);
         try {
             if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
                 Uri imgUri = data.getData();
@@ -120,6 +125,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
                                 if (task.isSuccessful()) {
+                                    //etUsername.setText(usernameWatcher);
                                     downloadURL = task.getResult().getDownloadUrl().toString();
                                     Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
                                     Picasso.with(ImageUsernameProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
@@ -251,6 +257,8 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         super.onResume();
         if (mAuth != null) {
             setStatusOnline();
+            //etUsername.setText("");
+            //etUsername.setText(usernameWatcher);
         }
     }
 
