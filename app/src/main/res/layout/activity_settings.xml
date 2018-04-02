@@ -142,8 +142,8 @@
                         app:min_value="18"
                         app:max_value="55"
                         app:bar_color="@color/colorDarkPink"
-                        app:bar_highlight_color="@color/colorLightPink"
-                        app:left_thumb_color="@color/colorDarkGrey"
+                        app:bar_highlight_color="@color/colorLightBlue"
+                        app:left_thumb_color="@color/colorDarkBlue"
                         app:left_thumb_color_pressed="@color/colorDarkGrey"
                         app:data_type="_integer"/>
 

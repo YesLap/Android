@@ -1,15 +1,18 @@
 package com.sendlook.yeslap;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
@@ -28,6 +31,7 @@ import com.google.firebase.storage.UploadTask;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -41,10 +45,9 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
     private CircleImageView cvImageUser;
     private Button btnChangeImage, btnSave;
 
-    private String usernameWatcher = "";
     private String username = "";
     private String downloadURL = "";
-    private static final int GALLERY_PICK = 1;
+    private Uri mainImageURI = null;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase, mDatabase1, mDatabase2;
@@ -58,9 +61,9 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_username_profile);
 
         mAuth = FirebaseAuth.getInstance();
+        mStorage = FirebaseStorage.getInstance().getReference().child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid());
 
         etUsername = (AppCompatEditText) findViewById(R.id.etUsername);
-        tlUsername = (TextInputLayout) findViewById(R.id.tlUsername);
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
         btnChangeImage = (Button) findViewById(R.id.btnChangeImage);
         btnSave = (Button) findViewById(R.id.btnSave);
@@ -68,12 +71,16 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         btnChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                usernameWatcher = etUsername.getText().toString().trim();
-
-                Intent intentGalery = new Intent();
-                intentGalery.setType(Utils.TYPE_IMAGE);
-                intentGalery.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intentGalery, getString(R.string.select_image_to_your_profile)), GALLERY_PICK);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(ImageUsernameProfileActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        Utils.toastyError(getApplicationContext(), getString(R.string.permission_dinied));
+                        ActivityCompat.requestPermissions(ImageUsernameProfileActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    } else {
+                        imagePicker();
+                    }
+                } else {
+                    imagePicker();
+                }
             }
         });
 
@@ -81,7 +88,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 username = etUsername.getText().toString().trim();
-                if (downloadURL.equals("")) {
+                if (downloadURL == null || downloadURL.equals("")) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.select_image_to_your_profile));
                 } else if (username.equals("")) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_username_field));
@@ -90,9 +97,10 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                     dialog.setTitle(getString(R.string.loading));
                     dialog.setMessage(getString(R.string.loading_msg));
                     dialog.setCanceledOnTouchOutside(false);
+                    dialog.setCancelable(false);
                     dialog.show();
 
-                    CheckUsernameAndUpdateProfile(username);
+                    saveUsernameAndUpdateProfile(username);
                 }
             }
         });
@@ -100,68 +108,86 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
     }
 
+    private void imagePicker() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1, 1)
+                .start(ImageUsernameProfileActivity.this);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Utils.toastySuccess(getApplicationContext(), usernameWatcher);
-        try {
-            if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
-                Uri imgUri = data.getData();
-                CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
-            }
 
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
 
-                if (resultCode == RESULT_OK) {
-                    Uri resultUri = mResult.getUri();
-                    if (resultUri != null) {
-                        Utils.toastyInfo(getApplicationContext(), getString(R.string.uploading_image_msg));
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-                        mStorage = FirebaseStorage.getInstance().getReference();
-                        StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child(Utils.IMAGE_1 + ".jpg");
+            if (resultCode == RESULT_OK) {
 
-                        filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                Utils.toastyInfo(getApplicationContext(), getString(R.string.sending_image));
 
-                                if (task.isSuccessful()) {
-                                    //etUsername.setText(usernameWatcher);
-                                    downloadURL = task.getResult().getDownloadUrl().toString();
-                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
-                                    Picasso.with(ImageUsernameProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
-                                } else {
-                                    Utils.toastyError(getApplicationContext(), task.getException().getMessage());
+                mainImageURI = result.getUri();
+                cvImageUser.setImageURI(mainImageURI);
+
+                StorageReference filePath = mStorage.child(Utils.IMAGE_1 + ".jpg");
+                filePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                        if (task.isSuccessful()) {
+                            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                            HashMap<String, String> image = new HashMap<>();
+                            image.put(Utils.IMAGE_1, task.getResult().getDownloadUrl().toString());
+                            database.setValue(image).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                    if (task.isSuccessful()) {
+                                        Utils.toastySuccess(getApplicationContext(), "Profile Image Up-To-Date");
+                                    }
+
                                 }
-                            }
-                        });
-                    } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Exception error = mResult.getError();
-                        Utils.toastyError(getApplicationContext(), error.getMessage());
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    dialog.dismiss();
+                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                }
+                            });
+
+                        }
                     }
-                }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        dialog.dismiss();
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                    }
+                });
+
             }
 
-        } catch (Exception e) {
-            Utils.toastyError(getApplicationContext(), e.getMessage());
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void CheckUsernameAndUpdateProfile(final String username) {
+    private void saveUsernameAndUpdateProfile(final String username) {
         mDatabase2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(username);
         mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                //Utils.toastyInfo(getApplicationContext(), String.valueOf(dataSnapshot.child("uid").toString()));
                 if (dataSnapshot.getChildrenCount() == 0) {
 
                     mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                     HashMap<String, Object> profile = new HashMap<>();
-                    profile.put("image1", downloadURL);
+                    //profile.put("image1", downloadURL);
                     profile.put("username", username);
                     mDatabase.updateChildren(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
+
                             if (task.isSuccessful()) {
                                 mDatabase1 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(username);
                                 HashMap<String, String> username = new HashMap<>();
@@ -169,11 +195,14 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                                 mDatabase1.setValue(username).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
+
                                         if (task.isSuccessful()) {
+
                                             dialog.dismiss();
                                             Intent intent = new Intent(ImageUsernameProfileActivity.this, UserProfileActivity.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(intent);
+
                                         }
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -217,20 +246,21 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                String image = dataSnapshot.child("image1").getValue(String.class);
+                username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+                String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
                 downloadURL = image;
+                mainImageURI = Uri.parse(image);
 
-                if (Objects.equals(username, "") || Objects.equals(downloadURL, "") || downloadURL == null) {
+                if (Objects.equals(username, "") || Objects.equals(username, null) || Objects.equals(downloadURL, "") || downloadURL == null) {
                     try {
                         etUsername.setText(username);
                         Picasso.with(ImageUsernameProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         dialog.dismiss();
                     } finally {
                         dialog.dismiss();
                     }
-                } else if (!Objects.equals(username, "") || !Objects.equals(image, "")){
+                } else if (!Objects.equals(username, "") || !Objects.equals(image, "")) {
                     dialog.dismiss();
                     Intent intent = new Intent(ImageUsernameProfileActivity.this, UserProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -257,8 +287,6 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         super.onResume();
         if (mAuth != null) {
             setStatusOnline();
-            //etUsername.setText("");
-            //etUsername.setText(usernameWatcher);
         }
     }
 
