@@ -41,7 +41,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ImageUsernameProfileActivity extends AppCompatActivity {
 
     private AppCompatEditText etUsername;
-    private TextInputLayout tlUsername;
     private CircleImageView cvImageUser;
     private Button btnChangeImage, btnSave;
 
@@ -67,8 +66,6 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
         btnChangeImage = (Button) findViewById(R.id.btnChangeImage);
         btnSave = (Button) findViewById(R.id.btnSave);
-
-        btnSave.setEnabled(false);
 
         btnChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,22 +126,26 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
                             DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                            HashMap<String, String> image = new HashMap<>();
-                            image.put(Utils.IMAGE_1, task.getResult().getDownloadUrl().toString());
+                            final HashMap<String, String> image = new HashMap<>();
+                            final String taskDownload = task.getResult().getDownloadUrl().toString();
+                            image.put(Utils.IMAGE_1, taskDownload);
                             database.setValue(image).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 
                                     if (task.isSuccessful()) {
                                         Utils.toastySuccess(getApplicationContext(), "Profile Image Up-To-Date");
-                                        btnSave.setEnabled(true);
+                                        downloadURL = taskDownload;
+                                        btnSave.setVisibility(View.VISIBLE);
                                     }
 
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    dialog.dismiss();
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
+                                    }
                                     Utils.toastyError(getApplicationContext(), e.getMessage());
                                 }
                             });
@@ -154,7 +155,9 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        dialog.dismiss();
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
                         Utils.toastyError(getApplicationContext(), e.getMessage());
                     }
                 });
@@ -236,6 +239,8 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
+        //btnSave.setVisibility(View.INVISIBLE);
+
         DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -243,9 +248,11 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
                 String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
                 downloadURL = image;
-                if (image != null) {
+
+                if (!Objects.equals(image, "")) {
+
                     mainImageURI = Uri.parse(image);
-                    btnSave.setEnabled(true);
+                    btnSave.setVisibility(View.VISIBLE);
                 }
 
                 if (Objects.equals(username, "") || Objects.equals(username, null) || Objects.equals(downloadURL, "") || downloadURL == null) {
@@ -253,9 +260,13 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                         etUsername.setText(username);
                         Picasso.with(ImageUsernameProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
                     } catch (Exception e) {
-                        dialog.dismiss();
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
                     } finally {
-                        dialog.dismiss();
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
                     }
                 } else if (!Objects.equals(username, "") || !Objects.equals(image, "")) {
                     dialog.dismiss();

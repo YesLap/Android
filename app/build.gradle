@@ -7,8 +7,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         //Dont forget to change the version in the Firebase
-        versionCode 7
-        versionName "1.0.50"
+        versionCode 9
+        versionName "1.0.52"
         //Dont forget to change the version in the Firebase
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

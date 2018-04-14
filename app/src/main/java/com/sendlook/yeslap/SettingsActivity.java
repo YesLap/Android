@@ -1,5 +1,6 @@
 package com.sendlook.yeslap;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -71,6 +72,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private SimpleLocation location;
     private double lat, lon;
+
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,13 +273,27 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void getUserConfig() {
+        dialog = new ProgressDialog(SettingsActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
         DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String age = dataSnapshot.child("age").getValue(String.class);
-                tvAgeUser.setText(String.valueOf(age));
-                rbAgeUser.setMinStartValue(Float.valueOf(age)).apply();
+                if (age != null) {
+                    tvAgeUser.setText(String.valueOf(age));
+                    rbAgeUser.setMinStartValue(Float.valueOf(age)).apply();
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                } else {
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                }
             }
 
             @Override

@@ -83,8 +83,6 @@
             android:name=".PinLockActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ImageUsernameProfileActivity" />
-        <activity android:name=".NewImageUserActivity" />
-        <activity android:name=".NewUsernameUserActivity"></activity>
     </application>
 
 </manifest>
