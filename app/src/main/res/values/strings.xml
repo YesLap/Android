@@ -92,4 +92,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="permission_dinied">Permission Denied</string>
     <string name="sending_image">Please wait while we update your profile picture</string>
+    <string name="permission_granted">Permissions Granted!</string>
+    <string name="permission_need_be_granted">All Permissions Need To Be Granted!</string>
 </resources>

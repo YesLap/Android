@@ -1,5 +1,6 @@
 package com.sendlook.yeslap;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,8 +20,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.sendlook.yeslap.model.Utils;
 
+import java.util.List;
 import java.util.Objects;
 
 public class SignInActivity extends AppCompatActivity {
@@ -38,6 +45,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         showMessage();
+        grantPermissions();
 
         //Instantiate Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -134,6 +142,37 @@ public class SignInActivity extends AppCompatActivity {
                     .show();
         }
 
+    }
+
+    private void grantPermissions() {
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_NETWORK_STATE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            Utils.toastySuccess(getApplicationContext(), getString(R.string.permission_granted));
+                        }
+
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            Utils.toastySuccess(getApplicationContext(), getString(R.string.permission_need_be_granted));
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .onSameThread()
+                .check();
     }
 
 }

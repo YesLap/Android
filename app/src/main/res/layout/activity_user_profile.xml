@@ -20,10 +20,10 @@
         android:id="@+id/btnGoToSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="30sp"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="15sp"
+        android:layout_marginEnd="30sp"
         android:src="@drawable/gotosetting" />
 
     <ImageView
@@ -71,6 +71,7 @@
             android:background="@color/colorDarkBlue">
 
             <ImageView
+                android:id="@+id/ivChats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -87,6 +88,7 @@
             android:background="@color/colorLightBlue">
 
             <ImageView
+                android:id="@+id/ivCalendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -103,6 +105,7 @@
             android:background="@color/colorDarkBlue">
 
             <ImageView
+                android:id="@+id/ivSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -117,13 +120,14 @@
         android:id="@+id/btnEditUserProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView4"
         android:layout_alignEnd="@+id/imageView4"
+        android:layout_alignBottom="@+id/imageView4"
         android:layout_marginBottom="13dp"
         android:clickable="true"
-        app:backgroundTint="@color/colorLightBlue"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/ic_create_white_24dp" />
+        android:focusable="true"
+        app:srcCompat="@drawable/ic_create_white_24dp"
+        app:backgroundTint="@color/colorDarkBlue"
+        app:fabSize="mini" />
 
     <ImageView
         android:id="@+id/btnFavorite"
@@ -137,8 +141,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:adjustViewBounds="true"
         android:cropToPadding="true"
         android:src="@drawable/wavebottom" />

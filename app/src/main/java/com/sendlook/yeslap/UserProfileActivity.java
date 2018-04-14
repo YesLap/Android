@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -144,87 +146,83 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void showSpotlight() {
-        SimpleTarget targetEditProfile = new SimpleTarget.Builder(this)
-                .setPoint(440f, 343f)
-                .setRadius(50f)
-                .setTitle(getString(R.string.welcome_yeslap))
-                .setDescription(getString(R.string.click_edit_profile))
-                .build();
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.ivChats), "Chats","Here you can see all your chats!")
+                                //Cor de fora transparente
+                                .dimColor(R.color.colorLightBlue)
+                                //Cor de dentro do circulo
+                                .outerCircleColor(R.color.colorLightBlue)
+                                //Cor de dentro do alvo
+                                .targetCircleColor(android.R.color.white)
+                                //Cor do texto
+                                .textColor(android.R.color.white)
+                                .cancelable(false),
+                        TapTarget.forView(findViewById(R.id.ivCalendar), "Calendar","here you can change the days that you will be or not available")
+                                //Cor de fora transparente
+                                .dimColor(R.color.colorLightBlue)
+                                //Cor de dentro do circulo
+                                .outerCircleColor(R.color.colorLightBlue)
+                                //Cor de dentro do alvo
+                                .targetCircleColor(android.R.color.white)
+                                //Cor do texto
+                                .textColor(android.R.color.white)
+                                .cancelable(false),
+                        TapTarget.forView(findViewById(R.id.ivSearch), "Search","Here you can find the people you will talk to")
+                                //Cor de fora transparente
+                                .dimColor(R.color.colorLightBlue)
+                                //Cor de dentro do circulo
+                                .outerCircleColor(R.color.colorLightBlue)
+                                //Cor de dentro do alvo
+                                .targetCircleColor(android.R.color.white)
+                                //Cor do texto
+                                .textColor(android.R.color.white)
+                                .cancelable(false),
+                        TapTarget.forView(findViewById(R.id.btnFavorite), "Favorites","Here you can see your favorite contacts")
+                                //Cor de fora transparente
+                                .dimColor(R.color.colorLightBlue)
+                                //Cor de dentro do circulo
+                                .outerCircleColor(R.color.colorLightBlue)
+                                //Cor de dentro do alvo
+                                .targetCircleColor(android.R.color.white)
+                                //Cor do texto
+                                .textColor(android.R.color.white)
+                                .cancelable(false),
+                        TapTarget.forView(findViewById(R.id.btnEditUserProfile), "Your Profile","here you can edit your username and add your photos")
+                                //Cor de fora transparente
+                                .dimColor(R.color.colorLightBlue)
+                                //Cor de dentro do circulo
+                                .outerCircleColor(R.color.colorLightBlue)
+                                //Cor de dentro do alvo
+                                .targetCircleColor(android.R.color.white)
+                                //Cor do texto
+                                .textColor(android.R.color.white)
+                                .cancelable(false)
+                ).listener(new TapTargetSequence.Listener() {
+            @Override
+            public void onSequenceFinish() {
+                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                HashMap<String, Object> spotlight = new HashMap<>();
+                spotlight.put("spotlight", "true");
+                mDatabase.updateChildren(spotlight);
+            }
 
-        SimpleTarget targetChatMessages = new SimpleTarget.Builder(this)
-                .setPoint(160f, 600f)
-                .setRadius(90f)
-                .setTitle(getString(R.string.chat_messages))
-                .setDescription(getString(R.string.chat_messages_mgs))
-                .build();
+            @Override
+            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
 
-        SimpleTarget targetCalendar = new SimpleTarget.Builder(this)
-                .setPoint(360f, 600f)
-                .setRadius(90f)
-                .setTitle(getString(R.string.appointment_book))
-                .setDescription(getString(R.string.appointment_book_msg))
-                .build();
+            }
 
-        SimpleTarget targetFind = new SimpleTarget.Builder(this)
-                .setPoint(565f, 600f)
-                .setRadius(90f)
-                .setTitle(getString(R.string.find_users))
-                .setDescription(getString(R.string.find_users_msg))
-                .build();
+            @Override
+            public void onSequenceCanceled(TapTarget lastTarget) {
 
-        SimpleTarget targetFavorite = new SimpleTarget.Builder(this)
-                .setPoint(360f, 820f)
-                .setRadius(90f)
-                .setTitle(getString(R.string.favorite_users))
-                .setDescription(getString(R.string.favorite_users_msg))
-                .build();
-
-        SimpleTarget targetSettings = new SimpleTarget.Builder(this)
-                .setPoint(618f, 120f)
-                .setRadius(50f)
-                .setTitle(getString(R.string.settings))
-                .setDescription(getString(R.string.settings_msg))
-                .build();
-
-        SimpleTarget targetEnd = new SimpleTarget.Builder(this)
-                .setPoint(300f, 300f)
-                .setRadius(1f)
-                .setTitle(getString(R.string.enjoy_yeslap))
-                .setDescription(getString(R.string.enjoy_yeslap_msg))
-                .build();
-
-        Spotlight.with(this)
-                .setDuration(1000L)
-                .setAnimation(new DecelerateInterpolator(2f))
-                .setTargets(targetEditProfile, targetChatMessages, targetCalendar, targetFind, targetFavorite, targetSettings, targetEnd)
-                .setOnSpotlightStartedListener(new OnSpotlightStartedListener() {
-                    @Override
-                    public void onStarted() {
-
-                    }
-                })
-                .setOnSpotlightEndedListener(new OnSpotlightEndedListener() {
-                    @Override
-                    public void onEnded() {
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                        HashMap<String, Object> spotlight = new HashMap<>();
-                        spotlight.put("spotlight", "true");
-                        mDatabase.updateChildren(spotlight);
-                    }
-                })
-                .start();
+            }
+        }).start();
     }
 
     //Get the user data from Firebase
     private void getUserData() {
         if (mAuth != null && mAuth.getCurrentUser() != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-
-            //dialog = new ProgressDialog(this);
-            //dialog.setTitle(getString(R.string.loading));
-            //dialog.setMessage(getString(R.string.loading_msg));
-            //dialog.setCanceledOnTouchOutside(false);
-            //dialog.show();
 
             mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -240,10 +238,11 @@ public class UserProfileActivity extends AppCompatActivity {
                         if (image != null && !Objects.equals(image, "")) {
                             Picasso.with(UserProfileActivity.this).load((image)).placeholder(R.drawable.img_profile).into(cvImageUser);
                         }
+                        if (spotlight == null || spotlight.equals("")){
+                            showSpotlight();
+                        }
                     } catch (Exception e) {
                         Utils.toastyError(getApplicationContext(), e.getMessage());
-                    } finally {
-                        //dialog.dismiss();
                     }
 
                 }
@@ -312,6 +311,31 @@ public class UserProfileActivity extends AppCompatActivity {
         return haveConnectedWifi || haveConnectedMobile;
     }
 
+    private void checkInternetConnection() {
+        if (!haveNetworkConnection()) {
+            // Display message in dialog box if you have not internet connection
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle(R.string.no_internet_connection);
+            alertDialogBuilder.setMessage(R.string.no_internet_connection_msg);
+            alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    finish();
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        } else {
+            //Get the user data
+            getUserData();
+            //Set status Online
+            setStatusOnline();
+            //Check if the user profile is complete
+            checkIfProfileIsComplete();
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -321,28 +345,7 @@ public class UserProfileActivity extends AppCompatActivity {
             sendToStart();
         } else {
             //Check Internet Connection
-            if (!haveNetworkConnection()) {
-                // Display message in dialog box if you have not internet connection
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle(R.string.no_internet_connection);
-                alertDialogBuilder.setMessage(R.string.no_internet_connection_msg);
-                alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        finish();
-                    }
-                });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            } else {
-                //Get the user data
-                getUserData();
-                //Set status Online
-                setStatusOnline();
-                //Check if the user profile is complete
-                checkIfProfileIsComplete();
-            }
+            checkInternetConnection();
         }
     }
 

@@ -1,8 +1,17 @@
 package com.sendlook.yeslap;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,16 +19,28 @@ import android.widget.TextView;
 
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
 import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sendlook.yeslap.model.Utils;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import im.delight.android.location.SimpleLocation;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -48,6 +69,9 @@ public class SettingsActivity extends AppCompatActivity {
     private Button btnLogOut;
     private Button btnDeleteAccount;
 
+    private SimpleLocation location;
+    private double lat, lon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,18 +99,13 @@ public class SettingsActivity extends AppCompatActivity {
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
         btnDeleteAccount = (Button) findViewById(R.id.btnDeleteAccount);
 
+        getCurrentLocation();
+        getUserConfig();
+
         // click events
         ivGoToProfile.setOnClickListener(callActivity(UserProfileActivity.class));
 
         ivGoToChat.setOnClickListener(callActivity(ChatActivity.class));
-
-        btnLocationUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // implementar
-                Utils.toastyInfo(getApplicationContext(), "Building");
-            }
-        });
 
         btnGenderUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +131,28 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void valueChanged(Number minValue) {
                 tvAgeUser.setText(String.valueOf(minValue));
+            }
+        });
+
+        rbAgeUser.setOnSeekbarFinalValueListener(new OnSeekbarFinalValueListener() {
+            @Override
+            public void finalValue(final Number value) {
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                HashMap<String, Object> age = new HashMap<>();
+                age.put("age", String.valueOf(value));
+                database.updateChildren(age).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("age updated", "Age: " + value);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                    }
+                });
             }
         });
 
@@ -192,14 +233,65 @@ public class SettingsActivity extends AppCompatActivity {
                 callActivity(UserProfileActivity.class);
             }
         });
+
     }
 
+    private void getCurrentLocation() {
+        location = new SimpleLocation(this);
+
+        if (!location.hasLocationEnabled()) {
+            SimpleLocation.openSettings(this);
+        }
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> loc = new HashMap<>();
+        loc.put("latitude", location.getLatitude());
+        loc.put("longitude", location.getLongitude());
+        database.updateChildren(loc).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        Geocoder geocoder = new Geocoder(SettingsActivity.this, Locale.getDefault());
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                        btnLocationUser.setText(addresses.get(0).getLocality());
+                    } catch (IOException e) {
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Utils.toastyError(getApplicationContext(), e.getMessage());
+            }
+        });
+
+    }
+
+    private void getUserConfig() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String age = dataSnapshot.child("age").getValue(String.class);
+                tvAgeUser.setText(String.valueOf(age));
+                rbAgeUser.setMinStartValue(Float.valueOf(age)).apply();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         mUser = mAuth.getCurrentUser();
         if (mUser != null) {
+            location.beginUpdates();
             setStatusOnline();
         }
     }
@@ -210,6 +302,7 @@ public class SettingsActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         if (mUser != null) {
             setStatusOffline();
+            location.endUpdates();
         }
     }
 

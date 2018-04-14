@@ -68,19 +68,12 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         btnChangeImage = (Button) findViewById(R.id.btnChangeImage);
         btnSave = (Button) findViewById(R.id.btnSave);
 
+        btnSave.setEnabled(false);
+
         btnChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(ImageUsernameProfileActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.toastyError(getApplicationContext(), getString(R.string.permission_dinied));
-                        ActivityCompat.requestPermissions(ImageUsernameProfileActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                    } else {
-                        imagePicker();
-                    }
-                } else {
-                    imagePicker();
-                }
+                imagePicker();
             }
         });
 
@@ -144,6 +137,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
                                     if (task.isSuccessful()) {
                                         Utils.toastySuccess(getApplicationContext(), "Profile Image Up-To-Date");
+                                        btnSave.setEnabled(true);
                                     }
 
                                 }
@@ -249,7 +243,10 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
                 String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
                 downloadURL = image;
-                mainImageURI = Uri.parse(image);
+                if (image != null) {
+                    mainImageURI = Uri.parse(image);
+                    btnSave.setEnabled(true);
+                }
 
                 if (Objects.equals(username, "") || Objects.equals(username, null) || Objects.equals(downloadURL, "") || downloadURL == null) {
                     try {
