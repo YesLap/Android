@@ -239,7 +239,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        //btnSave.setVisibility(View.INVISIBLE);
+        btnSave.setVisibility(View.INVISIBLE);
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         database.addListenerForSingleValueEvent(new ValueEventListener() {

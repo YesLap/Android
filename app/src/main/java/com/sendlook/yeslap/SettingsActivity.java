@@ -115,16 +115,70 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (genderUser) {
                     case "male":
+
                         ivGenderUser.setImageResource(R.drawable.settings_icon_female);
                         genderUser = "female";
+                        btnGenderUser.setText(genderUser);
+
+                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                        HashMap<String, Object> gender = new HashMap<>();
+                        gender.put("gender", genderUser);
+                        database.updateChildren(gender).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("Gender Updated", String.format("Gender Updated: %s", genderUser));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+                        });
+
                         break;
                     case "female":
+
                         ivGenderUser.setImageResource(R.drawable.settings_icon_gay);
                         genderUser = "gay";
+                        btnGenderUser.setText(genderUser);
+
+                        DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                        HashMap<String, Object> gender1 = new HashMap<>();
+                        gender1.put("gender", genderUser);
+                        database1.updateChildren(gender1).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("Gender Updated", String.format("Gender Updated: %s", genderUser));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+                        });
+
                         break;
                     case "gay":
+
                         ivGenderUser.setImageResource(R.drawable.settings_icon_male);
                         genderUser = "male";
+                        btnGenderUser.setText(genderUser);
+
+                        DatabaseReference database2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                        HashMap<String, Object> gender2 = new HashMap<>();
+                        gender2.put("gender", genderUser);
+                        database2.updateChildren(gender2).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("Gender Updated", String.format("Gender Updated: %s", genderUser));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+                        });
+
                         break;
                 }
             }
@@ -278,11 +332,14 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String age = dataSnapshot.child("age").getValue(String.class);
+                String gender = dataSnapshot.child("gender").getValue(String.class);
+
+                //AGE
                 if (age != null) {
                     tvAgeUser.setText(String.valueOf(age));
                     rbAgeUser.setMinStartValue(Float.valueOf(age)).apply();
@@ -294,6 +351,28 @@ public class SettingsActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 }
+
+                //GENDER
+                if (gender != null) {
+                    switch (gender) {
+                        case "male":
+                            ivGenderUser.setImageResource(R.drawable.settings_icon_male);
+                            genderUser = gender;
+                            btnGenderUser.setText(gender);
+                            break;
+                        case "female":
+                            ivGenderUser.setImageResource(R.drawable.settings_icon_female);
+                            genderUser = gender;
+                            btnGenderUser.setText(gender);
+                            break;
+                        case "gay":
+                            ivGenderUser.setImageResource(R.drawable.settings_icon_gay);
+                            genderUser = gender;
+                            btnGenderUser.setText(gender);
+                            break;
+                    }
+                }
+
             }
 
             @Override
