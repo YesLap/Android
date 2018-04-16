@@ -347,7 +347,7 @@ public class CalendarActivity extends AppCompatActivity {
             dialog.show();
 
             //Saving at the Firebase
-            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child(turn).child(mAuth.getCurrentUser().getUid());
+            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child(turn).push().child(mAuth.getCurrentUser().getUid());
             HashMap<String, String> uid = new HashMap<>();
             uid.put(Utils.UID, mAuth.getCurrentUser().getUid());
             mDatabase.setValue(uid).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -402,7 +402,9 @@ public class CalendarActivity extends AppCompatActivity {
         } catch (Exception e) {
             Utils.toastyError(getApplicationContext(), e.getMessage());
         } finally {
-            dialog.dismiss();
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
         }
 
     }

@@ -4,14 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -35,11 +32,8 @@ import com.google.firebase.storage.UploadTask;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.vansuita.pickimage.bundle.PickSetup;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vansuita.pickimage.dialog.PickImageDialog;
-import com.vansuita.pickimage.enums.EPickType;
-import com.vansuita.pickimage.listeners.IPickClick;
-import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +63,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private PickImageDialog pickImage;
     private Boolean isExistUsername = false;
     private String oldUsername;
+    private Uri mainImageURI = null;
 
 
     @Override
@@ -78,6 +73,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
         //Instantiate Firebase
         mAuth = FirebaseAuth.getInstance();
+        mStorage = FirebaseStorage.getInstance().getReference().child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid());
 
         //Cast
         btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
@@ -153,44 +149,15 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnChangeImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PickSetup setup = new PickSetup()
-                        .setTitle(getString(R.string.choose))
-                        .setTitleColor(Color.BLACK)
-                        //.setBackgroundColor(yourColor)
-                        //.setProgressText(yourText)
-                        //.setProgressTextColor(yourColor)
-                        .setCancelText(getString(R.string.cancels))
-                        .setCancelTextColor(Color.BLACK)
-                        //.setButtonTextColor(yourColor)
-                        //.setDimAmount(yourFloat)
-                        .setFlip(true)
-                        .setMaxSize(500)
-                        .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
-                        .setCameraButtonText(getString(R.string.camera))
-                        .setGalleryButtonText(getString(R.string.gallery))
-                        .setIconGravity(Gravity.LEFT)
-                        .setButtonOrientation(LinearLayoutCompat.VERTICAL)
-                        .setSystemDialog(false);
-                //.setGalleryIcon(R.drawable.gallery)
-                //.setCameraIcon(R.drawable.photo_camera);
+                dialog = new ProgressDialog(EditUserProfileActivity.this);
+                dialog.setTitle(getString(R.string.uploading_image));
+                dialog.setMessage(getString(R.string.uploading_image_msg));
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
 
-                pickImage = PickImageDialog.build(setup)
-                        .setOnClick(new IPickClick() {
-                            @Override
-                            public void onGalleryClick() {
-                                ImageStatus = 1;
-                                Intent intentImage1 = new Intent();
-                                intentImage1.setType(Utils.TYPE_IMAGE);
-                                intentImage1.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(Intent.createChooser(intentImage1, getString(R.string.select_image)), GALLERY_PICK_IMAGE_1);
-                                pickImage.dismiss();
-                            }
+                ImageStatus = 1;
 
-                            @Override
-                            public void onCameraClick() {
-                                Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
-                            }
-                        }).show(EditUserProfileActivity.this);
+                imagePicker();
 
             }
         });
@@ -205,44 +172,9 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
 
-                PickSetup setup = new PickSetup()
-                        .setTitle(getString(R.string.choose))
-                        .setTitleColor(Color.BLACK)
-                        //.setBackgroundColor(yourColor)
-                        //.setProgressText(yourText)
-                        //.setProgressTextColor(yourColor)
-                        .setCancelText(getString(R.string.cancels))
-                        .setCancelTextColor(Color.BLACK)
-                        //.setButtonTextColor(yourColor)
-                        //.setDimAmount(yourFloat)
-                        .setFlip(true)
-                        .setMaxSize(500)
-                        .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
-                        .setCameraButtonText(getString(R.string.camera))
-                        .setGalleryButtonText(getString(R.string.gallery))
-                        .setIconGravity(Gravity.LEFT)
-                        .setButtonOrientation(LinearLayoutCompat.VERTICAL)
-                        .setSystemDialog(false);
-                //.setGalleryIcon(R.drawable.gallery)
-                //.setCameraIcon(R.drawable.photo_camera);
+                ImageStatus = 2;
 
-                pickImage = PickImageDialog.build(setup)
-                        .setOnClick(new IPickClick() {
-                            @Override
-                            public void onGalleryClick() {
-                                ImageStatus = 2;
-                                Intent intentImage2 = new Intent();
-                                intentImage2.setType(Utils.TYPE_IMAGE);
-                                intentImage2.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(Intent.createChooser(intentImage2, getString(R.string.select_image)), GALLERY_PICK_IMAGE_2);
-                                pickImage.dismiss();
-                            }
-
-                            @Override
-                            public void onCameraClick() {
-                                Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
-                            }
-                        }).show(EditUserProfileActivity.this);
+                imagePicker();
             }
         });
 
@@ -250,193 +182,91 @@ public class EditUserProfileActivity extends AppCompatActivity {
         btnChangeImage3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PickSetup setup = new PickSetup()
-                        .setTitle(getString(R.string.choose))
-                        .setTitleColor(Color.BLACK)
-                        //.setBackgroundColor(yourColor)
-                        //.setProgressText(yourText)
-                        //.setProgressTextColor(yourColor)
-                        .setCancelText(getString(R.string.cancels))
-                        .setCancelTextColor(Color.BLACK)
-                        //.setButtonTextColor(yourColor)
-                        //.setDimAmount(yourFloat)
-                        .setFlip(true)
-                        .setMaxSize(500)
-                        .setPickTypes(EPickType.GALLERY, EPickType.CAMERA)
-                        .setCameraButtonText(getString(R.string.camera))
-                        .setGalleryButtonText(getString(R.string.gallery))
-                        .setIconGravity(Gravity.LEFT)
-                        .setButtonOrientation(LinearLayoutCompat.VERTICAL)
-                        .setSystemDialog(false);
-                //.setGalleryIcon(R.drawable.gallery)
-                //.setCameraIcon(R.drawable.photo_camera);
+                dialog = new ProgressDialog(EditUserProfileActivity.this);
+                dialog.setTitle(getString(R.string.uploading_image));
+                dialog.setMessage(getString(R.string.uploading_image_msg));
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
 
-                pickImage = PickImageDialog.build(setup)
-                        .setOnClick(new IPickClick() {
-                            @Override
-                            public void onGalleryClick() {
-                                ImageStatus = 3;
-                                Intent intentImage3 = new Intent();
-                                intentImage3.setType(Utils.TYPE_IMAGE);
-                                intentImage3.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(Intent.createChooser(intentImage3, getString(R.string.select_image)), GALLERY_PICK_IMAGE_3);
-                                pickImage.dismiss();
-                            }
+                ImageStatus = 3;
 
-                            @Override
-                            public void onCameraClick() {
-                                Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
-                            }
-                        }).show(EditUserProfileActivity.this);
+                imagePicker();
             }
         });
 
     }
 
+    private void imagePicker() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(this);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        try {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-            if (ImageStatus == 1) {
-                if (requestCode == GALLERY_PICK_IMAGE_1 && resultCode == RESULT_OK) {
-                    Uri imgUri = data.getData();
-                    CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
+            if (resultCode == RESULT_OK) {
+
+                Utils.toastyInfo(getApplicationContext(), getString(R.string.sending_image));
+
+                mainImageURI = result.getUri();
+
+                if (ImageStatus == 1) {
+                    ivImage1.setImageURI(mainImageURI);
+                } else if (ImageStatus == 2) {
+                    ivImage2.setImageURI(mainImageURI);
+                } else if (ImageStatus == 3) {
+                    ivImage3.setImageURI(mainImageURI);
                 }
 
-                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                    CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
-                    //Saving Image1
-                    if (resultCode == RESULT_OK && ImageStatus == 1) {
-                        Uri resultUri = mResult.getUri();
-                        if (resultUri != null) {
+                final String user = String.format("image%s", ImageStatus);
 
-                            Utils.toastyInfo(getApplicationContext(), getString(R.string.uploading_image_msg));
-
-                            mStorage = FirebaseStorage.getInstance().getReference();
-                            StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image1.jpg");
-
-                            filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                StorageReference filePath = mStorage.child(user + ".jpg");
+                filePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                            HashMap<String, Object> image = new HashMap<>();
+                            String taskDownload = task.getResult().getDownloadUrl().toString();
+                            image.put(user, taskDownload);
+                            database.updateChildren(image).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        downloadURL = task.getResult().getDownloadUrl().toString();
-                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
-
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                                        Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_1, downloadURL);
-                                        mDatabase.updateChildren(user);
-
-                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage1);
-                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(cvImageUser);
-                                    } else {
-                                        Utils.toastyError(getApplicationContext(), task.getException().getMessage());
+                                        Utils.toastySuccess(getApplicationContext(), "Profile Image Up-To-Date");
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
                                     }
                                 }
-                            });
-                        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                            Exception error = mResult.getError();
-                            Utils.toastyError(getApplicationContext(), error.getMessage());
-                        }
-                        ImageStatus = 0;
-                    }
-                }
-            }
-            if (ImageStatus == 2) {
-                if (requestCode == GALLERY_PICK_IMAGE_2 && resultCode == RESULT_OK) {
-                    Uri imgUri = data.getData();
-                    CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
-                }
-
-                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-                    CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
-                    //Saving Image2
-                    if (resultCode == RESULT_OK) {
-                        Uri resultUri = mResult.getUri();
-                        if (resultUri != null) {
-
-                            Utils.toastyInfo(getApplicationContext(), getString(R.string.uploading_image_msg));
-
-                            mStorage = FirebaseStorage.getInstance().getReference();
-                            StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image2.jpg");
-
-                            filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            }).addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        downloadURL = task.getResult().getDownloadUrl().toString();
-                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
-
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                                        Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_2, downloadURL);
-                                        mDatabase.updateChildren(user);
-
-                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage2);
-                                    } else {
-                                        Utils.toastyError(getApplicationContext(), task.getException().getMessage());
+                                public void onFailure(@NonNull Exception e) {
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
                                     }
+                                    Utils.toastyError(getApplicationContext(), e.getMessage());
                                 }
                             });
-                        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                            Exception error = mResult.getError();
-                            Utils.toastyError(getApplicationContext(), error.getMessage());
                         }
-                        ImageStatus = 0;
                     }
-                }
-            }
-            if (ImageStatus == 3) {
-                if (requestCode == GALLERY_PICK_IMAGE_3 && resultCode == RESULT_OK) {
-                    Uri imgUri = data.getData();
-                    CropImage.activity(imgUri).setAspectRatio(1, 1).start(this);
-                }
-
-                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-                    CropImage.ActivityResult mResult = CropImage.getActivityResult(data);
-                    //Saving Image3
-                    if (resultCode == RESULT_OK) {
-                        Uri resultUri = mResult.getUri();
-                        if (resultUri != null) {
-
-                            Utils.toastyInfo(getApplicationContext(), getString(R.string.uploading_image_msg));
-
-                            mStorage = FirebaseStorage.getInstance().getReference();
-                            StorageReference filePath = mStorage.child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid()).child("Image3.jpg");
-
-                            filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        downloadURL = task.getResult().getDownloadUrl().toString();
-                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
-
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                                        Map<String, Object> user = new HashMap<>();
-                                        user.put(Utils.IMAGE_3, downloadURL);
-                                        mDatabase.updateChildren(user);
-
-                                        Picasso.with(EditUserProfileActivity.this).load(downloadURL).placeholder(R.drawable.img_profile).into(ivImage3);
-                                    } else {
-                                        Utils.toastyError(getApplicationContext(), task.getException().getMessage());
-                                    }
-                                }
-                            });
-                        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                            Exception error = mResult.getError();
-                            Utils.toastyError(getApplicationContext(), error.getMessage());
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
                         }
-                        ImageStatus = 0;
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
                     }
-                }
+                });
+
             }
 
-
-        } catch (Exception e) {
-            Utils.toastyError(getApplicationContext(), e.getMessage());
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -557,7 +387,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                                             }
                                         });
 
-                                    } else if (dataSnapshot.getChildrenCount() >= 1){
+                                    } else if (dataSnapshot.getChildrenCount() >= 1) {
                                         Utils.toastyInfo(getApplicationContext(), getString(R.string.username_already_used));
                                     }
 

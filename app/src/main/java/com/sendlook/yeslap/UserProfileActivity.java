@@ -383,12 +383,16 @@ public class UserProfileActivity extends AppCompatActivity {
                 String image = dataSnapshot.child("image1").getValue(String.class);
 
                 if (Objects.equals(username, "") || Objects.equals(username, null) || Objects.equals(image, "")) {
-                    dialog.dismiss();
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
                     Intent intent = new Intent(UserProfileActivity.this, ImageUsernameProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
-                    dialog.dismiss();
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
                 }
 
             }

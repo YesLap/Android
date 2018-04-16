@@ -244,7 +244,7 @@ public class SettingsActivity extends AppCompatActivity {
         rbAgeSearch.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
             public void valueChanged(Number minValue, Number maxValue) {
-                tvAgeSearch.setText(String.valueOf(minValue) + "-" + String.valueOf(maxValue));
+                tvAgeSearch.setText(String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
             }
         });
 
