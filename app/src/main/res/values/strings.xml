@@ -94,4 +94,7 @@
     <string name="sending_image">Please wait while we update your profile picture</string>
     <string name="permission_granted">Permissions Granted!</string>
     <string name="permission_need_be_granted">All Permissions Need To Be Granted!</string>
+    <string name="user_location">User Location</string>
+    <string name="pass">* * * * * * * *</string>
+    <string name="terms_of_services">Terms Of Services</string>
 </resources>

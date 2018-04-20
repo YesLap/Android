@@ -53,14 +53,12 @@ public class SettingsActivity extends AppCompatActivity {
     private ImageView ivGoToChat;
     private Button btnLocationUser;
     private Button btnGenderUser;
-    private ImageView ivGenderUser;
     private String genderUser = "female";
     private TextView tvAgeUser;
     private CrystalSeekbar rbAgeUser;
 
     private Button btnLocationSearch;
     private Button btnGenderSearch;
-    private ImageView ivGenderSearch;
     private String genderSearch = "male";
     private TextView tvAgeSearch;
     private CrystalRangeSeekbar rbAgeSearch;
@@ -69,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button btnLicense;
     private Button btnLogOut;
     private Button btnDeleteAccount;
+    private Button btnEmailUser;
 
     private SimpleLocation location;
     private double lat, lon;
@@ -86,13 +85,12 @@ public class SettingsActivity extends AppCompatActivity {
         ivGoToChat = (ImageView) findViewById(R.id.imgGoToChat);
         btnLocationUser = (Button) findViewById(R.id.btnLocationUser);
         btnGenderUser = (Button) findViewById(R.id.btnGenderUser);
-        ivGenderUser = (ImageView) findViewById(R.id.imgGenderUser);
         tvAgeUser = (TextView) findViewById(R.id.tvRangeAgeUser);
         rbAgeUser = (CrystalSeekbar) findViewById(R.id.rangeAgeUser);
+        btnEmailUser = (Button) findViewById(R.id.btnEmailUser);
 
         btnLocationSearch = (Button) findViewById(R.id.btnLocationSearch);
         btnGenderSearch = (Button) findViewById(R.id.btnGenderSearch);
-        ivGenderSearch = (ImageView) findViewById(R.id.imgGenderSearch);
         tvAgeSearch = (TextView) findViewById(R.id.tvRangeAgeSearch);
         rbAgeSearch = (CrystalRangeSeekbar) findViewById(R.id.rangeAgeSearch);
 
@@ -116,13 +114,13 @@ public class SettingsActivity extends AppCompatActivity {
                 switch (genderUser) {
                     case "male":
 
-                        ivGenderUser.setImageResource(R.drawable.settings_icon_female);
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_female, 0, 0, 0);
                         genderUser = "female";
                         btnGenderUser.setText(genderUser);
 
                         DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         HashMap<String, Object> gender = new HashMap<>();
-                        gender.put("gender", genderUser);
+                        gender.put(Utils.GENDER_USER, genderUser);
                         database.updateChildren(gender).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -138,13 +136,13 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                     case "female":
 
-                        ivGenderUser.setImageResource(R.drawable.settings_icon_gay);
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_gay, 0, 0, 0);
                         genderUser = "gay";
                         btnGenderUser.setText(genderUser);
 
                         DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         HashMap<String, Object> gender1 = new HashMap<>();
-                        gender1.put("gender", genderUser);
+                        gender1.put(Utils.GENDER_USER, genderUser);
                         database1.updateChildren(gender1).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -160,13 +158,13 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                     case "gay":
 
-                        ivGenderUser.setImageResource(R.drawable.settings_icon_male);
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_male, 0, 0, 0);
                         genderUser = "male";
                         btnGenderUser.setText(genderUser);
 
                         DatabaseReference database2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         HashMap<String, Object> gender2 = new HashMap<>();
-                        gender2.put("gender", genderUser);
+                        gender2.put(Utils.GENDER_USER, genderUser);
                         database2.updateChildren(gender2).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -196,7 +194,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void finalValue(final Number value) {
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                 HashMap<String, Object> age = new HashMap<>();
-                age.put("age", String.valueOf(value));
+                age.put(Utils.AGE_USER, String.valueOf(value));
                 database.updateChildren(age).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -226,16 +224,19 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (genderSearch) {
                     case "male":
-                        ivGenderSearch.setImageResource(R.drawable.settings_icon_female);
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_female, 0, 0, 0);
                         genderSearch = "female";
+                        btnGenderSearch.setText(genderSearch);
                         break;
                     case "female":
-                        ivGenderSearch.setImageResource(R.drawable.settings_icon_gay);
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_gay, 0, 0, 0);
                         genderSearch = "gay";
+                        btnGenderSearch.setText(genderSearch);
                         break;
                     case "gay":
-                        ivGenderSearch.setImageResource(R.drawable.settings_icon_male);
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_male, 0, 0, 0);
                         genderSearch = "male";
+                        btnGenderSearch.setText(genderSearch);
                         break;
                 }
             }
@@ -302,8 +303,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> loc = new HashMap<>();
-        loc.put("latitude", location.getLatitude());
-        loc.put("longitude", location.getLongitude());
+        loc.put(Utils.LATITUDE_USER, location.getLatitude());
+        loc.put(Utils.LONGITUDE_USER, location.getLongitude());
         database.updateChildren(loc).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -336,8 +337,8 @@ public class SettingsActivity extends AppCompatActivity {
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String age = dataSnapshot.child("age").getValue(String.class);
-                String gender = dataSnapshot.child("gender").getValue(String.class);
+                String age = dataSnapshot.child(Utils.AGE_USER).getValue(String.class);
+                String gender = dataSnapshot.child(Utils.GENDER_USER).getValue(String.class);
 
                 //AGE
                 if (age != null) {
@@ -356,22 +357,24 @@ public class SettingsActivity extends AppCompatActivity {
                 if (gender != null) {
                     switch (gender) {
                         case "male":
-                            ivGenderUser.setImageResource(R.drawable.settings_icon_male);
+                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_male, 0, 0, 0);
                             genderUser = gender;
                             btnGenderUser.setText(gender);
                             break;
                         case "female":
-                            ivGenderUser.setImageResource(R.drawable.settings_icon_female);
+                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_female, 0, 0, 0);
                             genderUser = gender;
                             btnGenderUser.setText(gender);
                             break;
                         case "gay":
-                            ivGenderUser.setImageResource(R.drawable.settings_icon_gay);
+                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_gay, 0, 0, 0);
                             genderUser = gender;
                             btnGenderUser.setText(gender);
                             break;
                     }
                 }
+
+                btnEmailUser.setText(mAuth.getCurrentUser().getEmail());
 
             }
 

@@ -54,6 +54,11 @@ public class Utils {
 
     public static final String TYPE_IMAGE = "image/*";
 
+    public static final String GENDER_USER = "genderUser";
+    public static final String LATITUDE_USER = "latitudeUser";
+    public static final String LONGITUDE_USER = "longitudeUser";
+    public static final String AGE_USER = "ageUser";
+
 
     public static void toastySuccess(Context context, String msg) {
         Toasty.success(context, msg, Toast.LENGTH_LONG, true).show();

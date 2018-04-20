@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,10 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.sendlook.yeslap.model.FindUsers;
+import com.sendlook.yeslap.model.Users;
 import com.sendlook.yeslap.model.Utils;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -211,12 +210,11 @@ public class FindUsersActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        mDatabase.keepSynced(true);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS);
 
-        FirebaseRecyclerAdapter<FindUsers, FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<FindUsers, FindUsersViewHolder>(FindUsers.class, R.layout.list_users, FindUsersViewHolder.class, mDatabase) {
+        FirebaseRecyclerAdapter<Users, FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<Users, FindUsersViewHolder>(Users.class, R.layout.list_users, FindUsersViewHolder.class, mDatabase) {
             @Override
-            protected void populateViewHolder(final FindUsersViewHolder v, final FindUsers m, int position) {
+            protected void populateViewHolder(final FindUsersViewHolder v, final Users m, int position) {
                 //if (Objects.equals(m.getUid(), mAuth.getCurrentUser().getUid())){
                 //arrayUsers.remove(position);
                 //notifyDataSetChanged();
@@ -225,11 +223,11 @@ public class FindUsersActivity extends AppCompatActivity {
                 v.setName(m.getUsername());
                 v.setImage(m.getImage1(), getApplicationContext());
 
-                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(m.getUid());
-                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(m.getUid());
+                database.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        v.setImage(dataSnapshot.child(Utils.IMAGE_1).getValue(String.class), getApplicationContext());
+                        //v.setImage(dataSnapshot.child(Utils.IMAGE_1).getValue(String.class), getApplicationContext());
                         v.setStatus(dataSnapshot.child(Utils.STATUS).getValue(String.class));
                     }
 

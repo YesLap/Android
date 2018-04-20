@@ -1,362 +1,485 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context="com.sendlook.yeslap.UserProfileActivity">
+    android:layout_height="match_parent">
 
-
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--android:cropToPadding="true"-->
-        <!--android:src="@drawable/wavebottom" />-->
-
-    <ScrollView
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
-        <!--Layout principal-->
-        <!--mudar para relativa-->
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imgGoToProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/gotoprofile" />
+
+        <ImageView
+            android:id="@+id/imgGoToChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/iconchatsmall" />
+
+        <ImageView
+            android:id="@+id/ivIconPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/settings_icon_referenceface_profile" />
+
+        <Button
+            android:id="@+id/btnLocationUser"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableStart="@drawable/settings_icon_location"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/user_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivIconPerson" />
+
+        <View
+            android:id="@+id/view"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLocationUser" />
+
+        <Button
+            android:id="@+id/btnGenderUser"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableStart="@drawable/settings_icon_female"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="Female"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <View
+            android:id="@+id/view2"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnGenderUser" />
+
+        <ImageView
+            android:id="@+id/ivAgeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/settings_icon_birthday"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+        <TextView
+            android:id="@+id/tvRangeAgeUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="23dp"
+            android:text="18"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/ivAgeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+        <TextView
+            android:id="@+id/tvRangeAgeSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="31dp"
+            android:text="18 - 20"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/ivAgeIcons"
+            app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+        <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+            android:id="@+id/rangeAgeUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="32dp"
+            app:bar_color="@color/colorTextViewOrange"
+            app:bar_highlight_color="@color/colorLightBlue"
+            app:corner_radius="10"
+            app:data_type="_integer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvRangeAgeUser"
+            app:layout_constraintTop_toBottomOf="@+id/view2"
+            app:left_thumb_color="@color/colorDarkBlue"
+            app:left_thumb_color_pressed="@color/colorDarkGrey"
+            app:max_value="55"
+            app:min_value="18" />
+
+        <View
+            android:id="@+id/view3"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivAgeIcon" />
+
+        <Button
+            android:id="@+id/btnEmailUser"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableStart="@drawable/ic_mail_black_36dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+        <View
+            android:id="@+id/view4"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnEmailUser" />
+
+        <Button
+            android:id="@+id/btnPasswordUser"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableStart="@drawable/ic_https_black_36dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/pass"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnPasswordUser"
+            app:srcCompat="@drawable/settings_division_lineblue" />
+
+        <!-- MID -->
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView6"
+            app:srcCompat="@drawable/settings_icon_bluefind" />
+
+        <Button
+            android:id="@+id/btnLocationSearch"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableStart="@drawable/settings_icon_location"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/user_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+        <View
+            android:id="@+id/view5"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLocationSearch" />
+
+        <Button
+            android:id="@+id/btnGenderSearch"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableStart="@drawable/settings_icon_female"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="Button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view5" />
+
+        <View
+            android:id="@+id/view6"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnGenderSearch" />
+
+        <ImageView
+            android:id="@+id/ivAgeIcons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/settings_icon_birthday"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+        <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+            android:id="@+id/rangeAgeSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="32dp"
+            app:bar_color="@color/colorTextViewOrange"
+            app:bar_highlight_color="@color/colorDarkBlue"
+            app:corner_radius="10"
+            app:data_type="_integer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvRangeAgeSearch"
+            app:layout_constraintTop_toBottomOf="@+id/view6"
+            app:left_thumb_color="@color/colorDarkGrey"
+            app:left_thumb_color_pressed="@color/colorDarkGrey"
+            app:max_value="99"
+            app:min_value="18"
+            app:right_thumb_color="@color/colorDarkGrey"
+            app:right_thumb_color_pressed="@color/colorDarkGrey" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivAgeIcons"
+            app:srcCompat="@drawable/settings_division_lineblue" />
+
+        <!-- MID -->
+
+        <TextView
+            android:id="@+id/tvLegal"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/legal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+
+        <View
+            android:id="@+id/view7"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLegal" />
+
+        <Button
+            android:id="@+id/btnPrivacyPolicy"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="24dp"
+            android:paddingEnd="30dp"
+            android:text="@string/privacy_policy"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view7" />
+
+        <View
+            android:id="@+id/view8"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnPrivacyPolicy" />
+
+        <Button
+            android:id="@+id/btnTermsService"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="24dp"
+            android:paddingEnd="30dp"
+            android:text="@string/terms_of_services"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view8" />
+
+        <View
+            android:id="@+id/view9"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnTermsService" />
+
+        <Button
+            android:id="@+id/btnLicenses"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
+            android:paddingStart="24dp"
+            android:paddingEnd="30dp"
+            android:text="@string/licenses"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view9" />
+
+        <View
+            android:id="@+id/view10"
+            style="@style/Divider"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLicenses" />
+
+        <Button
+            android:id="@+id/btnLogOut"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/settings_btn_log_out"
+            android:text="@string/logout"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogOut"
+            app:srcCompat="@drawable/logoyeslap" />
+
+        <TextView
+            android:id="@+id/tvVersionApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Version 1.0.55"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+        <Button
+            android:id="@+id/btnDeleteAccount"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/settings_btn_delete_account"
+            android:text="@string/delete_account"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvVersionApp" />
+
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp">
-
-                <ImageView
-                    android:id="@+id/imgGoToProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:srcCompat="@drawable/gotoprofile" />
-
-                <ImageView
-                    android:id="@+id/imgGoToChat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:srcCompat="@drawable/iconchatsmall" />
-
-            </RelativeLayout>
-
-            <!--Settings User -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="25dp"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:srcCompat="@drawable/settings_icon_referenceface_profile" />
-
-                <Button
-                    android:id="@+id/btnLocationUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/settings_btn_legal"
-                    android:text="City"
-                    android:textColor="@color/gray_btn_bg_pressed_color"
-                    android:textStyle="bold"
-                    android:drawableStart="@drawable/settings_icon_location"
-                    android:textAlignment="center" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/imgGenderUser"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
-                        app:srcCompat="@drawable/settings_icon_female" />
-
-                    <Button
-                        android:id="@+id/btnGenderUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/settings_btn_legal"
-                        android:drawableEnd="@drawable/settings_right_arrow"
-                        android:text=""
-                        android:textAlignment="center" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal">
-
-                    <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--app:srcCompat="@drawable/settings_icon_birthday" />-->
-
-                    <TextView
-                        android:id="@+id/tvRangeAgeUser"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:visibility="visible"
-                        android:drawableStart="@drawable/settings_icon_birthday"
-                        android:drawablePadding="5dp"
-                        android:gravity="center"
-                        android:textSize="16sp"
-                        tools:text="18" />
-
-                    <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
-                        android:id="@+id/rangeAgeUser"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="5dp"
-                        app:corner_radius="10"
-                        app:min_value="18"
-                        app:max_value="55"
-                        app:bar_color="@color/colorTextViewOrange"
-                        app:bar_highlight_color="@color/colorLightBlue"
-                        app:left_thumb_color="@color/colorDarkBlue"
-                        app:left_thumb_color_pressed="@color/colorDarkGrey"
-                        app:data_type="_integer"/>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                app:srcCompat="@drawable/settings_division_lineblue" />
-
-            <!--Settings Search-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="25dp"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:srcCompat="@drawable/settings_icon_bluefind" />
-
-                <Button
-                    android:id="@+id/btnLocationSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/settings_btn_legal"
-                    android:text="City"
-                    android:textColor="@color/gray_btn_bg_pressed_color"
-                    android:textStyle="bold"
-                    android:drawableEnd="@drawable/settings_right_arrow"
-                    android:drawableStart="@drawable/settings_icon_location"
-                    android:textAlignment="center" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/imgGenderSearch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
-                        app:srcCompat="@drawable/settings_icon_male" />
-
-                    <Button
-                        android:id="@+id/btnGenderSearch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/settings_btn_legal"
-                        android:drawableEnd="@drawable/settings_right_arrow"
-                        android:text=""
-                        android:textAlignment="center" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal">
-
-                    <!--<ImageView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginTop="5dp"-->
-                        <!--app:srcCompat="@drawable/settings_icon_birthday" />-->
-
-                    <TextView
-                        android:id="@+id/tvRangeAgeSearch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:drawableStart="@drawable/settings_icon_birthday"
-                        android:drawablePadding="5dp"
-                        android:gravity="center"
-                        android:visibility="visible"
-                        android:textSize="16sp"
-                        tools:text="18-55" />
-
-                    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
-                        android:id="@+id/rangeAgeSearch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="5dp"
-                        app:corner_radius="10"
-                        app:min_value="18"
-                        app:max_value="99"
-                        app:bar_color="@color/colorTextViewOrange"
-                        app:bar_highlight_color="@color/colorDarkBlue"
-                        app:left_thumb_color="@color/colorDarkGrey"
-                        app:left_thumb_color_pressed="@color/colorDarkGrey"
-                        app:right_thumb_color="@color/colorDarkGrey"
-                        app:right_thumb_color_pressed="@color/colorDarkGrey"
-                        app:data_type="_integer" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                app:srcCompat="@drawable/settings_division_lineblue" />
-
-            <!--Legal-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:textSize="18sp"
-                    android:visibility="visible"
-                    android:textColor="@color/colorDarkGrey"
-                    tools:text="@string/legal" />
-
-                <Button
-                    android:id="@+id/btnPrivacyPolicy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/settings_btn_legal"
-                    android:text="@string/privacy_policy"
-                    android:drawableEnd="@drawable/settings_right_arrow"
-                    android:textAlignment="textStart" />
-
-                <Button
-                    android:id="@+id/btnTermsService"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/settings_btn_legal"
-                    android:drawableEnd="@drawable/settings_right_arrow"
-                    android:text="@string/terms_of_service"
-                    android:textAlignment="textStart" />
-
-                <Button
-                    android:id="@+id/btnLicenses"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/settings_btn_legal"
-                    android:drawableEnd="@drawable/settings_right_arrow"
-                    android:text="@string/licenses"
-                    android:textAlignment="textStart" />
-
-                <Button
-                    android:id="@+id/btnLogOut"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    android:background="@drawable/settings_btn_log_out"
-                    android:text="@string/logout" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:srcCompat="@drawable/logoyeslap" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:visibility="visible"
-                    android:gravity="center"
-                    android:textColor="@android:color/black"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    tools:text="@string/version_app" />
-
-                <Button
-                    android:id="@+id/btnDeleteAccount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    android:background="@drawable/settings_btn_delete_account"
-                    android:text="@string/delete_account" />
-            </LinearLayout>
-
-            <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            app:layout_constraintTop_toBottomOf="@+id/btnDeleteAccount"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
             android:src="@drawable/wavebottom" />
 
-        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
-    </ScrollView>
-
-</RelativeLayout>
+</ScrollView>

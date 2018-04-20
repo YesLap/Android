@@ -56,7 +56,7 @@
             android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
-            android:text="User Location"
+            android:text="@string/user_location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivIconPerson" />
@@ -109,7 +109,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view2" />
 
         <TextView
-            android:id="@+id/tvRangeUSer"
+            android:id="@+id/tvRangeAgeUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -120,7 +120,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view2" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tvRangeAgeSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -142,7 +142,7 @@
             app:corner_radius="10"
             app:data_type="_integer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvRangeUSer"
+            app:layout_constraintStart_toEndOf="@+id/tvRangeAgeUser"
             app:layout_constraintTop_toBottomOf="@+id/view2"
             app:left_thumb_color="@color/colorDarkBlue"
             app:left_thumb_color_pressed="@color/colorDarkGrey"
@@ -171,7 +171,7 @@
             android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
-            android:text="Email"
+            android:text="@string/email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view3" />
@@ -197,7 +197,7 @@
             android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
-            android:text="* * * * * * * *"
+            android:text="@string/pass"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view4" />
@@ -240,7 +240,7 @@
             android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
-            android:text="User Location"
+            android:text="@string/user_location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -307,7 +307,7 @@
             app:corner_radius="10"
             app:data_type="_integer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
+            app:layout_constraintStart_toEndOf="@+id/tvRangeAgeSearch"
             app:layout_constraintTop_toBottomOf="@+id/view6"
             app:left_thumb_color="@color/colorDarkGrey"
             app:left_thumb_color_pressed="@color/colorDarkGrey"
@@ -336,7 +336,7 @@
             android:layout_height="21dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="LEGAL"
+            android:text="@string/legal"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView9" />
@@ -362,7 +362,7 @@
             android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="24dp"
             android:paddingEnd="30dp"
-            android:text="Privacy Policy"
+            android:text="@string/privacy_policy"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -390,7 +390,7 @@
             android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="24dp"
             android:paddingEnd="30dp"
-            android:text="Terms Of Services"
+            android:text="@string/terms_of_services"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -418,7 +418,7 @@
             android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="24dp"
             android:paddingEnd="30dp"
-            android:text="Licenses"
+            android:text="@string/licenses"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -461,6 +461,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnLogOut"
             app:srcCompat="@drawable/logoyeslap" />
+
+        <TextView
+            android:id="@+id/tvVersionApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Version 1.0.55"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+        <Button
+            android:id="@+id/btnDeleteAccount"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/settings_btn_delete_account"
+            android:text="@string/delete_account"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvVersionApp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/btnDeleteAccount"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            android:src="@drawable/wavebottom" />
 
     </android.support.constraint.ConstraintLayout>
 

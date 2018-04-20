@@ -1,6 +1,7 @@
 package com.sendlook.yeslap;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -64,6 +67,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         getIntentBundle();
         getUserData();
+
+        ivImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //viewPictureProfile(url);
+            }
+        });
 
         btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +143,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void viewPictureProfile(String uri) {
+        /**mPhotoDraweeView.setPhotoUri(Uri.parse("http://your.image.url"));
+
+        PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
+        controller.setUri(Uri.parse(uri));
+        controller.setOldController()*/
     }
 
     @Override
