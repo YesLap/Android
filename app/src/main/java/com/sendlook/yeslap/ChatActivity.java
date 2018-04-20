@@ -227,7 +227,7 @@ public class ChatActivity extends AppCompatActivity {
             uidAddressee = bundle.getString("uid");
             uidSender = mAuth.getCurrentUser().getUid();
         }
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uidSender);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(uidSender);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

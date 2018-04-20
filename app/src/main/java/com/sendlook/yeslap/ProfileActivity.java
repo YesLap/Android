@@ -146,11 +146,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void viewPictureProfile(String uri) {
-        /**mPhotoDraweeView.setPhotoUri(Uri.parse("http://your.image.url"));
 
-        PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-        controller.setUri(Uri.parse(uri));
-        controller.setOldController()*/
     }
 
     @Override

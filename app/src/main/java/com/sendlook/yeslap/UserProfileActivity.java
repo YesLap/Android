@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -257,7 +258,7 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void chekcUpateApplication() {
+    private void chekcUpateApplication()  {
         try {
             final String currentVersionApp = BuildConfig.VERSION_NAME;
             final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Utils.APP_CONFIG).child(Utils.APP_VERSION);
@@ -273,7 +274,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        String url = "https://play.google.com/store/apps/details?id=com.sendlook.yeslap";
+                                        String url = Utils.PLAYSTORE;
                                         Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(url));
                                         startActivity(i);
@@ -379,21 +380,36 @@ public class UserProfileActivity extends AppCompatActivity {
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                String image = dataSnapshot.child("image1").getValue(String.class);
+                final String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+                final String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
 
-                if (Objects.equals(username, "") || Objects.equals(username, null) || Objects.equals(image, "")) {
-                    if (dialog.isShowing()) {
-                        dialog.dismiss();
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                HashMap<String, Object> user = new HashMap<>();
+                user.put(Utils.UID, mAuth.getCurrentUser().getUid());
+                database.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (Objects.equals(username, "") || Objects.equals(username, null) || Objects.equals(image, "")) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Intent intent = new Intent(UserProfileActivity.this, ImageUsernameProfileActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            } else {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                            }
+                        }
                     }
-                    Intent intent = new Intent(UserProfileActivity.this, ImageUsernameProfileActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                } else {
-                    if (dialog.isShowing()) {
-                        dialog.dismiss();
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
                     }
-                }
+                });
 
             }
 

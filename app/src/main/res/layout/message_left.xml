@@ -48,12 +48,12 @@
         android:maxWidth="220sp"
         android:padding="10sp" />
 
-    <ImageView
+    <!-- <ImageView
         android:layout_marginStart="-15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/tvMessage"
-        android:background="@drawable/iconbluebombmessage" />
+        android:background="@drawable/iconbluebombmessage" /> -->
 
 </RelativeLayout>

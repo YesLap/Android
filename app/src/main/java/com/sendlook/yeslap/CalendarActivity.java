@@ -7,6 +7,7 @@ import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,7 +25,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.sendlook.yeslap.model.Base64Custom;
 import com.sendlook.yeslap.model.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -347,8 +351,12 @@ public class CalendarActivity extends AppCompatActivity {
             dialog.show();
 
             //Saving at the Firebase
-            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child(turn).push().child(mAuth.getCurrentUser().getUid());
+            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child(turn).child(mAuth.getCurrentUser().getUid());
             HashMap<String, String> uid = new HashMap<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            Date hora = Calendar.getInstance().getTime();
+            String date = sdf.format(hora);
+            uid.put("date", date);
             uid.put(Utils.UID, mAuth.getCurrentUser().getUid());
             mDatabase.setValue(uid).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -444,7 +452,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void getDayAndTurn(final String week, final String turn, final ImageView imageview, final ToggleButton toggleButton) {
         final String uid = mAuth.getCurrentUser().getUid();
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child(turn);
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child(turn);
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -453,6 +461,7 @@ public class CalendarActivity extends AppCompatActivity {
                         toggleButton.setChecked(true);
                         isOn(week, turn);
                         if (turn.equals(Utils.MORNING)) {
+
                             imageview.setImageDrawable(getDrawable(R.drawable.iconmorningon));
                         } else if (turn.equals(Utils.AFTERNOON)) {
                             imageview.setImageDrawable(getDrawable(R.drawable.iconafternoonon));

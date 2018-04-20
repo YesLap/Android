@@ -37,7 +37,7 @@ public class ReportActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private String uid;
-    private String answer;
+    private String reason;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +59,22 @@ public class ReportActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton button = (RadioButton) radioGroup.findViewById(i);
-                answer = button.getText().toString();
+                reason = button.getText().toString();
             }
         });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Objects.equals(answer, null)) {
+                if (Objects.equals(reason, null)) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.select_option_to_send_message));
                 } else {
                     String message = etMsgReport.getText().toString().trim();
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("reports").child(uid).push();
+                    String userWhoReported = mAuth.getCurrentUser().getUid();
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.REPORTS).child(userWhoReported).child(uid).push();
                     HashMap<String, String> report = new HashMap<>();
-                    report.put("reason", answer);
+                    report.put("reason", reason);
                     report.put("message", message);
-                    report.put("userWhoReported", mAuth.getCurrentUser().getUid());
                     mDatabase.setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

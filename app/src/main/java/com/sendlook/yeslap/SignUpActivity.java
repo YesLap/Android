@@ -89,7 +89,6 @@ public class SignUpActivity extends AppCompatActivity {
                                 user.put(Utils.IMAGE_2, "");
                                 user.put(Utils.IMAGE_3, "");
                                 user.put(Utils.SPOTLIGHT, "false");
-                                user.put(Utils.UID, mAuth.getCurrentUser().getUid());
                                 //user.put(Utils.SINCE, getTime());
                                 mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

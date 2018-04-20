@@ -114,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
                 switch (genderUser) {
                     case "male":
 
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_female, 0, 0, 0);
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
                         genderUser = "female";
                         btnGenderUser.setText(genderUser);
 
@@ -136,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                     case "female":
 
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_gay, 0, 0, 0);
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
                         genderUser = "gay";
                         btnGenderUser.setText(genderUser);
 
@@ -158,7 +158,7 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                     case "gay":
 
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_male, 0, 0, 0);
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
                         genderUser = "male";
                         btnGenderUser.setText(genderUser);
 
@@ -224,17 +224,17 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (genderSearch) {
                     case "male":
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_female, 0, 0, 0);
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
                         genderSearch = "female";
                         btnGenderSearch.setText(genderSearch);
                         break;
                     case "female":
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_gay, 0, 0, 0);
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
                         genderSearch = "gay";
                         btnGenderSearch.setText(genderSearch);
                         break;
                     case "gay":
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_male, 0, 0, 0);
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
                         genderSearch = "male";
                         btnGenderSearch.setText(genderSearch);
                         break;
@@ -357,17 +357,17 @@ public class SettingsActivity extends AppCompatActivity {
                 if (gender != null) {
                     switch (gender) {
                         case "male":
-                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_male, 0, 0, 0);
+                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
                             genderUser = gender;
                             btnGenderUser.setText(gender);
                             break;
                         case "female":
-                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_female, 0, 0, 0);
+                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, R.drawable.settings_right_arrow, 0);
                             genderUser = gender;
                             btnGenderUser.setText(gender);
                             break;
                         case "gay":
-                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds( R.drawable.settings_icon_gay, 0, 0, 0);
+                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
                             genderUser = gender;
                             btnGenderUser.setText(gender);
                             break;

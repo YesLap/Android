@@ -50,13 +50,13 @@
         android:layout_toStartOf="@+id/imageView4"
         android:background="@drawable/input_outline_right" />
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_marginEnd="-15sp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageView4"
         android:layout_toStartOf="@+id/tvMessage"
-        android:background="@drawable/icongraybombmessage" />
+        android:background="@drawable/icongraybombmessage" /> -->
 
 </RelativeLayout>

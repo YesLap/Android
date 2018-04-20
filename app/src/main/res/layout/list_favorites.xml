@@ -31,7 +31,7 @@
         android:layout_below="@+id/cvUserImageFav"
         android:layout_marginTop="2sp"
         android:gravity="center"
-        android:text="@string/username"
+        android:text="@string/loading"
         android:textColor="@android:color/black"
         android:textStyle="bold" />
 
