@@ -3,15 +3,15 @@ package com.sendlook.yeslap.model;
 public class Favorites {
 
     private String uid;
-    private String date;
+    private String lastSeen;
 
     public Favorites() {
 
     }
 
-    public Favorites(String uid, String date) {
+    public Favorites(String uid, String lastSeen) {
         this.uid = uid;
-        this.date = date;
+        this.lastSeen = lastSeen;
     }
 
     public String getUid() {
@@ -22,11 +22,11 @@ public class Favorites {
         this.uid = uid;
     }
 
-    public String getDate() {
-        return date;
+    public String getLastSeen() {
+        return lastSeen;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setLastSeen(String lastSeen) {
+        this.lastSeen = lastSeen;
     }
 }

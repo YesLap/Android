@@ -4,6 +4,7 @@ package com.sendlook.yeslap.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.thunder413.datetimeutils.DateTimeUnits;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,8 +24,11 @@ import com.sendlook.yeslap.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,6 +58,7 @@ public class FavoritesAdapter extends ArrayAdapter<Favorites> {
 
             final CircleImageView cvImageUser = (CircleImageView) view.findViewById(R.id.cvUserImageFav);
             final ImageView ivStatus = (ImageView) view.findViewById(R.id.ivStatus);
+            final ImageView ivGhost = (ImageView) view.findViewById(R.id.ivGhost);
             final TextView tvUsername = (TextView) view.findViewById(R.id.tvUsername);
 
             Favorites favorite = favorites.get(position);
@@ -60,19 +67,26 @@ public class FavoritesAdapter extends ArrayAdapter<Favorites> {
             mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String username = dataSnapshot.child("username").getValue(String.class);
-                    String image = dataSnapshot.child("image1").getValue(String.class);
-                    String status = dataSnapshot.child("status").getValue(String.class);
+                    String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+                    String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
+                    final String status = dataSnapshot.child(Utils.STATUS).getValue(String.class);
+                    String uid = dataSnapshot.child(Utils.UID).getValue(String.class);
+                    String lastSeen = dataSnapshot.child(Utils.LAST_SEEN).getValue(String.class);
 
                     tvUsername.setText(username);
 
-                    if (Objects.equals(status, "online")) {
-                        ivStatus.setImageResource(R.drawable.on_user);
-                    } else {
-                        ivStatus.setImageResource(R.drawable.off_user);
-                    }
-
                     Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
+
+                    int diff = DateTimeUtils.getDateDiff(getDateNow(), lastSeen, DateTimeUnits.DAYS);
+                    if (diff > 90) {
+                        ivStatus.setImageResource(R.drawable.icon_ghost);
+                    } else {
+                        if (Objects.equals(status, "online")) {
+                            ivStatus.setImageResource(R.drawable.on_user);
+                        } else {
+                            ivStatus.setImageResource(R.drawable.off_user);
+                        }
+                    }
 
 
                 }
@@ -87,4 +101,13 @@ public class FavoritesAdapter extends ArrayAdapter<Favorites> {
 
         return view;
     }
+
+    private String getDateNow() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        int yyyy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH);
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        return yyyy + "-" + mm + "-" + dd;
+    }
+
 }

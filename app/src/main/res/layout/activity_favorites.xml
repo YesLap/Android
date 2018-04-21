@@ -8,12 +8,21 @@
     tools:context="com.sendlook.yeslap.FavoritesActivity">
 
     <ImageView
-        android:id="@+id/btnGoToProfile"
+        android:id="@+id/ivFavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="30sp"
-        android:layout_marginTop="15sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/iconfavoriteorange" />
+
+    <ImageView
+        android:id="@+id/btnGoToProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/btnGoToSettings"
+        android:layout_marginStart="34dp"
         android:src="@drawable/gotoprofile" />
 
     <ImageView
@@ -28,10 +37,12 @@
 
     <GridView
         android:id="@+id/gvFavorites"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="380dp"
         android:layout_above="@id/wave"
-        android:layout_below="@id/btnGoToSettings"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ivFavorite"
         android:columnWidth="100sp"
         android:gravity="center"
         android:numColumns="auto_fit"

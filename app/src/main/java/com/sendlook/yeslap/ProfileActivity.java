@@ -1,7 +1,6 @@
 package com.sendlook.yeslap;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -21,16 +18,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.sendlook.yeslap.model.ChatMessage;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
-import com.vansuita.pickimage.util.Util;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
-        btnFavorite = (ImageView) findViewById(R.id.btnFavorite);
+        btnFavorite = (ImageView) findViewById(R.id.ivFavorite);
         btnReport = (ImageView) findViewById(R.id.btnReport);
         btnChatMessage = (ImageView) findViewById(R.id.btnChatMessage);
         ivImage1 = (ImageView) findViewById(R.id.ivImage1);
@@ -80,11 +74,8 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid()).child(uid);
                 HashMap<String, String> favorite = new HashMap<>();
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                Date hora = Calendar.getInstance().getTime();
-                String date = sdf.format(hora);
-                favorite.put("date", date);
-                favorite.put("uid", uid);
+                favorite.put(Utils.SINCE, getDateNow());
+                favorite.put(Utils.UID, uid);
                 mDatabase.setValue(favorite).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -147,6 +138,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void viewPictureProfile(String uri) {
 
+    }
+
+    private String getDateNow() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        int yyyy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH);
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        return yyyy + "-" + mm + "-" + dd;
     }
 
     @Override

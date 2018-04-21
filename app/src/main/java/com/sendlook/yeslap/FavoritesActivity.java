@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +32,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private DatabaseReference database;
     private GridView gvFavorite;
     private ArrayAdapter<Favorites> adapter;
+    private ImageView btnGoToProfile,btnGoToSettings;
     private ArrayList<Favorites> arrayFavorites;
     private ValueEventListener valueEventListener;
     private ProgressDialog dialog;
@@ -45,6 +47,8 @@ public class FavoritesActivity extends AppCompatActivity {
         String uid = mAuth.getCurrentUser().getUid();
 
         gvFavorite = (GridView) findViewById(R.id.gvFavorites);
+        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
+        btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
 
         arrayFavorites = new ArrayList<>();
         adapter = new FavoritesAdapter(getApplicationContext(), arrayFavorites);
@@ -76,6 +80,21 @@ public class FavoritesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(FavoritesActivity.this, ProfileActivity.class);
                 intent.putExtra("uid", (arrayFavorites.get(position).getUid()));
+                startActivity(intent);
+            }
+        });
+
+        btnGoToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnGoToSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FavoritesActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });

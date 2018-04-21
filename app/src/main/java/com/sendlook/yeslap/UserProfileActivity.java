@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -13,9 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,17 +31,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.sendlook.yeslap.model.Utils;
 import com.squareup.picasso.Picasso;
-import com.takusemba.spotlight.OnSpotlightEndedListener;
-import com.takusemba.spotlight.OnSpotlightStartedListener;
-import com.takusemba.spotlight.SimpleTarget;
-import com.takusemba.spotlight.Spotlight;
 
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -78,7 +71,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnChat = (RelativeLayout) findViewById(R.id.btnChat);
         btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
-        btnFavorite = (ImageView) findViewById(R.id.btnFavorite);
+        btnFavorite = (ImageView) findViewById(R.id.ivFavorite);
 
         chekcUpateApplication();
 
@@ -179,7 +172,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 //Cor do texto
                                 .textColor(android.R.color.white)
                                 .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.btnFavorite), "Favorites","Here you can see your favorite contacts")
+                        TapTarget.forView(findViewById(R.id.ivFavorite), "Favorites","Here you can see your favorite contacts")
                                 //Cor de fora transparente
                                 .dimColor(R.color.colorLightBlue)
                                 //Cor de dentro do circulo
@@ -271,6 +264,8 @@ public class UserProfileActivity extends AppCompatActivity {
                                 .title(getString(R.string.update_avaliable))
                                 .content(getString(R.string.update_avaliable_msg))
                                 .positiveText(getString(R.string.update))
+                                .cancelable(false)
+                                .canceledOnTouchOutside(false)
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -347,7 +342,23 @@ public class UserProfileActivity extends AppCompatActivity {
         } else {
             //Check Internet Connection
             checkInternetConnection();
+            setLastSeen();
         }
+    }
+
+    private void setLastSeen() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        HashMap<String, Object> user = new HashMap<>();
+        user.put(Utils.LAST_SEEN, getDateNow());
+        database.updateChildren(user);
+    }
+
+    private String getDateNow() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        int yyyy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH);
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        return yyyy + "-" + mm + "-" + dd;
     }
 
     @Override
@@ -423,14 +434,14 @@ public class UserProfileActivity extends AppCompatActivity {
     private void setStatusOnline() {
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "online");
+        status.put(Utils.STATUS, "online");
         mDatabase.updateChildren(status);
     }
 
     private void setStatusOffline() {
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "offline");
+        status.put(Utils.STATUS, "offline");
         mDatabase.updateChildren(status);
     }
 

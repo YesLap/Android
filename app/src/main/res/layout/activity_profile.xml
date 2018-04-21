@@ -76,7 +76,7 @@
 
 
         <ImageView
-            android:id="@+id/btnFavorite"
+            android:id="@+id/ivFavorite"
             android:layout_width="50sp"
             android:layout_height="50sp"
             android:layout_weight="1"

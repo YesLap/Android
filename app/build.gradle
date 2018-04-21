@@ -6,9 +6,9 @@ android {
         applicationId "com.sendlook.yeslap"
         minSdkVersion 21
         targetSdkVersion 27
-        //Dont forget to change the version in the Firebase
-        versionCode 13
-        versionName "1.0.56"
+        //Dont forget to change the version in the Firebase and in Settings Screen
+        versionCode 14
+        versionName "1.0.57"
         //Dont forget to change the version in the Firebase
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -58,7 +58,7 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
     implementation 'com.github.delight-im:Android-SimpleLocation:v1.0.1'
     implementation 'com.facebook.fresco:fresco:1.3.0'
-    implementation 'me.relex:photodraweeview:1.1.3'
+    implementation 'com.github.thunder413:DateTimeUtils:1.0'
 
     implementation 'com.google.firebase:firebase-auth:12.0.1'
     implementation 'com.google.firebase:firebase-database:12.0.1'
