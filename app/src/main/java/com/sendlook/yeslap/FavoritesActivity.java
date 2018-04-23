@@ -14,6 +14,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -40,7 +42,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private DatabaseReference database;
     private GridView gvFavorite;
     private ArrayAdapter<Favorites> adapter;
-    private ImageView btnGoToProfile,btnGoToSettings;
+    private ImageView btnGoToProfile, btnGoToSettings;
     private TextView tvFavorite;
     private ArrayList<Favorites> arrayFavorites;
     private ValueEventListener valueEventListener;
@@ -101,22 +103,41 @@ public class FavoritesActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         break;
                                     case R.id.nav_menu_delete_favorite:
-                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid()).child(arrayFavorites.get(position).getUid());
-                                        database.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<Void> task) {
-                                               if (task.isSuccessful()) {
-                                                   Utils.toastySuccess(getApplicationContext(), getString(R.string.favorite_removed));
-                                                   checkFavorite();
-                                               }
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                           @Override
-                                           public void onFailure(@NonNull Exception e) {
-                                                   Utils.toastyError(getApplicationContext(), e.getMessage());
-                                            }
-                                       });
-                                       break;
+
+                                        new MaterialDialog.Builder(FavoritesActivity.this)
+                                                .title(R.string.delete)
+                                                .content(R.string.delete_favorite_msg)
+                                                .positiveText(R.string.confirm)
+                                                .negativeText(R.string.cancel)
+                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                    @Override
+                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid()).child(arrayFavorites.get(position).getUid());
+                                                        database.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.favorite_removed));
+                                                                    checkFavorite();
+                                                                }
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                                    @Override
+                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                }).show();
+
+
+                                        break;
                                     case R.id.nav_menu_chat:
                                         Intent intentChat = new Intent(FavoritesActivity.this, ChatActivity.class);
                                         intentChat.putExtra(Utils.UID, (arrayFavorites.get(position).getUid()));

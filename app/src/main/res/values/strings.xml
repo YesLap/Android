@@ -29,7 +29,7 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app" translatable="false">Version 1.0.22</string>
+    <string name="version_app" >Version 1.0.59</string>
     <string name="legal" translatable="false">LEGAL</string>
     <string name="licenses" translatable="false">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
@@ -87,16 +87,17 @@
     <string name="update_avaliable">Update Avaliable</string>
     <string name="update_avaliable_msg">Hello, we have something new for you! YesLap has a new version ready for you to upgrade.</string>
     <string name="update">Update Now</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="permission_dinied">Permission Denied</string>
     <string name="sending_image">Please wait while we update your profile picture</string>
     <string name="permission_granted">Permissions Granted!</string>
     <string name="permission_need_be_granted">All Permissions Need To Be Granted!</string>
     <string name="user_location">User Location</string>
-    <string name="pass">* * * * * * * *</string>
+    <string name="pass" translatable="false">* * * * * * * *</string>
     <string name="terms_of_services">Terms Of Services</string>
     <string name="delete_favorite">Delete Favorite</string>
     <string name="favorite_removed">Favorite Removed</string>
+    <string name="delete">Delete</string>
+    <string name="delete_favorite_msg">Are you sure you want to delete this favorite?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

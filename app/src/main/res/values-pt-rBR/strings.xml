@@ -77,4 +77,24 @@
     <string name="gallery">Galeria</string>
     <string name="choose">Escolha</string>
     <string name="fill_username_field">Preencha o campo Nome de Usuário</string>
+    <string name="licenses">Licenças</string>
+    <string name="warning">Aviso</string>
+    <string name="warning_msg">O YesLap! está em fase de desenvolvimento, para que possamos melhorar nosso aplicativo cada vez mais, às vezes as contas do nosso banco de dados serão excluídas, estamos atualmente fase de testes, ok?</string>
+    <string name="iagree">Concordo</string>
+    <string name="soon">Em Breve</string>
+    <string name="update_avaliable">Atualização Disponível</string>
+    <string name="update_avaliable_msg">Olá, nós temos algo novo para você! O YesLap tem uma nova versão pronta para você atualizar.</string>
+    <string name="update">Atualizar Agora</string>
+    <string name="permission_dinied">Perminções Negada</string>
+    <string name="sending_image">Por favor aguarde enquanto atualizamos sua foto de perfil</string>
+    <string name="permission_granted">Permições Concedida</string>
+    <string name="permission_need_be_granted">Todas as permições precisa ser concedidas</string>
+    <string name="user_location">Localização do Usuário</string>
+    <string name="terms_of_services">Termos de Serviçp</string>
+    <string name="delete_favorite">Deletar Favorito</string>
+    <string name="favorite_removed">Favorito Deletado</string>
+    <string name="delete">Deletar</string>
+    <string name="delete_favorite_msg">Tem certeza de que deseja excluir este favorito?</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
 </resources>
