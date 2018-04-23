@@ -97,4 +97,6 @@
     <string name="user_location">User Location</string>
     <string name="pass">* * * * * * * *</string>
     <string name="terms_of_services">Terms Of Services</string>
+    <string name="delete_favorite">Delete Favorite</string>
+    <string name="favorite_removed">Favorite Removed</string>
 </resources>

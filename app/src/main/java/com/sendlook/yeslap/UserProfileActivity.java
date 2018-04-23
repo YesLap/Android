@@ -260,6 +260,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String currentVersionPlayStore = dataSnapshot.child(Utils.CURRENT_VERSION).getValue(String.class);
                     if (!Objects.equals(currentVersionApp, currentVersionPlayStore)) {
+
                         new MaterialDialog.Builder(UserProfileActivity.this)
                                 .title(getString(R.string.update_avaliable))
                                 .content(getString(R.string.update_avaliable_msg))

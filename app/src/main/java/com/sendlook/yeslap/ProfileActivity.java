@@ -1,10 +1,12 @@
 package com.sendlook.yeslap;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -61,13 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         getIntentBundle();
         getUserData();
-
-        ivImage1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //viewPictureProfile(url);
-            }
-        });
 
         btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,9 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void viewPictureProfile(String uri) {
 
-    }
 
     private String getDateNow() {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());

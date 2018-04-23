@@ -251,12 +251,12 @@ public class FindUsersActivity extends AppCompatActivity {
                                         switch (menuItem.getItemId()) {
                                             case R.id.nav_menu_chat:
                                                 Intent intent = new Intent(FindUsersActivity.this, ChatActivity.class);
-                                                intent.putExtra("uid", (m.getUid()));
+                                                intent.putExtra(Utils.UID, (m.getUid()));
                                                 startActivity(intent);
                                                 break;
                                             case R.id.nav_menu_view_profile:
                                                 Intent intentProfile = new Intent(FindUsersActivity.this, ProfileActivity.class);
-                                                intentProfile.putExtra("uid", (m.getUid()));
+                                                intentProfile.putExtra(Utils.UID, (m.getUid()));
                                                 startActivity(intentProfile);
                                                 break;
                                         }
@@ -276,14 +276,14 @@ public class FindUsersActivity extends AppCompatActivity {
     private void setStatusOnline() {
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "online");
+        status.put(Utils.STATUS, "online");
         mDatabase.updateChildren(status);
     }
 
     private void setStatusOffline() {
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "offline");
+        status.put(Utils.STATUS, "offline");
         mDatabase.updateChildren(status);
     }
 

@@ -37,16 +37,17 @@
 
     <GridView
         android:id="@+id/gvFavorites"
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="380dp"
         android:layout_above="@id/wave"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/ivFavorite"
+        android:layout_marginTop="5dp"
         android:columnWidth="100sp"
         android:gravity="center"
         android:numColumns="auto_fit"
-        android:stretchMode="columnWidth" />
+        android:stretchMode="columnWidth"
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/wave"
@@ -57,5 +58,16 @@
         android:adjustViewBounds="true"
         android:cropToPadding="true"
         android:src="@drawable/wavebottom" />
+
+    <TextView
+        android:id="@+id/tvFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:layout_centerVertical="true"
+        android:text="You haven't any favorites yet." />
 
 </RelativeLayout>
