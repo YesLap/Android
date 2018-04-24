@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relChat"
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:layout_height="match_parent"
@@ -44,10 +45,10 @@
         android:layout_height="match_parent"
         android:layout_above="@id/lnChat"
         android:layout_below="@id/btnGoToProfile"
+        android:divider="@android:color/white"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        android:divider="@android:color/white"
-        android:padding="5sp" />
+        android:padding="5sp"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -100,5 +101,17 @@
         android:layout_centerHorizontal="true"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:textColor="@color/colorLightBlue"/>
+
+    <TextView
+        android:id="@+id/tvNoMessages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:text="@string/you_still_have_not_talked_say_hello"
+        android:textStyle="bold"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
 
 </RelativeLayout>

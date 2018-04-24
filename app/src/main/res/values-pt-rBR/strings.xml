@@ -97,4 +97,5 @@
     <string name="delete_favorite_msg">Tem certeza de que deseja excluir este favorito?</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
+    <string name="version_app">Versão 1.0.60</string>
 </resources>

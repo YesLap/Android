@@ -40,6 +40,7 @@ public class Utils {
     public static final String MESSAGE = "message";
     public static final String CALENDAR = "calendar";
     public static final String LAST_SEEN = "lastSeen";
+    public static final String CHAT_MESSAGES = "chatmessages";
 
     public static final String SUNDAY = "1";
     public static final String MONDAY = "2";

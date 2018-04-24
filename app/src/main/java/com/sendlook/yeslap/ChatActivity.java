@@ -3,11 +3,13 @@ package com.sendlook.yeslap;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +22,8 @@ import com.sendlook.yeslap.model.ChatMessage;
 import com.sendlook.yeslap.model.MesageAdapter;
 import com.sendlook.yeslap.model.Message;
 import com.sendlook.yeslap.model.Utils;
+import com.tomergoldst.tooltips.ToolTip;
+import com.tomergoldst.tooltips.ToolTipsManager;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -36,7 +40,7 @@ public class ChatActivity extends AppCompatActivity {
     private EditText etChat;
     private ImageView btnSendMessage;
     private ListView lvChat;
-    private TextView tvUsername, tvStatus;
+    private TextView tvUsername, tvStatus, tvNoMessages;
     private String uidAddressee;
     private String uidSender;
     private String usernameSender;
@@ -56,10 +60,12 @@ public class ChatActivity extends AppCompatActivity {
         lvChat = (ListView) findViewById(R.id.lvChat);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
+        tvNoMessages = (TextView) findViewById(R.id.tvNoMessages);
 
         getBundleIntent();
         getUserData();
         setStatus();
+        checkIfHaveMessages();
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +131,7 @@ public class ChatActivity extends AppCompatActivity {
         valueEventListenerMessages = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                checkIfHaveMessages();
                 messages.clear();
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
@@ -142,11 +149,11 @@ public class ChatActivity extends AppCompatActivity {
 
         mDatabase.addValueEventListener(valueEventListenerMessages);
 
-        datadase = FirebaseDatabase.getInstance().getReference().child("chatmessages").child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
+        datadase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
         datadase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                tvStatus.setText(dataSnapshot.child("status").getValue(String.class));
+                tvStatus.setText(dataSnapshot.child(Utils.STATUS).getValue(String.class));
             }
 
             @Override
@@ -157,20 +164,39 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    private void checkIfHaveMessages() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(uidSender).child(uidAddressee);
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    tvNoMessages.setVisibility(View.VISIBLE);
+                } else {
+                    tvNoMessages.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void setStatus() {
         KeyboardVisibilityEvent.setEventListener(ChatActivity.this,
                 new KeyboardVisibilityEventListener() {
                     @Override
                     public void onVisibilityChanged(boolean isOpen) {
                         if (isOpen){
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child("chatmessages").child(uidAddressee).child(uidSender);
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(uidAddressee).child(uidSender);
                             Map<String, Object> status = new HashMap<>();
-                            status.put("status","Typing ...");
+                            status.put(Utils.STATUS,"Typing ...");
                             mDatabase.updateChildren(status);
                         } else {
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child("chatmessages").child(uidAddressee).child(uidSender);
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(uidAddressee).child(uidSender);
                             Map<String, Object> status = new HashMap<>();
-                            status.put("status","");
+                            status.put(Utils.STATUS,"");
                             mDatabase.updateChildren(status);
                         }
                     }
@@ -193,7 +219,7 @@ public class ChatActivity extends AppCompatActivity {
     private boolean saveChat(String uidSender, String uidAddressee, ChatMessage chatMessage) {
         try {
 
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("chatmessages");
+            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES);
             mDatabase.child(uidSender).child(uidAddressee).setValue(chatMessage);
 
             return true;
@@ -204,7 +230,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void getUserData() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uidAddressee);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(uidAddressee);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -224,14 +250,14 @@ public class ChatActivity extends AppCompatActivity {
     private void getBundleIntent() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            uidAddressee = bundle.getString("uid");
+            uidAddressee = bundle.getString(Utils.UID);
             uidSender = mAuth.getCurrentUser().getUid();
         }
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(uidSender);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                usernameSender = dataSnapshot.child("username").getValue(String.class);
+                usernameSender = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
             }
 
             @Override
@@ -266,14 +292,14 @@ public class ChatActivity extends AppCompatActivity {
     private void setStatusOnline() {
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "online");
+        status.put(Utils.STATUS, "online");
         mDatabase.updateChildren(status);
     }
 
     private void setStatusOffline() {
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
         HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "offline");
+        status.put(Utils.STATUS, "offline");
         mDatabase.updateChildren(status);
     }
 }

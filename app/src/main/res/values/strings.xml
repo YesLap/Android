@@ -29,9 +29,9 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app" >Version 1.0.59</string>
+    <string name="version_app" >Version 1.0.60</string>
     <string name="legal" translatable="false">LEGAL</string>
-    <string name="licenses" translatable="false">Licenses</string>
+    <string name="licenses">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="view_profile">View Profile</string>
@@ -100,4 +100,5 @@
     <string name="delete_favorite_msg">Are you sure you want to delete this favorite?</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="you_still_have_not_talked_say_hello">You still have not talked \n Say Hello</string>
 </resources>
