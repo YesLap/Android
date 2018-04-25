@@ -78,7 +78,7 @@ public class FavoritesAdapter extends ArrayAdapter<Favorites> {
                     Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
 
                     int diff = DateTimeUtils.getDateDiff(getDateNow(), lastSeen, DateTimeUnits.DAYS);
-                    if (diff > 90) {
+                    if (diff > 7) {
                         ivStatus.setImageResource(R.drawable.icon_ghost);
                     } else {
                         if (Objects.equals(status, "online")) {

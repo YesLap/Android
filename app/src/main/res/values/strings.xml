@@ -101,4 +101,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="you_still_have_not_talked_say_hello">You still have not talked \n Say Hello</string>
+    <string name="favorites">Favorites</string>
+    <string name="new_username_msg">Enter your new username</string>
+    <string name="username_must_have_only">Your username must have only characters of a-z or A-Z</string>
 </resources>

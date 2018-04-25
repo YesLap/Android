@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +41,8 @@ import com.vansuita.pickimage.dialog.PickImageDialog;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -289,29 +294,33 @@ public class EditUserProfileActivity extends AppCompatActivity {
     }
 
     private void updateUsername() {
-        //Dialog to change the user name
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
-        View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
-        alertDialogBuilderUserInput.setView(mView);
 
-        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
-        alertDialogBuilderUserInput
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogBox, int id) {
-                        if (Objects.equals(userInputDialogEditText.getText().toString(), "")) {
+
+        new MaterialDialog.Builder(this)
+                .title(getString(R.string.username))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(getString(R.string.new_username_msg), null, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        final String username = input.toString();
+
+                        Pattern p = Pattern.compile("[^a-z]", Pattern.CASE_INSENSITIVE);
+                        Matcher m = p.matcher(username);
+                        boolean b = m.find();
+                        boolean s = username.contains(" ");
+
+                        if (b || s) {
+                            Utils.toastyInfo(getApplicationContext(), getString(R.string.username_must_have_only));
+                        } else if (Objects.equals(username, "")) {
                             Utils.toastyInfo(getApplicationContext(), getString(R.string.insert_username));
                         } else {
-
-                            DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(userInputDialogEditText.getText().toString());
+                            DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(username);
                             mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.getChildrenCount() == 0) {
-
-                                        final String username = userInputDialogEditText.getText().toString();
                                         //Progress Dialog
+                                        final ProgressDialog dialog;
                                         dialog = new ProgressDialog(EditUserProfileActivity.this);
                                         dialog.setTitle(getString(R.string.loading));
                                         dialog.setMessage(getString(R.string.loading_msg));
@@ -343,7 +352,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                                                         //Function to save the user data at Firebase: Users > UID > user data
                                                                         Map<String, Object> user = new HashMap<>();
-                                                                        user.put(Utils.USERNAME, userInputDialogEditText.getText().toString());
+                                                                        user.put(Utils.USERNAME, username);
                                                                         mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                             @Override
                                                                             public void onComplete(@NonNull Task<Void> task) {
@@ -398,20 +407,19 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
                                 }
                             });
-
                         }
+
                     }
                 })
+                .negativeText(getString(R.string.cancels))
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
 
-                .setNegativeButton(getString(R.string.cancels),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                dialogBox.cancel();
-                            }
-                        });
-
-        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-        alertDialogAndroid.show();
     }
 
     private void getUserData() {

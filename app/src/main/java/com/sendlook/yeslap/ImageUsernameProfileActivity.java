@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,6 +36,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -78,10 +81,18 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 username = etUsername.getText().toString().trim();
+
+                Pattern p = Pattern.compile("[^a-z]", Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(username);
+                boolean b = m.find();
+                boolean s = username.contains(" ");
+
                 if (downloadURL == null || downloadURL.equals("")) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.select_image_to_your_profile));
                 } else if (username.equals("")) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_username_field));
+                } else if (b || s) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.username_must_have_only));
                 } else {
                     dialog = new ProgressDialog(ImageUsernameProfileActivity.this);
                     dialog.setTitle(getString(R.string.loading));
