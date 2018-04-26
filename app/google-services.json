@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:405673897660:android:67ba7c98f6874439",
+        "mobilesdk_app_id": "1:405673897660:android:209059ccda9b9c6d",
         "android_client_info": {
-          "package_name": "com.sendlook.yeslap"
+          "package_name": "br.sendlook.yeslap"
         }
       },
       "oauth_client": [
         {
-          "client_id": "405673897660-4tm0qalfvsb6715bjmgq8u7uf99545hh.apps.googleusercontent.com",
+          "client_id": "405673897660-vg7ikg4ijcdk78n7us3qs8m452cp49il.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.sendlook.yeslap",
-            "certificate_hash": "fa4bef26ed583abb9ea518c61bb01c2fbf274a0b"
+            "package_name": "br.sendlook.yeslap",
+            "certificate_hash": "73e8eaa6b907c18e944adc8363e77d59c5b86bc8"
           }
         },
         {
@@ -40,15 +40,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "405673897660-g5trop3as5joomf748vuqa9pr2c3fsh0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "405673897660-8aooql2vefffo6lss5kqkiduotctjm2p.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.yeslap"
               }
-            },
-            {
-              "client_id": "405673897660-g5trop3as5joomf748vuqa9pr2c3fsh0.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },

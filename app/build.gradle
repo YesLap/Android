@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.sendlook.yeslap"
+        applicationId "br.sendlook.yeslap"
         minSdkVersion 21
         targetSdkVersion 27
         //Dont forget to change the version in the Firebase and in Settings Screen
-        versionCode 16
+        versionCode 17
         versionName "1.0.61"
         //Dont forget to change the version in the Firebase
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

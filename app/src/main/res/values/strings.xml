@@ -29,7 +29,7 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app" >Version 1.0.60</string>
+    <string name="version_app" >Version 1.0.62</string>
     <string name="legal" translatable="false">LEGAL</string>
     <string name="licenses">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
@@ -104,4 +104,7 @@
     <string name="favorites">Favorites</string>
     <string name="new_username_msg">Enter your new username</string>
     <string name="username_must_have_only">Your username must have only characters of a-z or A-Z</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="gay">Gay</string>
 </resources>
