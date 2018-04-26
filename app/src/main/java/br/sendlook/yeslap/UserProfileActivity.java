@@ -259,6 +259,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String currentVersionPlayStore = dataSnapshot.child(Utils.CURRENT_VERSION).getValue(String.class);
+                    final String url = dataSnapshot.child(Utils.PLAYSTORE_LINK).getValue(String.class);
                     if (!Objects.equals(currentVersionApp, currentVersionPlayStore)) {
 
                         new MaterialDialog.Builder(UserProfileActivity.this)
@@ -270,7 +271,6 @@ public class UserProfileActivity extends AppCompatActivity {
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        String url = Utils.PLAYSTORE;
                                         Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(url));
                                         startActivity(i);

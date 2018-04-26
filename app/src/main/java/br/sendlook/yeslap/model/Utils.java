@@ -54,7 +54,7 @@ public class Utils {
     public static final String AFTERNOON = "afternoon";
     public static final String NIGHT = "night";
 
-    public static final String PLAYSTORE = "https://play.google.com/store/apps/details?id=com.sendlook.yeslap";
+    public static final String PLAYSTORE_LINK = "playstore_link";
     public static final String REPORTS = "reports";
 
     public static final String GENDER_USER = "genderUser";

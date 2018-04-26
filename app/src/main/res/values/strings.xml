@@ -29,7 +29,7 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app" >Version 1.0.62</string>
+    <string name="version_app" >Version 1.0.63</string>
     <string name="legal" translatable="false">LEGAL</string>
     <string name="licenses">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
