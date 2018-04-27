@@ -120,6 +120,21 @@ public class ChatMessagesActivity extends AppCompatActivity {
             }
         });
 
+        btnGoToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        btnGoToSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChatMessagesActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override

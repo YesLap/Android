@@ -53,7 +53,6 @@ public class FindUsersActivity extends AppCompatActivity {
 
         //Instantiate Firebase and Iniciate the DatabaseReference
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users_list").child(mAuth.getCurrentUser().getUid());
 
         arrayUsers = new ArrayList<String>();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayUsers);
@@ -88,8 +87,7 @@ public class FindUsersActivity extends AppCompatActivity {
         btnGoToProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FindUsersActivity.this, UserProfileActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -212,13 +210,14 @@ public class FindUsersActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS);
 
-        FirebaseRecyclerAdapter<Users, FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<Users, FindUsersViewHolder>(Users.class, R.layout.list_users, FindUsersViewHolder.class, mDatabase) {
+        final FirebaseRecyclerAdapter<Users, FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<Users, FindUsersViewHolder>(Users.class, R.layout.list_users, FindUsersViewHolder.class, mDatabase) {
             @Override
             protected void populateViewHolder(final FindUsersViewHolder v, final Users m, int position) {
-                //if (Objects.equals(m.getUid(), mAuth.getCurrentUser().getUid())){
+                //if (Objects.equals(m.getUid(), mAuth.getCurrentUser().getUid())) {
                 //arrayUsers.remove(position);
+
                 //notifyDataSetChanged();
-                //Utils.toastyInfo(getApplicationContext(), "m.getUid(): " + m.getUid() + "\n" + "Current User: " + mAuth.getCurrentUser().getUid() +  "ArraySize: " + arrayUsers.size());
+                //Utils.toastyInfo(getApplicationContext(), "m.getUid(): " + m.getUid() + "\n" + "Current User: " + mAuth.getCurrentUser().getUid() + "\n" + "ArraySize: " + arrayUsers.size() + "\n" + "Position: " + position);
                 //} else {
                 v.setName(m.getUsername());
                 v.setImage(m.getImage1(), getApplicationContext());
@@ -227,7 +226,6 @@ public class FindUsersActivity extends AppCompatActivity {
                 database.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        //v.setImage(dataSnapshot.child(Utils.IMAGE_1).getValue(String.class), getApplicationContext());
                         v.setStatus(dataSnapshot.child(Utils.STATUS).getValue(String.class));
                     }
 
@@ -268,7 +266,7 @@ public class FindUsersActivity extends AppCompatActivity {
                 });
             }
         };
-
+        
         rvUsers.setAdapter(adapter);
 
     }

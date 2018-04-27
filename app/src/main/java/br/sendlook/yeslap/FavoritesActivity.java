@@ -98,8 +98,10 @@ public class FavoritesActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
+                        final String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+
                         SheetMenu.with(FavoritesActivity.this)
-                                .setTitle(dataSnapshot.child(Utils.USERNAME).getValue(String.class))
+                                .setTitle(username)
                                 .setMenu(R.menu.menu_favorite)
                                 .setClick(new MenuItem.OnMenuItemClickListener() {
                                     @Override
@@ -113,7 +115,7 @@ public class FavoritesActivity extends AppCompatActivity {
                                             case R.id.nav_menu_delete_favorite:
 
                                                 new MaterialDialog.Builder(FavoritesActivity.this)
-                                                        .title(R.string.delete)
+                                                        .title(username)
                                                         .content(R.string.delete_favorite_msg)
                                                         .positiveText(R.string.confirm)
                                                         .negativeText(R.string.cancel)

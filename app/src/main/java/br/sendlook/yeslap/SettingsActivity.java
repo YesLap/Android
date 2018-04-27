@@ -104,7 +104,12 @@ public class SettingsActivity extends AppCompatActivity {
         getUserConfig();
 
         // click events
-        ivGoToProfile.setOnClickListener(callActivity(UserProfileActivity.class));
+        ivGoToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         ivGoToChat.setOnClickListener(callActivity(ChatActivity.class));
 

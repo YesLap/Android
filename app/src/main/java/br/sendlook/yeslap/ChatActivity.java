@@ -1,5 +1,6 @@
 package br.sendlook.yeslap;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference datadase;
     private EditText etChat;
-    private ImageView btnSendMessage;
+    private ImageView btnSendMessage, btnGoToProfile, btnGoToSettings;
     private ListView lvChat;
     private TextView tvUsername, tvStatus, tvNoMessages;
     private String uidAddressee;
@@ -55,6 +56,8 @@ public class ChatActivity extends AppCompatActivity {
 
         etChat = (EditText) findViewById(R.id.etChat);
         btnSendMessage = (ImageView) findViewById(R.id.btnSendMessage);
+        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
+        btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
         lvChat = (ListView) findViewById(R.id.lvChat);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
@@ -64,6 +67,21 @@ public class ChatActivity extends AppCompatActivity {
         getUserData();
         setStatus();
         checkIfHaveMessages();
+
+        btnGoToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnGoToSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChatActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
