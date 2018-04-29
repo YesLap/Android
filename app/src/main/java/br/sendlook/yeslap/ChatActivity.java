@@ -190,7 +190,20 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() == 0) {
-                    tvNoMessages.setVisibility(View.VISIBLE);
+                    DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(uidAddressee).child(uidSender);
+                    database1.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getChildrenCount() == 0) {
+                                tvNoMessages.setVisibility(View.VISIBLE);
+                            } else {
+                                tvNoMessages.setVisibility(View.GONE);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
                 } else {
                     tvNoMessages.setVisibility(View.GONE);
                 }

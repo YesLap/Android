@@ -82,7 +82,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
         //Get the Chat Messages from firebase
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid());
-        valueEventListener = new ValueEventListener() {
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arrayChatMessages.clear();
@@ -91,7 +91,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
                         ChatMessage chatMessage = chat.getValue(ChatMessage.class);
                         arrayChatMessages.add(chatMessage);
                     } catch (Exception e) {
-                        Log.d("TAGS", e.getMessage());
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -99,8 +99,9 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
             }
-        };
+        });
 
         //Click item on listView
         lstChatMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -227,30 +228,14 @@ public class ChatMessagesActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        //Stop the EventListener
-        //mDatabase.removeEventListener(valueEventListener);
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
-        mDatabase.removeEventListener(valueEventListener);
         setStatusOffline();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //Iniciate the EventListener
-        //mDatabase.addValueEventListener(valueEventListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mDatabase.addValueEventListener(valueEventListener);
         setStatusOnline();
     }
 
