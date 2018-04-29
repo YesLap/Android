@@ -106,6 +106,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvHaveChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        android:text="You haven't any talks yet" />
 
 
 </RelativeLayout>

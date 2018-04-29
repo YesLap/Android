@@ -165,7 +165,12 @@ public class ChatActivity extends AppCompatActivity {
 
         mDatabase.addValueEventListener(valueEventListenerMessages);
 
-        datadase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
+        getStatus();
+
+    }
+
+    private void getStatus() {
+        datadase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
         datadase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -177,7 +182,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void checkIfHaveMessages() {
@@ -205,12 +209,12 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void onVisibilityChanged(boolean isOpen) {
                         if (isOpen){
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(uidAddressee).child(uidSender);
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
                             Map<String, Object> status = new HashMap<>();
                             status.put(Utils.STATUS,"Typing ...");
                             mDatabase.updateChildren(status);
                         } else {
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(uidAddressee).child(uidSender);
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
                             Map<String, Object> status = new HashMap<>();
                             status.put(Utils.STATUS,"");
                             mDatabase.updateChildren(status);

@@ -2,21 +2,32 @@ package br.sendlook.yeslap;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +36,14 @@ import java.util.Objects;
 import br.sendlook.yeslap.model.ChatMessage;
 import br.sendlook.yeslap.model.ChatMessageAdapter;
 import br.sendlook.yeslap.model.Utils;
+import ru.whalemare.sheetmenu.SheetMenu;
 
 public class ChatMessagesActivity extends AppCompatActivity {
 
     private ImageView btnGoToProfile, btnGoToSettings;
     private ListView lstChatMessages;
     private RelativeLayout btnChat, btnCalendar, btnSearch;
+    private TextView tvHaveChat;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private DatabaseReference database;
@@ -44,8 +57,12 @@ public class ChatMessagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_messages);
 
+        //TODO: METODO PARA VERIFICAR SE HA MENSAGENS SENAO COLOCAR MENSGEM QUE NAO HÁ MENSAGEM
+
         //Instatiate Firebase
         mAuth = FirebaseAuth.getInstance();
+
+        checkIfHaveChats();
 
         //Cast
         btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
@@ -54,6 +71,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
         btnChat = (RelativeLayout) findViewById(R.id.btnChat);
         btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
+        tvHaveChat = (TextView) findViewById(R.id.tvHaveChat);
 
         //Array of chat messages
         arrayChatMessages = new ArrayList<>();
@@ -63,17 +81,17 @@ public class ChatMessagesActivity extends AppCompatActivity {
         lstChatMessages.setAdapter(adapter);
 
         //Get the Chat Messages from firebase
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("chatmessages").child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid());
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arrayChatMessages.clear();
-                for (DataSnapshot chat: dataSnapshot.getChildren()) {
+                for (DataSnapshot chat : dataSnapshot.getChildren()) {
                     try {
                         ChatMessage chatMessage = chat.getValue(ChatMessage.class);
                         arrayChatMessages.add(chatMessage);
                     } catch (Exception e) {
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                        Log.d("TAGS", e.getMessage());
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -92,6 +110,58 @@ public class ChatMessagesActivity extends AppCompatActivity {
                 Intent intent = new Intent(ChatMessagesActivity.this, ChatActivity.class);
                 intent.putExtra("uid", chat.getUid());
                 startActivity(intent);
+            }
+        });
+
+        lstChatMessages.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                final ChatMessage chat = arrayChatMessages.get(position);
+                SheetMenu.with(ChatMessagesActivity.this)
+                        .setTitle(arrayChatMessages.get(position).getName())
+                        .setMenu(R.menu.menu_chat_messages)
+                        .setClick(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.nav_menu_delete_chat:
+                                        new MaterialDialog.Builder(ChatMessagesActivity.this)
+                                                .title(arrayChatMessages.get(position).getName())
+                                                .content(R.string.delete_chat_msg)
+                                                .positiveText(R.string.delete)
+                                                .negativeText(R.string.cancels)
+                                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                                    @Override
+                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                })
+                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                    @Override
+                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid()).child(chat.getUid());
+                                                        database.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.chat_removed));
+                                                                }
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .show();
+                                        break;
+                                }
+                                return false;
+                            }
+                        }).show();
+                return false;
             }
         });
 
@@ -137,11 +207,30 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
     }
 
+    private void checkIfHaveChats() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid());;
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    tvHaveChat.setVisibility(View.VISIBLE);
+                } else {
+                    tvHaveChat.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
         //Stop the EventListener
-        mDatabase.removeEventListener(valueEventListener);
+        //mDatabase.removeEventListener(valueEventListener);
     }
 
     @Override
@@ -155,7 +244,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //Iniciate the EventListener
-        mDatabase.addValueEventListener(valueEventListener);
+        //mDatabase.addValueEventListener(valueEventListener);
     }
 
     @Override

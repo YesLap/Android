@@ -97,11 +97,16 @@
     <string name="delete_favorite_msg">Tem certeza de que deseja excluir este favorito?</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
-    <string name="version_app">Versão 1.0.64</string>
+    <string name="version_app">Versão 1.0.65</string>
     <string name="favorites">Favoritos</string>
     <string name="you_still_have_not_talked_say_hello">Vocês ainda não conversaram \n Diga Olá</string>
     <string name="new_username_msg">Digite seu novo nome de usuário</string>
     <string name="female">Feminino</string>
     <string name="male">Masculino</string>
     <string name="gay">Gay</string>
+    <string name="username_must_have_only">Seu nome de usuário deve ter apenas caracteres de a-z ou A-Z</string>
+    <string name="delete_chat">Deletar Conversa</string>
+    <string name="chat_removed">Conversa Removida</string>
+    <string name="delete_chat_msg">Tem certeza de que deseja excluir esta conversa?</string>
+    <string name="soon_this_new_feature">Em Breve novos recursos</string>
 </resources>

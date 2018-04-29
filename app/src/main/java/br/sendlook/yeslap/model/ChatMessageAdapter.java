@@ -45,6 +45,7 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
         mAuth = FirebaseAuth.getInstance();
 
+        //if (chatMessages != null || !Objects.equals(chatMessages.get(position).getMessage(), "")) {
         if (chatMessages != null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 

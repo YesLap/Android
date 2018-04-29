@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_menu_delete_chat"
+        android:title="@string/delete_chat"
+        android:icon="@drawable/ic_delete_black_24dp"/>
+</menu>
