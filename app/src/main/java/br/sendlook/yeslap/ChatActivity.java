@@ -185,16 +185,16 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void checkIfHaveMessages() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(uidSender).child(uidAddressee);
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee);
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() == 0) {
-                    DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(uidAddressee).child(uidSender);
+                    DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidAddressee).child(uidSender);
                     database1.addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.getChildrenCount() == 0) {
+                        public void onDataChange(DataSnapshot dataSnapshot1) {
+                            if (dataSnapshot1.getChildrenCount() == 0) {
                                 tvNoMessages.setVisibility(View.VISIBLE);
                             } else {
                                 tvNoMessages.setVisibility(View.GONE);

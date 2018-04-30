@@ -38,6 +38,7 @@ public class Utils {
     public static final String SPOTLIGHT = "spotlight";
     public static final String FAVORITES = "favorites";
     public static final String MESSAGE = "message";
+    public static final String MESSAGES = "messages";
     public static final String CALENDAR = "calendar";
     public static final String LAST_SEEN = "lastSeen";
     public static final String CHAT_MESSAGES = "chatmessages";
