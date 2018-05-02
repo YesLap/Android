@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarFinalValueListener;
@@ -59,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Button btnLocationSearch;
     private Button btnGenderSearch;
-    private String genderSearch = "male";
+    private String genderSearch = "female";
     private TextView tvAgeSearch;
     private CrystalRangeSeekbar rbAgeSearch;
     private Button btnPrivacyPolicy;
@@ -70,8 +73,6 @@ public class SettingsActivity extends AppCompatActivity {
     private Button btnEmailUser;
 
     private SimpleLocation location;
-    private double lat, lon;
-
     private ProgressDialog dialog;
 
     @Override
@@ -99,6 +100,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnLicense = (Button) findViewById(R.id.btnLicenses);
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
         btnDeleteAccount = (Button) findViewById(R.id.btnDeleteAccount);
+
 
         getCurrentLocation();
         getUserConfig();
@@ -299,6 +301,29 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
+    private void checkIfGpsIsOn() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            new MaterialDialog.Builder(SettingsActivity.this)
+                    .title("GPS OFF")
+                    .content("You need to call your location so we can find you.")
+                    .positiveText("Turn On")
+                    .negativeText(getString(R.string.cancels))
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    }).show();
+        }
+    }
+
     private void getCurrentLocation() {
         location = new SimpleLocation(this);
 
@@ -395,6 +420,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
         mUser = mAuth.getCurrentUser();
         if (mUser != null) {
+            checkIfGpsIsOn();
             location.beginUpdates();
             setStatusOnline();
         }

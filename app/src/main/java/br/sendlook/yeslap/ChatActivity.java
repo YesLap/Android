@@ -2,6 +2,7 @@ package br.sendlook.yeslap;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.thunder413.datetimeutils.DateTimeUnits;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,8 +28,10 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import br.sendlook.yeslap.model.ChatMessage;
 import br.sendlook.yeslap.model.MesageAdapter;
@@ -92,17 +99,21 @@ public class ChatActivity extends AppCompatActivity {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.enter_a_messege_to_send));
                 } else {
 
-                    Message msg = new Message();
-                    msg.setUid(uidSender);
+                    /**Message msg = new Message();
+                    msg.setUidSender(uidSender);
                     msg.setMessage(message);
+                    msg.setDate(getDateTimeNow());*/
 
                     //salva para o remetente
-                    Boolean returnSender = saveMessage(uidSender, uidAddressee, msg);
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(uidSender).child(uidAddressee).push();
+                    String push = mDatabase.getKey();
+                    Boolean returnSender = saveMessage(uidSender, uidAddressee, message, getDateTimeNow(), mDatabase);
                     if (!returnSender) {
                         Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
                     } else {
                         //salva para o destinatario
-                        Boolean returnAddressee = saveMessage(uidAddressee, uidSender, msg);
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(uidAddressee).child(uidSender).child(push);
+                        Boolean returnAddressee = saveMessage(uidSender, uidAddressee, message, getDateTimeNow(), mDatabase);
                         if (!returnAddressee) {
                             Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
                         } else {
@@ -134,7 +145,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
                 }
-
+                lvChat.smoothScrollToPosition(messages.size());
             }
         });
 
@@ -151,8 +162,10 @@ public class ChatActivity extends AppCompatActivity {
                 messages.clear();
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    //Utils.toastyInfo(getApplicationContext(), dataSnapshot.getChildren().toString());
                     Message message = data.getValue(Message.class);
                     messages.add(message);
+                    lvChat.smoothScrollToPosition(messages.size());
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -167,6 +180,21 @@ public class ChatActivity extends AppCompatActivity {
 
         getStatus();
 
+        //String dateDB = "2018-1-5 00:00:01";
+        //int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), dateDB, DateTimeUnits.MINUTES);
+        //Utils.toastyInfo(getApplicationContext(), String.valueOf(diff));
+
+    }
+
+    private String getDateTimeNow() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        int yyyy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH);
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        int hh = calendar.get(Calendar.HOUR);
+        int min = calendar.get(Calendar.MINUTE);
+        int seg  =calendar.get(Calendar.SECOND);
+        return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + min + ":" + seg ;
     }
 
     private void getStatus() {
@@ -200,6 +228,7 @@ public class ChatActivity extends AppCompatActivity {
                                 tvNoMessages.setVisibility(View.GONE);
                             }
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                         }
@@ -221,26 +250,30 @@ public class ChatActivity extends AppCompatActivity {
                 new KeyboardVisibilityEventListener() {
                     @Override
                     public void onVisibilityChanged(boolean isOpen) {
-                        if (isOpen){
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
+                        DatabaseReference database;
+                        if (isOpen) {
+                            database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
                             Map<String, Object> status = new HashMap<>();
-                            status.put(Utils.STATUS,"Typing ...");
-                            mDatabase.updateChildren(status);
+                            status.put(Utils.STATUS, "Typing ...");
+                            database.updateChildren(status);
                         } else {
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
-                            Map<String, Object> status = new HashMap<>();
-                            status.put(Utils.STATUS,"");
-                            mDatabase.updateChildren(status);
+                            database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
+                            database.removeValue();
                         }
                     }
                 });
     }
 
-    private boolean saveMessage(String uidSender, String uidAddressee, Message message) {
+    private boolean saveMessage(String uidSender, String uidAddressee, String message, String date, DatabaseReference datadase) {
         try {
 
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("messages");
-            mDatabase.child(uidSender).child(uidAddressee).push().setValue(message);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("uidSender", uidSender);
+            msg.put("uidAddressee", uidAddressee);
+            msg.put("message", message);
+            msg.put("date", date);
+            msg.put("key", mDatabase.getKey());
+            datadase.setValue(msg);
 
             return true;
         } catch (Exception e) {
@@ -321,6 +354,8 @@ public class ChatActivity extends AppCompatActivity {
         super.onPause();
         if (mAuth != null) {
             setStatusOffline();
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
+            database.removeValue();
         }
     }
 

@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.thunder413.datetimeutils.DateTimeUnits;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,8 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import br.sendlook.yeslap.R;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,6 +49,7 @@ public class MesageAdapter extends ArrayAdapter<Message>{
         View view = null;
         mAuth = FirebaseAuth.getInstance();
 
+
         if (message != null) {
             String uid = mAuth.getCurrentUser().getUid();
 
@@ -53,7 +57,7 @@ public class MesageAdapter extends ArrayAdapter<Message>{
 
             Message messages = message.get(position);
 
-            if (uid.equals(messages.getUid())) {
+            if (uid.equals(messages.getUidSender())) {
                 view = inflater.inflate(R.layout.message_right, parent, false);
             } else {
                 view = inflater.inflate(R.layout.message_left, parent, false);
@@ -65,7 +69,7 @@ public class MesageAdapter extends ArrayAdapter<Message>{
             final ImageView ivStatus = view.findViewById(R.id.ivStatus);
             final CircleImageView cvUserImage = view.findViewById(R.id.cvImageUser);
             try {
-                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(messages.getUid());
+                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(messages.getUidSender());
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -94,10 +98,47 @@ public class MesageAdapter extends ArrayAdapter<Message>{
                 Utils.toastyError(context, e.getMessage());
             }
 
+            //Check de time of message and delete
+            final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("messages").child(messages.getUidSender()).child(messages.getUidAddressee()).child(messages.getKey());
+            final DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child("messages").child(messages.getUidAddressee()).child(messages.getUidSender()).child(messages.getKey());
+            database.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String date = dataSnapshot.child("date").getValue(String.class);
+                    if (date != null) {
+                        int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), date, DateTimeUnits.HOURS);
+
+                        if (diff > 24) {
+                            database.removeValue();
+                            database1.removeValue();
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
         }
 
         return view;
     }
+
+    private String getDateTimeNow() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        int yyyy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH);
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        int hh = calendar.get(Calendar.HOUR);
+        int min = calendar.get(Calendar.MINUTE);
+        int seg  =calendar.get(Calendar.SECOND);
+        return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + min + ":" + seg ;
+    }
+
 }
 
 

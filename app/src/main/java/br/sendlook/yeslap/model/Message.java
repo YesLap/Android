@@ -2,18 +2,21 @@ package br.sendlook.yeslap.model;
 
 public class Message {
 
-    private String uid;
+    private String uidSender;
+    private String uidAddressee;
     private String message;
+    private String date;
+    private String key;
 
     public Message() {
     }
 
-    public String getUid() {
-        return uid;
+    public String getUidSender() {
+        return uidSender;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUidSender(String uidSender) {
+        this.uidSender = uidSender;
     }
 
     public String getMessage() {
@@ -22,5 +25,29 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getUidAddressee() {
+        return uidAddressee;
+    }
+
+    public void setUidAddressee(String uidAddressee) {
+        this.uidAddressee = uidAddressee;
     }
 }
