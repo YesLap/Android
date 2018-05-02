@@ -43,6 +43,10 @@ public class Utils {
     public static final String LAST_SEEN = "lastSeen";
     public static final String CHAT_MESSAGES = "chatmessages";
     public static final String MESSAGES_STATUS = "messages_status";
+    public static final String DATE = "date";
+    public static final String KEY = "key";
+    public static final String UID_SENDER = "uidSender";
+    public static final String UID_ADDRESSEE = "uidAddressee";
 
     public static final String SUNDAY = "1";
     public static final String MONDAY = "2";

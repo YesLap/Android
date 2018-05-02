@@ -29,7 +29,7 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app" >Version 1.0.68</string>
+    <string name="version_app" >Version 1.0.69</string>
     <string name="legal" translatable="false">LEGAL</string>
     <string name="licenses">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
@@ -111,4 +111,7 @@
     <string name="chat_removed">Chat Removed</string>
     <string name="delete_chat_msg">Are you sure you want to delete this chat?</string>
     <string name="soon_this_new_feature">Soon this new feature</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset_password_msg">Do you want to reset your password? We will email you with a link to reset your password</string>
+    <string name="email_sent">E-mail Sent</string>
 </resources>

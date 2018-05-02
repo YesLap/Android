@@ -2,6 +2,7 @@ package br.sendlook.yeslap;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -93,26 +94,22 @@ public class ChatActivity extends AppCompatActivity {
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                playSoundSentMessage();
                 String message = etChat.getText().toString().trim();
 
                 if (message.isEmpty()) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.enter_a_messege_to_send));
                 } else {
 
-                    /**Message msg = new Message();
-                    msg.setUidSender(uidSender);
-                    msg.setMessage(message);
-                    msg.setDate(getDateTimeNow());*/
-
                     //salva para o remetente
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(uidSender).child(uidAddressee).push();
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee).push();
                     String push = mDatabase.getKey();
                     Boolean returnSender = saveMessage(uidSender, uidAddressee, message, getDateTimeNow(), mDatabase);
                     if (!returnSender) {
                         Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
                     } else {
                         //salva para o destinatario
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(uidAddressee).child(uidSender).child(push);
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidAddressee).child(uidSender).child(push);
                         Boolean returnAddressee = saveMessage(uidSender, uidAddressee, message, getDateTimeNow(), mDatabase);
                         if (!returnAddressee) {
                             Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
@@ -153,7 +150,7 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new MesageAdapter(ChatActivity.this, messages);
         lvChat.setAdapter(adapter);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(uidSender).child(uidAddressee);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee);
 
         valueEventListenerMessages = new ValueEventListener() {
             @Override
@@ -184,6 +181,11 @@ public class ChatActivity extends AppCompatActivity {
         //int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), dateDB, DateTimeUnits.MINUTES);
         //Utils.toastyInfo(getApplicationContext(), String.valueOf(diff));
 
+    }
+
+    private void playSoundSentMessage() {
+        MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap);
+        whooap.start();
     }
 
     private String getDateTimeNow() {
@@ -268,11 +270,11 @@ public class ChatActivity extends AppCompatActivity {
         try {
 
             HashMap<String, String> msg = new HashMap<>();
-            msg.put("uidSender", uidSender);
-            msg.put("uidAddressee", uidAddressee);
-            msg.put("message", message);
-            msg.put("date", date);
-            msg.put("key", mDatabase.getKey());
+            msg.put(Utils.UID_SENDER, uidSender);
+            msg.put(Utils.UID_ADDRESSEE, uidAddressee);
+            msg.put(Utils.MESSAGE, message);
+            msg.put(Utils.DATE, date);
+            msg.put(Utils.KEY, mDatabase.getKey());
             datadase.setValue(msg);
 
             return true;

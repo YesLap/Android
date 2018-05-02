@@ -71,6 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button btnLogOut;
     private Button btnDeleteAccount;
     private Button btnEmailUser;
+    private Button btnPasswordUser;
 
     private SimpleLocation location;
     private ProgressDialog dialog;
@@ -89,6 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
         tvAgeUser = (TextView) findViewById(R.id.tvRangeAgeUser);
         rbAgeUser = (CrystalSeekbar) findViewById(R.id.rangeAgeUser);
         btnEmailUser = (Button) findViewById(R.id.btnEmailUser);
+        btnPasswordUser = (Button) findViewById(R.id.btnPasswordUser);
 
         btnLocationSearch = (Button) findViewById(R.id.btnLocationSearch);
         btnGenderSearch = (Button) findViewById(R.id.btnGenderSearch);
@@ -215,6 +217,41 @@ public class SettingsActivity extends AppCompatActivity {
                         Utils.toastyError(getApplicationContext(), e.getMessage());
                     }
                 });
+            }
+        });
+
+        btnPasswordUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MaterialDialog.Builder(SettingsActivity.this)
+                        .title(R.string.reset_password)
+                        .content(R.string.reset_password_msg)
+                        .positiveText(getString(R.string.confirm))
+                        .negativeText(getString(R.string.cancels))
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                mAuth.sendPasswordResetEmail(mAuth.getCurrentUser().getEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Utils.toastySuccess(getApplicationContext(), getString(R.string.email_sent));
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                    }
+                                });
+                            }
+                        }).show();
             }
         });
 
