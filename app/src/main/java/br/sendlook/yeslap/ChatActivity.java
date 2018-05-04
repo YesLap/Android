@@ -94,12 +94,12 @@ public class ChatActivity extends AppCompatActivity {
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                playSoundSentMessage();
                 String message = etChat.getText().toString().trim();
 
                 if (message.isEmpty()) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.enter_a_messege_to_send));
                 } else {
+                    playSoundSentMessage();
 
                     //salva para o remetente
                     mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee).push();
@@ -142,7 +142,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
                 }
-                lvChat.smoothScrollToPosition(messages.size());
+                lvChat.smoothScrollToPosition(messages.size() - 1);
             }
         });
 
@@ -185,6 +185,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private void playSoundSentMessage() {
         MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap);
+        whooap.start();
+    }
+
+    private void playSoundSentMessageSent() {
+        MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap_sent);
         whooap.start();
     }
 

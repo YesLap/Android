@@ -106,9 +106,9 @@ public class MesageAdapter extends ArrayAdapter<Message>{
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String date = dataSnapshot.child(Utils.DATE).getValue(String.class);
                     if (date != null) {
-                        int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), date, DateTimeUnits.HOURS);
+                        int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), date, DateTimeUnits.DAYS);
 
-                        if (diff > 24) {
+                        if (diff >= 1) {
                             database.removeValue();
                             database1.removeValue();
                         }
