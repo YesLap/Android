@@ -97,7 +97,11 @@
     <string name="delete_favorite_msg">Tem certeza de que deseja excluir este favorito?</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
+<<<<<<< HEAD
     <string name="version_app">Versão 1.0.70</string>
+=======
+    <string name="version_app">Versão 1.0.68</string>
+>>>>>>> parent of 1d3c9dd... 1.0.69
     <string name="favorites">Favoritos</string>
     <string name="you_still_have_not_talked_say_hello">Vocês ainda não conversaram \n Diga Olá</string>
     <string name="new_username_msg">Digite seu novo nome de usuário</string>
@@ -109,7 +113,4 @@
     <string name="chat_removed">Conversa Removida</string>
     <string name="delete_chat_msg">Tem certeza de que deseja excluir esta conversa?</string>
     <string name="soon_this_new_feature">Em Breve novos recursos</string>
-    <string name="reset_password">Redefinir Senha</string>
-    <string name="email_sent">E-mail Enviado</string>
-    <string name="reset_password_msg">" Você quer redefinir sua senha? Nós lhe enviaremos um link para redefinir sua senha"</string>
 </resources>

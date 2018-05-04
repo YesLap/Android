@@ -99,12 +99,12 @@ public class MesageAdapter extends ArrayAdapter<Message>{
             }
 
             //Check de time of message and delete
-            final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(messages.getUidSender()).child(messages.getUidAddressee()).child(messages.getKey());
-            final DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(messages.getUidAddressee()).child(messages.getUidSender()).child(messages.getKey());
+            final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("messages").child(messages.getUidSender()).child(messages.getUidAddressee()).child(messages.getKey());
+            final DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child("messages").child(messages.getUidAddressee()).child(messages.getUidSender()).child(messages.getKey());
             database.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String date = dataSnapshot.child(Utils.DATE).getValue(String.class);
+                    String date = dataSnapshot.child("date").getValue(String.class);
                     if (date != null) {
                         int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), date, DateTimeUnits.DAYS);
 
