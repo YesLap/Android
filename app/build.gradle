@@ -7,13 +7,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         //Dont forget to change the version in the Firebase and in Settings Screen
-<<<<<<< HEAD
-        versionCode 25
-        versionName "1.0.70"
-=======
-        versionCode 23
-        versionName "1.0.68"
->>>>>>> parent of 1d3c9dd... 1.0.69
+        versionCode 26
+        versionName "1.0.71"
         //Dont forget to change the version in the Firebase
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
