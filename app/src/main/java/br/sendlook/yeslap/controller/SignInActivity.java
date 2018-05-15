@@ -1,4 +1,4 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -29,7 +29,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.util.List;
 import java.util.Objects;
 
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Utils;
 
 public class SignInActivity extends AppCompatActivity {
 

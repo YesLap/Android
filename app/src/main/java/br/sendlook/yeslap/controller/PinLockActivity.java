@@ -1,4 +1,4 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
+
+import br.sendlook.yeslap.R;
 
 public class PinLockActivity extends AppCompatActivity {
 

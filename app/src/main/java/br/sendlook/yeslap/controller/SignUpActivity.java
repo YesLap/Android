@@ -1,4 +1,4 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +25,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Utils;
 
 public class SignUpActivity extends AppCompatActivity {
 

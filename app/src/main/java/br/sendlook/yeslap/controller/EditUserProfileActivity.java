@@ -1,8 +1,6 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,9 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,7 +39,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditUserProfileActivity extends AppCompatActivity {

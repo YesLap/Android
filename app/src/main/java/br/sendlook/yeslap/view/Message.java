@@ -1,4 +1,4 @@
-package br.sendlook.yeslap.model;
+package br.sendlook.yeslap.view;
 
 public class Message {
 

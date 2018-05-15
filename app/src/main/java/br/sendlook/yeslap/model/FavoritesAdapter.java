@@ -4,7 +4,6 @@ package br.sendlook.yeslap.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +23,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
 
 import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Favorites;
+import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FavoritesAdapter extends ArrayAdapter<Favorites> {

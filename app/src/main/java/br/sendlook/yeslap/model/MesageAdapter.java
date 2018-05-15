@@ -27,6 +27,8 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Message;
+import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MesageAdapter extends ArrayAdapter<Message>{
@@ -99,8 +101,8 @@ public class MesageAdapter extends ArrayAdapter<Message>{
             }
 
             //Check de time of message and delete
-            final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("messages").child(messages.getUidSender()).child(messages.getUidAddressee()).child(messages.getKey());
-            final DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child("messages").child(messages.getUidAddressee()).child(messages.getUidSender()).child(messages.getKey());
+            final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(messages.getUidSender()).child(messages.getUidAddressee()).child(messages.getKey());
+            final DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(messages.getUidAddressee()).child(messages.getUidSender()).child(messages.getKey());
             database.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

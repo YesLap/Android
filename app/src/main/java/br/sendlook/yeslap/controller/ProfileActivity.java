@@ -1,12 +1,10 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +25,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {

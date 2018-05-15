@@ -1,4 +1,4 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,8 +27,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import br.sendlook.yeslap.model.Users;
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Users;
+import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import ru.whalemare.sheetmenu.SheetMenu;
 

@@ -32,7 +32,7 @@
         </provider>
 
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".controller.UserProfileActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,45 +44,45 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".controller.SignInActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".controller.SignUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".controller.ForgotPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EditUserProfileActivity"
+            android:name=".controller.EditUserProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CalendarActivity"
+            android:name=".controller.CalendarActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".controller.SettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FindUsersActivity"
+            android:name=".controller.FindUsersActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".controller.ChatActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ChatMessagesActivity"
+            android:name=".controller.ChatMessagesActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".controller.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ReportActivity"
+            android:name=".controller.ReportActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FavoritesActivity"
+            android:name=".controller.FavoritesActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PinLockActivity"
+            android:name=".controller.PinLockActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ImageUsernameProfileActivity" />
+        <activity android:name=".controller.ImageUsernameProfileActivity" />
     </application>
 
 </manifest>

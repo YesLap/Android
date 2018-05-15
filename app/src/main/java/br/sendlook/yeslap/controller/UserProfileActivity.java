@@ -1,4 +1,4 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -38,7 +38,9 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.BuildConfig;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileActivity extends AppCompatActivity {

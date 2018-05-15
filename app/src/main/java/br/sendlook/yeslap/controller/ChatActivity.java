@@ -1,12 +1,9 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.media.MediaPlayer;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -14,10 +11,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.github.thunder413.datetimeutils.DateTimeUnits;
-import com.github.thunder413.datetimeutils.DateTimeUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,10 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-import br.sendlook.yeslap.model.ChatMessage;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.ChatMessage;
 import br.sendlook.yeslap.model.MesageAdapter;
-import br.sendlook.yeslap.model.Message;
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.view.Message;
+import br.sendlook.yeslap.view.Utils;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -102,19 +96,19 @@ public class ChatActivity extends AppCompatActivity {
                     playSoundSentMessage();
 
                     /**Message msg = new Message();
-                    msg.setUidSender(uidSender);
-                    msg.setMessage(message);
-                    msg.setDate(getDateTimeNow());*/
+                     msg.setUidSender(uidSender);
+                     msg.setMessage(message);
+                     msg.setDate(getDateTimeNow());*/
 
                     //salva para o remetente
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(uidSender).child(uidAddressee).push();
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee).push();
                     String push = mDatabase.getKey();
                     Boolean returnSender = saveMessage(uidSender, uidAddressee, message, getDateTimeNow(), mDatabase);
                     if (!returnSender) {
                         Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
                     } else {
                         //salva para o destinatario
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(uidAddressee).child(uidSender).child(push);
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidAddressee).child(uidSender).child(push);
                         Boolean returnAddressee = saveMessage(uidSender, uidAddressee, message, getDateTimeNow(), mDatabase);
                         if (!returnAddressee) {
                             Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
@@ -155,7 +149,7 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new MesageAdapter(ChatActivity.this, messages);
         lvChat.setAdapter(adapter);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(uidSender).child(uidAddressee);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee);
 
         valueEventListenerMessages = new ValueEventListener() {
             @Override
@@ -205,8 +199,8 @@ public class ChatActivity extends AppCompatActivity {
         int dd = calendar.get(Calendar.DAY_OF_MONTH);
         int hh = calendar.get(Calendar.HOUR);
         int min = calendar.get(Calendar.MINUTE);
-        int seg  =calendar.get(Calendar.SECOND);
-        return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + min + ":" + seg ;
+        int seg = calendar.get(Calendar.SECOND);
+        return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + min + ":" + seg;
     }
 
     private void getStatus() {
@@ -280,11 +274,11 @@ public class ChatActivity extends AppCompatActivity {
         try {
 
             HashMap<String, String> msg = new HashMap<>();
-            msg.put("uidSender", uidSender);
-            msg.put("uidAddressee", uidAddressee);
-            msg.put("message", message);
-            msg.put("date", date);
-            msg.put("key", mDatabase.getKey());
+            msg.put(Utils.UID_SENDER, uidSender);
+            msg.put(Utils.UID_ADDRESSEE, uidAddressee);
+            msg.put(Utils.MESSAGE, message);
+            msg.put(Utils.DATE, date);
+            msg.put(Utils.KEY, mDatabase.getKey());
             datadase.setValue(msg);
 
             return true;

@@ -1,17 +1,13 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +22,6 @@ import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
-import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -43,7 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Utils;
 import im.delight.android.location.SimpleLocation;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -71,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button btnLogOut;
     private Button btnDeleteAccount;
     private Button btnEmailUser;
+    private Button btnPasswordUser;
 
     private SimpleLocation location;
     private ProgressDialog dialog;
@@ -100,6 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnLicense = (Button) findViewById(R.id.btnLicenses);
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
         btnDeleteAccount = (Button) findViewById(R.id.btnDeleteAccount);
+        btnPasswordUser = (Button) findViewById(R.id.btnPasswordUser);
 
 
         getCurrentLocation();
@@ -186,6 +184,41 @@ public class SettingsActivity extends AppCompatActivity {
 
                         break;
                 }
+            }
+        });
+
+        btnPasswordUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MaterialDialog.Builder(SettingsActivity.this)
+                        .title(R.string.reset_password)
+                        .content(R.string.reset_password_msg)
+                        .positiveText(getString(R.string.confirm))
+                        .negativeText(getString(R.string.cancels))
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                mAuth.sendPasswordResetEmail(mAuth.getCurrentUser().getEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Utils.toastySuccess(getApplicationContext(), getString(R.string.email_sent));
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                    }
+                                });
+                            }
+                        }).show();
             }
         });
 
@@ -303,7 +336,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void checkIfGpsIsOn() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             new MaterialDialog.Builder(SettingsActivity.this)
                     .title("GPS OFF")
                     .content("You need to call your location so we can find you.")

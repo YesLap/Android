@@ -1,11 +1,10 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,15 +26,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import br.sendlook.yeslap.model.ChatMessage;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.ChatMessage;
 import br.sendlook.yeslap.model.ChatMessageAdapter;
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.view.Utils;
 import ru.whalemare.sheetmenu.SheetMenu;
 
 public class ChatMessagesActivity extends AppCompatActivity {

@@ -1,12 +1,10 @@
-package br.sendlook.yeslap;
+package br.sendlook.yeslap.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +15,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -31,9 +28,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import br.sendlook.yeslap.model.Favorites;
+import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.Favorites;
 import br.sendlook.yeslap.model.FavoritesAdapter;
-import br.sendlook.yeslap.model.Utils;
+import br.sendlook.yeslap.view.Utils;
 import ru.whalemare.sheetmenu.SheetMenu;
 
 public class FavoritesActivity extends AppCompatActivity {
