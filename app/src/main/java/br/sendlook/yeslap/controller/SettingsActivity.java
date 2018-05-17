@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
@@ -32,6 +33,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -59,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button btnLocationSearch;
     private Button btnGenderSearch;
     private String genderSearch = "female";
-    private TextView tvAgeSearch;
+    private TextView tvAgeSearch, tvRangeAgeSearch;
     private CrystalRangeSeekbar rbAgeSearch;
     private Button btnPrivacyPolicy;
     private Button btnTermsService;
@@ -91,6 +94,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnGenderSearch = (Button) findViewById(R.id.btnGenderSearch);
         tvAgeSearch = (TextView) findViewById(R.id.tvRangeAgeSearch);
         rbAgeSearch = (CrystalRangeSeekbar) findViewById(R.id.rangeAgeSearch);
+        tvRangeAgeSearch = (TextView) findViewById(R.id.tvRangeAgeSearch);
 
         btnPrivacyPolicy = (Button) findViewById(R.id.btnPrivacyPolicy);
         btnTermsService = (Button) findViewById(R.id.btnTermsService);
@@ -116,6 +120,9 @@ public class SettingsActivity extends AppCompatActivity {
         btnGenderUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+
                 switch (genderUser) {
                     case "male":
 
@@ -123,13 +130,12 @@ public class SettingsActivity extends AppCompatActivity {
                         genderUser = "female";
                         btnGenderUser.setText(getString(R.string.female));
 
-                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         HashMap<String, Object> gender = new HashMap<>();
                         gender.put(Utils.GENDER_USER, genderUser);
                         database.updateChildren(gender).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Log.d("Gender Updated", String.format("Gender Updated: %s", genderUser));
+                                Log.d("Gender User Updated", String.format("Gender User Updated: %s", genderUser));
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -145,10 +151,9 @@ public class SettingsActivity extends AppCompatActivity {
                         genderUser = "gay";
                         btnGenderUser.setText(getString(R.string.gay));
 
-                        DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         HashMap<String, Object> gender1 = new HashMap<>();
                         gender1.put(Utils.GENDER_USER, genderUser);
-                        database1.updateChildren(gender1).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        database.updateChildren(gender1).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 Log.d("Gender Updated", String.format("Gender Updated: %s", genderUser));
@@ -167,10 +172,9 @@ public class SettingsActivity extends AppCompatActivity {
                         genderUser = "male";
                         btnGenderUser.setText(getString(R.string.male));
 
-                        DatabaseReference database2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                         HashMap<String, Object> gender2 = new HashMap<>();
                         gender2.put(Utils.GENDER_USER, genderUser);
-                        database2.updateChildren(gender2).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        database.updateChildren(gender2).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 Log.d("Gender Updated", String.format("Gender Updated: %s", genderUser));
@@ -262,33 +266,106 @@ public class SettingsActivity extends AppCompatActivity {
         btnGenderSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+
                 switch (genderSearch) {
                     case "male":
+
                         btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
                         genderSearch = "female";
                         btnGenderSearch.setText(getString(R.string.female));
+
+                        HashMap<String, Object> searchFemale = new HashMap<>();
+                        searchFemale.put(Utils.GENDER_SEARCH, genderSearch);
+                        database.updateChildren(searchFemale).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("Gender Search Updated", String.format("Gender Search Updated: %s", genderUser));
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+                        });
+
                         break;
                     case "female":
+
                         btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
                         genderSearch = "gay";
                         btnGenderSearch.setText(getString(R.string.gay));
+
+                        HashMap<String, Object> searchGay = new HashMap<>();
+                        searchGay.put(Utils.GENDER_SEARCH, genderSearch);
+                        database.updateChildren(searchGay).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("Gender Search Updated", String.format("Gender Search Updated: %s", genderUser));
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+                        });
+
                         break;
                     case "gay":
+
                         btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
                         genderSearch = "male";
                         btnGenderSearch.setText(getString(R.string.male));
+
+                        HashMap<String, Object> searchMale = new HashMap<>();
+                        searchMale.put(Utils.GENDER_SEARCH, genderSearch);
+                        database.updateChildren(searchMale).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("Gender Search Updated", String.format("Gender Search Updated: %s", genderUser));
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+                        });
+
                         break;
                 }
             }
         });
 
-        rbAgeSearch.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+        rbAgeSearch.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
-            public void valueChanged(Number minValue, Number maxValue) {
-                tvAgeSearch.setText(String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
+            public void finalValue(final Number minValue, final Number maxValue) {
+                tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                HashMap<String, Object> ageSearch = new HashMap<>();
+                ageSearch.put(Utils.AGE_SEARCH_MIN, String.valueOf(minValue));
+                ageSearch.put(Utils.AGE_SEARCH_MAX, String.valueOf(maxValue));
+                database.updateChildren(ageSearch).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("AGE SEARCH", String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                    }
+                });
             }
         });
-
 
         btnPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -397,16 +474,20 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String age = dataSnapshot.child(Utils.AGE_USER).getValue(String.class);
-                String gender = dataSnapshot.child(Utils.GENDER_USER).getValue(String.class);
+                String ageUser = dataSnapshot.child(Utils.AGE_USER).getValue(String.class);
+                String genderUser = dataSnapshot.child(Utils.GENDER_USER).getValue(String.class);
+
+                String genderSearch = dataSnapshot.child(Utils.GENDER_SEARCH).getValue(String.class);
+                String ageSearchMin = dataSnapshot.child(Utils.AGE_SEARCH_MIN).getValue(String.class);
+                String ageSearchMax = dataSnapshot.child(Utils.AGE_SEARCH_MAX).getValue(String.class);
 
                 //AGE
-                if (age != null) {
-                    tvAgeUser.setText(String.valueOf(age));
-                    rbAgeUser.setMinStartValue(Float.valueOf(age)).apply();
+                if (ageUser != null) {
+                    tvAgeUser.setText(String.valueOf(ageUser));
+                    rbAgeUser.setMinStartValue(Float.valueOf(ageUser)).apply();
                     if (dialog.isShowing()) {
                         dialog.dismiss();
                     }
@@ -416,28 +497,57 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 }
 
-                //GENDER
-                if (gender != null) {
-                    switch (gender) {
+                //GENDER USER
+                if (genderUser != null) {
+                    switch (genderUser) {
                         case "male":
                             btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
-                            genderUser = gender;
-                            btnGenderUser.setText(gender);
+                            SettingsActivity.this.genderUser = genderUser;
+                            btnGenderUser.setText(genderUser);
                             break;
                         case "female":
                             btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, R.drawable.settings_right_arrow, 0);
-                            genderUser = gender;
-                            btnGenderUser.setText(gender);
+                            SettingsActivity.this.genderUser = genderUser;
+                            btnGenderUser.setText(genderUser);
                             break;
                         case "gay":
                             btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
-                            genderUser = gender;
-                            btnGenderUser.setText(gender);
+                            SettingsActivity.this.genderUser = genderUser;
+                            btnGenderUser.setText(genderUser);
                             break;
                     }
                 }
 
+                //GENDER SEARCH
+                if (genderSearch != null) {
+                    switch (genderSearch) {
+                        case "male":
+                            btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
+                            SettingsActivity.this.genderSearch = genderSearch;
+                            btnGenderSearch.setText(genderSearch);
+                            break;
+                        case "female":
+                            btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, R.drawable.settings_right_arrow, 0);
+                            SettingsActivity.this.genderSearch = genderSearch;
+                            btnGenderSearch.setText(genderSearch);
+                            break;
+                        case "gay":
+                            btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
+                            SettingsActivity.this.genderSearch = genderSearch;
+                            btnGenderSearch.setText(genderSearch);
+                            break;
+                    }
+                }
+
+                //EMAIL USER
                 btnEmailUser.setText(mAuth.getCurrentUser().getEmail());
+
+                //AGE SEARCH
+                if (ageSearchMin != null && ageSearchMax != null) {
+                    rbAgeSearch.setMinStartValue(Float.valueOf(ageSearchMin)).apply();
+                    rbAgeSearch.setMaxStartValue(Float.valueOf(ageSearchMax)).apply();
+                    tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(ageSearchMin), String.valueOf(ageSearchMax)));
+                }
 
             }
 

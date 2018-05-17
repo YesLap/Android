@@ -240,7 +240,7 @@
             android:drawableStart="@drawable/settings_icon_location"
             android:paddingEnd="30dp"
             android:paddingStart="30dp"
-            android:text="@string/user_location"
+            android:text="@string/soon"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

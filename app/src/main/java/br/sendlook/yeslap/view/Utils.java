@@ -64,6 +64,9 @@ public class Utils {
     public static final String REPORTS = "reports";
 
     public static final String GENDER_USER = "genderUser";
+    public static final String GENDER_SEARCH = "genderSearch";
+    public static final String AGE_SEARCH_MIN = "ageSearchMin";
+    public static final String AGE_SEARCH_MAX = "ageSearchMax";
     public static final String LATITUDE_USER = "latitudeUser";
     public static final String LONGITUDE_USER = "longitudeUser";
     public static final String AGE_USER = "ageUser";

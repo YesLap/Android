@@ -566,25 +566,25 @@ public class CalendarActivity extends AppCompatActivity {
                             AfternoonTue = true;
                         } else if (Objects.equals(week, Utils.TUESDAY) && Objects.equals(turn, Utils.NIGHT)) {
                             NightTue = true;
-                        }else if (Objects.equals(week, Utils.WEDNESDAY) && Objects.equals(turn, Utils.MORNING)) {
+                        } else if (Objects.equals(week, Utils.WEDNESDAY) && Objects.equals(turn, Utils.MORNING)) {
                             MorningWed = true;
                         } else if (Objects.equals(week, Utils.WEDNESDAY) && Objects.equals(turn, Utils.AFTERNOON)) {
                             AfternoonWed = true;
                         } else if (Objects.equals(week, Utils.WEDNESDAY) && Objects.equals(turn, Utils.NIGHT)) {
                             NightWed = true;
-                        }else if (Objects.equals(week, Utils.THURSDAY) && Objects.equals(turn, Utils.MORNING)) {
+                        } else if (Objects.equals(week, Utils.THURSDAY) && Objects.equals(turn, Utils.MORNING)) {
                             MorningThu = true;
                         } else if (Objects.equals(week, Utils.THURSDAY) && Objects.equals(turn, Utils.AFTERNOON)) {
                             AfternoonThu = true;
                         } else if (Objects.equals(week, Utils.THURSDAY) && Objects.equals(turn, Utils.NIGHT)) {
                             NightThu = true;
-                        }else if (Objects.equals(week, Utils.FRIDAY) && Objects.equals(turn, Utils.MORNING)) {
+                        } else if (Objects.equals(week, Utils.FRIDAY) && Objects.equals(turn, Utils.MORNING)) {
                             MorningFri = true;
                         } else if (Objects.equals(week, Utils.FRIDAY) && Objects.equals(turn, Utils.AFTERNOON)) {
                             AfternoonFri = true;
                         } else if (Objects.equals(week, Utils.FRIDAY) && Objects.equals(turn, Utils.NIGHT)) {
                             NightFri = true;
-                        }else if (Objects.equals(week, Utils.SATURDAY) && Objects.equals(turn, Utils.MORNING)) {
+                        } else if (Objects.equals(week, Utils.SATURDAY) && Objects.equals(turn, Utils.MORNING)) {
                             MorningSat = true;
                         } else if (Objects.equals(week, Utils.SATURDAY) && Objects.equals(turn, Utils.AFTERNOON)) {
                             AfternoonSat = true;
