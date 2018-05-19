@@ -97,7 +97,7 @@
     <string name="delete_favorite_msg">Tem certeza de que deseja excluir este favorito?</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
-    <string name="version_app">Versão 1.0.73</string>
+    <string name="version_app">Versão 1.0.74</string>
     <string name="favorites">Favoritos</string>
     <string name="you_still_have_not_talked_say_hello">Vocês ainda não conversaram \n Diga Olá</string>
     <string name="new_username_msg">Digite seu novo nome de usuário</string>
@@ -112,4 +112,13 @@
     <string name="reset_password">Redefinir Senha</string>
     <string name="email_sent">E-mail Enviado</string>
     <string name="reset_password_msg">" Você quer redefinir sua senha? Nós lhe enviaremos um link para redefinir sua senha"</string>
+    <string name="current_email">E-mail Atual</string>
+    <string name="current_password">Senha Atual</string>
+    <string name="new_email">Novo E-mail</string>
+    <string name="update_email">Atualizar E-mail</string>
+    <string name="fill_current_email">Preencha  seu E-mail Atual</string>
+    <string name="fill_your_password">Preencha sua Senha</string>
+    <string name="fill_new_email">Preencha seu novo E-mail</string>
+    <string name="email_changed">Seu E-mail foi alterado!</string>
+    <string name="change_email">Alterar E-mail</string>
 </resources>

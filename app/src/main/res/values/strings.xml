@@ -29,7 +29,7 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app" >Version 1.0.73</string>
+    <string name="version_app" >Version 1.0.74</string>
     <string name="legal" translatable="false">LEGAL</string>
     <string name="licenses">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
@@ -114,4 +114,13 @@
     <string name="reset_password">Reset Password</string>
     <string name="reset_password_msg">Do you want to reset your password? We will email you with a link to reset your password</string>
     <string name="email_sent">E-mail Sent</string>
+    <string name="current_email">Current E-mail</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_email">New E-mail</string>
+    <string name="update_email">Update E-mail</string>
+    <string name="fill_current_email">Fill in your current E-mail</string>
+    <string name="fill_your_password">fill in your Password</string>
+    <string name="fill_new_email">fill in your New E-mail</string>
+    <string name="email_changed">You E-mail has been changed!</string>
+    <string name="change_email">Change E-mail</string>
 </resources>

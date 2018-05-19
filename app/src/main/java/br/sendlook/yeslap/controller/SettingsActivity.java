@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,9 +24,12 @@ import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
+import com.firebase.client.FirebaseError;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,12 +44,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.view.DialogNewEmail;
 import br.sendlook.yeslap.view.Utils;
 import im.delight.android.location.SimpleLocation;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements DialogNewEmail.DialogNewEmailListener {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -115,7 +121,13 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        ivGoToChat.setOnClickListener(callActivity(ChatActivity.class));
+        ivGoToChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, ChatMessagesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnGenderUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -343,6 +355,14 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        btnEmailUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogNewEmail newEmail = new DialogNewEmail();
+                newEmail.show(getSupportFragmentManager(), "newEmail");
+            }
+        });
+
         rbAgeSearch.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
             public void finalValue(final Number minValue, final Number maxValue) {
@@ -474,7 +494,7 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        database.addValueEventListener(new ValueEventListener() {
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String ageUser = dataSnapshot.child(Utils.AGE_USER).getValue(String.class);
@@ -556,6 +576,64 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void changeEmail(String currentEmail, String currentPassword, final String newEmail) {
+
+        if (Objects.equals(currentEmail, "")) {
+            Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_current_email));
+        } else if (Objects.equals(currentPassword, "")) {
+            Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_your_password));
+        } else if (Objects.equals(newEmail, "")) {
+            Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_new_email));
+        } else {
+            dialog = new ProgressDialog(SettingsActivity.this);
+            dialog.setMessage(getString(R.string.loading));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currentPassword);
+            user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        user.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
+                                    }
+                                    btnEmailUser.setText(mAuth.getCurrentUser().getEmail());
+                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.email_changed));
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+                        });
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                    Utils.toastyError(getApplicationContext(), e.getMessage());
+
+                }
+            });
+        }
+
     }
 
     @Override
