@@ -270,7 +270,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnLocationSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // implementar
+                //TODO:Implementar Localização de procura do usuário
                 Utils.toastyInfo(getApplicationContext(), "Buinding");
             }
         });
@@ -363,9 +363,9 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
             }
         });
 
-        rbAgeSearch.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
+        rbAgeSearch.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
-            public void finalValue(final Number minValue, final Number maxValue) {
+            public void valueChanged(final Number minValue, final Number maxValue) {
                 tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                 HashMap<String, Object> ageSearch = new HashMap<>();
@@ -581,12 +581,12 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
     @Override
     public void changeEmail(String currentEmail, String currentPassword, final String newEmail) {
 
-        if (Objects.equals(currentEmail, "")) {
-            Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_current_email));
-        } else if (Objects.equals(currentPassword, "")) {
+        if (Objects.equals(currentPassword, "")) {
             Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_your_password));
         } else if (Objects.equals(newEmail, "")) {
             Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_new_email));
+        } else if (Objects.equals(newEmail, mAuth.getCurrentUser().getEmail())) {
+            Utils.toastyInfo(getApplicationContext(), getString(R.string.email_equal_new));
         } else {
             dialog = new ProgressDialog(SettingsActivity.this);
             dialog.setMessage(getString(R.string.loading));

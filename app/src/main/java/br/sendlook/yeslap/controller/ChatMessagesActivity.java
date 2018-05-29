@@ -55,8 +55,6 @@ public class ChatMessagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_messages);
 
-        //TODO: METODO PARA VERIFICAR SE HA MENSAGENS SENAO COLOCAR MENSGEM QUE NAO HÁ MENSAGEM
-
         //Instatiate Firebase
         mAuth = FirebaseAuth.getInstance();
 
@@ -248,10 +246,10 @@ public class ChatMessagesActivity extends AppCompatActivity {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                String image = dataSnapshot.child("image1").getValue(String.class);
+                String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+                String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
 
-                if (Objects.equals(username, "Username") || Objects.equals(image, "")) {
+                if (Objects.equals(username, Utils.USERNAME) || Objects.equals(image, "")) {
                     dialog.dismiss();
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.please_change_image_username));
                 } else {

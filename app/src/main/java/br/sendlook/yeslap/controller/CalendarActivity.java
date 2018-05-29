@@ -36,7 +36,7 @@ public class CalendarActivity extends AppCompatActivity {
     private ImageView ivMorningSun, ivMorningMon, ivMorningTue, ivMorningWed, ivMorningThu, ivMorningFri, ivMorningSat;
     private ImageView ivAfternoonSun, ivAfternoonMon, ivAfternoonTue, ivAfternoonWed, ivAfternoonThu, ivAfternoonFri, ivAfternoonSat;
     private ImageView ivNightSun, ivNightMon, ivNightTue, ivNightWed, ivNightThu, ivNightFri, ivNightSat;
-    private ToggleButton tbAvailabilitySun, tbAvailabilityMon, tbAvailabilityTue, tbAvailabilityWed, tbAvailabilityThu, tbAvailabilityFri, tbAvailabilitySat;
+    private com.suke.widget.SwitchButton tbAvailabilitySun, tbAvailabilityMon, tbAvailabilityTue, tbAvailabilityWed, tbAvailabilityThu, tbAvailabilityFri, tbAvailabilitySat;
     private ImageView btnGoToProfile, btnGoToSettings;
     private RelativeLayout btnCalendar, btnChat, btnSearch;
     private ProgressDialog dialog;
@@ -89,13 +89,13 @@ public class CalendarActivity extends AppCompatActivity {
         ivNightFri = (ImageView) findViewById(R.id.ivNightFri);
         ivNightSat = (ImageView) findViewById(R.id.ivNightSat);
 
-        tbAvailabilitySun = (ToggleButton) findViewById(R.id.tbAvailabilitySun);
-        tbAvailabilityMon = (ToggleButton) findViewById(R.id.tbAvailabilityMon);
-        tbAvailabilityTue = (ToggleButton) findViewById(R.id.tbAvailabilityTue);
-        tbAvailabilityWed = (ToggleButton) findViewById(R.id.tbAvailabilityWed);
-        tbAvailabilityThu = (ToggleButton) findViewById(R.id.tbAvailabilityThu);
-        tbAvailabilityFri = (ToggleButton) findViewById(R.id.tbAvailabilityFri);
-        tbAvailabilitySat = (ToggleButton) findViewById(R.id.tbAvailabilitySat);
+        tbAvailabilitySun = (com.suke.widget.SwitchButton) findViewById(R.id.tbAvailabilitySun);
+        tbAvailabilityMon = (com.suke.widget.SwitchButton) findViewById(R.id.tbAvailabilityMon);
+        tbAvailabilityTue = (com.suke.widget.SwitchButton) findViewById(R.id.tbAvailabilityTue);
+        tbAvailabilityWed = (com.suke.widget.SwitchButton) findViewById(R.id.tbAvailabilityWed);
+        tbAvailabilityThu = (com.suke.widget.SwitchButton) findViewById(R.id.tbAvailabilityThu);
+        tbAvailabilityFri = (com.suke.widget.SwitchButton) findViewById(R.id.tbAvailabilityFri);
+        tbAvailabilitySat = (com.suke.widget.SwitchButton) findViewById(R.id.tbAvailabilitySat);
 
         getCalendar();
 
@@ -417,7 +417,7 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
-    private void setCalendar(String week, String turn, ToggleButton toogle) {
+    private void setCalendar(String week, String turn, com.suke.widget.SwitchButton toogle) {
         //Check if the button is activated
         if (!toogle.isChecked()) {
             Utils.toastyInfo(getApplicationContext(), "Please, active the button");
@@ -530,7 +530,7 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
-    private void getDayAndTurn(final String week, final String turn, final ImageView imageview, final ToggleButton toggleButton) {
+    private void getDayAndTurn(final String week, final String turn, final ImageView imageview, final com.suke.widget.SwitchButton toggleButton) {
         final String uid = mAuth.getCurrentUser().getUid();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CALENDAR).child(week).child(turn);
         database.addValueEventListener(new ValueEventListener() {

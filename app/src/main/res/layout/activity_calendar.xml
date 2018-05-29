@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
     android:layout_height="match_parent"
-    tools:context="com.sendlook.yeslap.CalendarActivity">
+    android:background="@android:color/white"
+    tools:context="br.sendlook.yeslap.controller.CalendarActivity">
 
     <ImageView
         android:id="@+id/btnGoToProfile"
@@ -20,19 +20,19 @@
         android:id="@+id/btnGoToSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="30sp"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="15sp"
+        android:layout_marginEnd="30sp"
         android:src="@drawable/gotosetting" />
 
     <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/linearLayout"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="100dp"
-        android:id="@+id/relativeLayout2">
+        android:layout_marginTop="75dp">
 
         <ImageView
             android:id="@+id/ivSun"
@@ -80,18 +80,13 @@
             android:layout_toEndOf="@+id/ivAfternoonSun"
             android:src="@drawable/iconnightoff" />
 
-        <ToggleButton
+        <com.suke.widget.SwitchButton
             android:id="@+id/tbAvailabilitySun"
-            android:layout_width="55sp"
-            android:layout_height="35sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightSun"
-            android:background="@drawable/toggle_selector"
-            android:checked="false"
-            android:text=""
-            android:textOff=""
-            android:textOn="" />
+            android:layout_toEndOf="@+id/ivNightSun" />
 
     </RelativeLayout>
 
@@ -99,9 +94,9 @@
         android:id="@+id/relativeLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5sp"
+        android:layout_below="@+id/relativeLayout2"
         android:layout_alignStart="@+id/relativeLayout4"
-        android:layout_below="@+id/relativeLayout2">
+        android:layout_marginTop="5sp">
 
         <ImageView
             android:id="@+id/ivMon"
@@ -149,28 +144,23 @@
             android:layout_toEndOf="@+id/ivAfternoonMon"
             android:src="@drawable/iconnightoff" />
 
-        <ToggleButton
+        <com.suke.widget.SwitchButton
             android:id="@+id/tbAvailabilityMon"
-            android:layout_width="55sp"
-            android:layout_height="35sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightMon"
-            android:background="@drawable/toggle_selector"
-            android:checked="false"
-            android:text=""
-            android:textOff=""
-            android:textOn="" />
+            android:layout_toEndOf="@+id/ivNightMon" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5sp"
-        android:layout_alignStart="@+id/relativeLayout2"
         android:layout_below="@+id/relativeLayout3"
-        android:id="@+id/relativeLayout4">
+        android:layout_alignStart="@+id/relativeLayout2"
+        android:layout_marginTop="5sp">
 
         <ImageView
             android:id="@+id/ivTue"
@@ -218,27 +208,22 @@
             android:layout_toEndOf="@+id/ivAfternoonTue"
             android:src="@drawable/iconnightoff" />
 
-        <ToggleButton
+        <com.suke.widget.SwitchButton
             android:id="@+id/tbAvailabilityTue"
-            android:layout_width="55sp"
-            android:layout_height="35sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightTue"
-            android:background="@drawable/toggle_selector"
-            android:checked="false"
-            android:text=""
-            android:textOff=""
-            android:textOn="" />
+            android:layout_toEndOf="@+id/ivNightTue" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5sp"
-        android:layout_alignStart="@+id/relativeLayout4"
         android:layout_below="@+id/relativeLayout4"
-        android:id="@+id/relativeLayout5">
+        android:layout_alignStart="@+id/relativeLayout4"
+        android:layout_marginTop="5sp">
 
         <ImageView
             android:id="@+id/ivWed"
@@ -286,28 +271,23 @@
             android:layout_toEndOf="@+id/ivAfternoonWed"
             android:src="@drawable/iconnightoff" />
 
-        <ToggleButton
+        <com.suke.widget.SwitchButton
             android:id="@+id/tbAvailabilityWed"
-            android:layout_width="55sp"
-            android:layout_height="35sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightWed"
-            android:background="@drawable/toggle_selector"
-            android:checked="false"
-            android:text=""
-            android:textOff=""
-            android:textOn="" />
+            android:layout_toEndOf="@+id/ivNightWed" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5sp"
-        android:layout_alignStart="@+id/relativeLayout5"
         android:layout_below="@+id/relativeLayout5"
-        android:id="@+id/relativeLayout6">
+        android:layout_alignStart="@+id/relativeLayout5"
+        android:layout_marginTop="5sp">
 
         <ImageView
             android:id="@+id/ivThu"
@@ -374,28 +354,23 @@
             android:layout_toEndOf="@+id/ivAfternoonThu"
             android:src="@drawable/iconnightoff" />
 
-        <ToggleButton
+        <com.suke.widget.SwitchButton
             android:id="@+id/tbAvailabilityThu"
-            android:layout_width="55sp"
-            android:layout_height="35sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightThu"
-            android:background="@drawable/toggle_selector"
-            android:checked="false"
-            android:text=""
-            android:textOff=""
-            android:textOn="" />
+            android:layout_toEndOf="@+id/ivNightThu" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout7"
         android:layout_width="wrap_content"
-        android:layout_marginTop="5sp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/relativeLayout6"
         android:layout_below="@+id/relativeLayout6"
-        android:id="@+id/relativeLayout7">
+        android:layout_alignStart="@+id/relativeLayout6"
+        android:layout_marginTop="5sp">
 
         <ImageView
             android:id="@+id/ivFri"
@@ -444,28 +419,23 @@
             android:layout_toEndOf="@+id/ivAfternoonFri"
             android:src="@drawable/iconnightoff" />
 
-        <ToggleButton
+        <com.suke.widget.SwitchButton
             android:id="@+id/tbAvailabilityFri"
-            android:layout_width="55sp"
-            android:layout_height="35sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightFri"
-            android:background="@drawable/toggle_selector"
-            android:checked="false"
-            android:text=""
-            android:textOff=""
-            android:textOn="" />
+            android:layout_toEndOf="@+id/ivNightFri" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout8"
         android:layout_width="wrap_content"
-        android:layout_marginTop="5sp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout7"
         android:layout_alignStart="@+id/relativeLayout7"
-        android:layout_below="@+id/relativeLayout7">
+        android:layout_marginTop="5sp">
 
         <ImageView
             android:id="@+id/ivSat"
@@ -513,18 +483,13 @@
             android:layout_toEndOf="@+id/ivAfternoonSat"
             android:src="@drawable/iconnightoff" />
 
-        <ToggleButton
+        <com.suke.widget.SwitchButton
             android:id="@+id/tbAvailabilitySat"
-            android:layout_width="55sp"
-            android:layout_height="35sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="25dp"
-            android:layout_toEndOf="@+id/ivNightSat"
-            android:background="@drawable/toggle_selector"
-            android:checked="false"
-            android:text=""
-            android:textOff=""
-            android:textOn="" />
+            android:layout_toEndOf="@+id/ivNightSat"/>
 
     </RelativeLayout>
 
@@ -587,14 +552,14 @@
 
     </LinearLayout>
 
-        <ImageView
+    <ImageView
+        android:id="@+id/imageView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:adjustViewBounds="true"
         android:cropToPadding="true"
-        android:src="@drawable/wavebottom"
-        android:id="@+id/imageView5" />
+        android:src="@drawable/wavebottom" />
 
 </RelativeLayout>

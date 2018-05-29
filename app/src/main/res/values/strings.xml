@@ -29,7 +29,7 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app" >Version 1.0.74</string>
+    <string name="version_app" >Version 1.0.75</string>
     <string name="legal" translatable="false">LEGAL</string>
     <string name="licenses">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
@@ -91,7 +91,7 @@
     <string name="sending_image">Please wait while we update your profile picture</string>
     <string name="permission_granted">Permissions Granted!</string>
     <string name="permission_need_be_granted">All Permissions Need To Be Granted!</string>
-    <string name="user_location">User Location</string>
+    <string name="user_location">Location</string>
     <string name="pass" translatable="false">* * * * * * * *</string>
     <string name="terms_of_services">Terms Of Services</string>
     <string name="delete_favorite">Delete Favorite</string>
@@ -123,4 +123,5 @@
     <string name="fill_new_email">fill in your New E-mail</string>
     <string name="email_changed">You E-mail has been changed!</string>
     <string name="change_email">Change E-mail</string>
+    <string name="email_equal_new">New email just like your current one</string>
 </resources>

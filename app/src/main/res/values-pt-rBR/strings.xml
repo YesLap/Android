@@ -89,7 +89,7 @@
     <string name="sending_image">Por favor aguarde enquanto atualizamos sua foto de perfil</string>
     <string name="permission_granted">Permições Concedida</string>
     <string name="permission_need_be_granted">Todas as permições precisa ser concedidas</string>
-    <string name="user_location">Localização do Usuário</string>
+    <string name="user_location">Localização</string>
     <string name="terms_of_services">Termos de Serviçp</string>
     <string name="delete_favorite">Deletar Favorito</string>
     <string name="favorite_removed">Favorito Deletado</string>
@@ -97,7 +97,7 @@
     <string name="delete_favorite_msg">Tem certeza de que deseja excluir este favorito?</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
-    <string name="version_app">Versão 1.0.74</string>
+    <string name="version_app">Versão 1.0.75</string>
     <string name="favorites">Favoritos</string>
     <string name="you_still_have_not_talked_say_hello">Vocês ainda não conversaram \n Diga Olá</string>
     <string name="new_username_msg">Digite seu novo nome de usuário</string>
@@ -121,4 +121,5 @@
     <string name="fill_new_email">Preencha seu novo E-mail</string>
     <string name="email_changed">Seu E-mail foi alterado!</string>
     <string name="change_email">Alterar E-mail</string>
+    <string name="email_equal_new">Novo e-mail igual ao seu atual</string>
 </resources>

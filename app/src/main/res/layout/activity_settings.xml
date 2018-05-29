@@ -267,7 +267,7 @@
             android:drawableStart="@drawable/settings_icon_female"
             android:paddingEnd="30dp"
             android:paddingStart="30dp"
-            android:text="Button"
+            android:text="@string/female"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
