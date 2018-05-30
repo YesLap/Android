@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ceylonlabs.imageviewpopup.ImagePopup;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -140,6 +141,36 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, FindUsersActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        ivImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePopup imagePopup = new ImagePopup(ProfileActivity.this);
+                imagePopup.initiatePopup(ivImage1.getDrawable());
+                imagePopup.setImageOnClickClose(true);
+                imagePopup.viewPopup();
+            }
+        });
+
+        ivImage2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePopup imagePopup = new ImagePopup(ProfileActivity.this);
+                imagePopup.initiatePopup(ivImage2.getDrawable());
+                imagePopup.setImageOnClickClose(true);
+                imagePopup.viewPopup();
+            }
+        });
+
+        ivImage3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePopup imagePopup = new ImagePopup(ProfileActivity.this);
+                imagePopup.initiatePopup(ivImage3.getDrawable());
+                imagePopup.setImageOnClickClose(true);
+                imagePopup.viewPopup();
             }
         });
 
