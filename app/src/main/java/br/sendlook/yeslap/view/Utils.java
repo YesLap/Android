@@ -4,22 +4,11 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
 public class Utils {
-
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
 
     public static final String USERS = "users";
     public static final String USER_IMAGES = "user_images";
@@ -71,6 +60,15 @@ public class Utils {
     public static final String LONGITUDE_USER = "longitudeUser";
     public static final String AGE_USER = "ageUser";
 
+    //TODO: Colocar a URL de onde esta o arquivo
+    public static final String URL_SIGN_UP = "";
+    public static final String EMAIL_APP = "email_app";
+    public static final String PASSWORD_APP = "password_app";
+    public static final String SIGN_UP_CODE = "signUp";
+
+    public static final String CODE_SUCCESS = "200";
+    public static final String CODE_ERROR_EMAIL = "201";
+    public static final String CODE_ERROR = "300";
 
     public static void toastySuccess(Context context, String msg) {
         Toasty.success(context, msg, Toast.LENGTH_LONG, true).show();

@@ -3,56 +3,42 @@ package br.sendlook.yeslap.controller;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Objects;
 
 import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Utils;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText etEmail, etPassword, etRetypePassword;
-    private ImageView btnSignUp;
     private TextView tvHaveAccount;
     private ProgressDialog dialog;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        //Instantiate Firebase
-        mAuth = FirebaseAuth.getInstance();
-
         //Cast
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etRetypePassword = (EditText) findViewById(R.id.etRetypePassword);
-        btnSignUp = (ImageView) findViewById(R.id.btnSignUp);
+        findViewById(R.id.btnSignUp).setOnClickListener(this);
         tvHaveAccount = (TextView) findViewById(R.id.tvHaveAccount);
 
-        //Button Event
+        /** //Button Event
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
 
         //tvHaveAccount Event Button
         tvHaveAccount.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +125,79 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnSignUp:
+
+                String email = etEmail.getText().toString();
+                String password = etPassword.getText().toString();
+                String retypePassword = etRetypePassword.getText().toString();
+
+                if (Objects.equals(email, "")) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_email));
+                } else if (Objects.equals(password, "")) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_password));
+                } else if (Objects.equals(retypePassword, "")) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.retype_password));
+                } else if (!Objects.equals(password, retypePassword)) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.password_not_match));
+                } else {
+
+                    dialog = new ProgressDialog(SignUpActivity.this);
+                    dialog.setTitle(getString(R.string.loading));
+                    dialog.setMessage(getString(R.string.loading_msg));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
+                    Ion.with(this)
+                            .load(Utils.URL_SIGN_UP)
+                            .setBodyParameter(Utils.EMAIL_APP, email)
+                            .setBodyParameter(Utils.PASSWORD_APP, password)
+                            .asJsonObject()
+                            .setCallback(new FutureCallback<JsonObject>() {
+                                @Override
+                                public void onCompleted(Exception e, JsonObject result) {
+                                    try {
+                                        String returnApp = result.get(Utils.SIGN_UP_CODE).getAsString();
+
+                                        switch (returnApp) {
+                                            case Utils.CODE_SUCCESS:
+                                                dialog.dismiss();
+                                                Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
+                                                Intent intent = new Intent(SignUpActivity.this, ImageUsernameProfileActivity.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                                break;
+                                            case Utils.CODE_ERROR_EMAIL:
+                                                if (dialog.isShowing()) {
+                                                    dialog.dismiss();
+                                                }
+                                                Utils.toastyError(SignUpActivity.this, "This email is already being used");
+                                                break;
+                                            case Utils.CODE_ERROR:
+                                                if (dialog.isShowing()) {
+                                                    dialog.dismiss();
+                                                }
+                                                Utils.toastyError(SignUpActivity.this, "Excuse me! An unexpected error has occurred!");
+                                                break;
+                                        }
+
+                                    } catch (Exception x) {
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                        Utils.toastyError(getApplicationContext(), x.getMessage());
+                                    }
+                                }
+                            });
+
+                }
+
+                break;
+        }
+    }
+
     //Function to get the actual Date and Time
     private String getTime() {
         Calendar cal = Calendar.getInstance();
@@ -146,5 +205,4 @@ public class SignUpActivity extends AppCompatActivity {
         cal.setTime(data);
         return String.valueOf(data.getTime());
     }
-
 }
