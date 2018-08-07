@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -31,6 +32,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -56,13 +61,12 @@ public class UserProfileActivity extends AppCompatActivity {
     private CircleImageView cvImageUser;
     private ProgressDialog dialog;
 
+    private String idUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-
-        //Instantiate Firebase
-        mAuth = FirebaseAuth.getInstance();
 
         //Cast
         btnEditUserProfile = (FloatingActionButton) findViewById(R.id.btnEditUserProfile);
@@ -75,7 +79,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
         btnFavorite = (ImageView) findViewById(R.id.ivFavorite);
 
-        chekcUpateApplication();
+        //chekcUpateApplication();
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +148,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void showSpotlight() {
         new TapTargetSequence(this)
                 .targets(
-                        TapTarget.forView(findViewById(R.id.ivChats), "Chats","Here you can see all your chats!")
+                        TapTarget.forView(findViewById(R.id.ivChats), "Chats", "Here you can see all your chats!")
                                 //Cor de fora transparente
                                 .dimColor(R.color.colorLightBlue)
                                 //Cor de dentro do circulo
@@ -154,7 +158,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 //Cor do texto
                                 .textColor(android.R.color.white)
                                 .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.ivCalendar), "Calendar","here you can change the days that you will be or not available")
+                        TapTarget.forView(findViewById(R.id.ivCalendar), "Calendar", "here you can change the days that you will be or not available")
                                 //Cor de fora transparente
                                 .dimColor(R.color.colorLightBlue)
                                 //Cor de dentro do circulo
@@ -164,7 +168,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 //Cor do texto
                                 .textColor(android.R.color.white)
                                 .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.ivSearch), "Search","Here you can find the people you will talk to")
+                        TapTarget.forView(findViewById(R.id.ivSearch), "Search", "Here you can find the people you will talk to")
                                 //Cor de fora transparente
                                 .dimColor(R.color.colorLightBlue)
                                 //Cor de dentro do circulo
@@ -174,7 +178,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 //Cor do texto
                                 .textColor(android.R.color.white)
                                 .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.ivFavorite), "Favorites","Here you can see your favorite contacts")
+                        TapTarget.forView(findViewById(R.id.ivFavorite), "Favorites", "Here you can see your favorite contacts")
                                 //Cor de fora transparente
                                 .dimColor(R.color.colorLightBlue)
                                 //Cor de dentro do circulo
@@ -184,7 +188,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 //Cor do texto
                                 .textColor(android.R.color.white)
                                 .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.btnEditUserProfile), "Your Profile","here you can edit your username and add your photos")
+                        TapTarget.forView(findViewById(R.id.btnEditUserProfile), "Your Profile", "here you can edit your username and add your photos")
                                 //Cor de fora transparente
                                 .dimColor(R.color.colorLightBlue)
                                 //Cor de dentro do circulo
@@ -217,43 +221,48 @@ public class UserProfileActivity extends AppCompatActivity {
 
     //Get the user data from Firebase
     private void getUserData() {
-        if (mAuth != null && mAuth.getCurrentUser() != null) {
-            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+        dialog = new ProgressDialog(UserProfileActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
-            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                    String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
-                    String spotlight = dataSnapshot.child(Utils.SPOTLIGHT).getValue(String.class);
+        Ion.with(this)
+                .load(Utils.URL_GET_USER_DATA)
+                .setBodyParameter(Utils.ID_USER_APP, idUser)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.GET_USER_DATA).getAsString();
 
-                    try {
-                        if (!(username == null || Objects.equals(username, ""))) {
-                            tvUsername.setText(username);
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+
+                                String username = result.get(Utils.USERNAME_USER).getAsString();
+                                String image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
+
+                                tvUsername.setText(username);
+                                //TODO: CRIAR METODO PARA CARREGAR O LINK DA IMAGEM DO FIREBASE
+
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Utils.toastyError(getApplicationContext(), "Error: " + Utils.CODE_ERROR);
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
                         }
-                        if (image != null && !Objects.equals(image, "")) {
-                            Picasso.with(UserProfileActivity.this).load((image)).placeholder(R.drawable.img_profile).into(cvImageUser);
-                        }
-                        if (spotlight == null || spotlight.equals("")){
-                            showSpotlight();
-                        }
-                    } catch (Exception e) {
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
                     }
+                });
 
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-
-            });
-
-        }
     }
 
-    private void chekcUpateApplication()  {
+    private void chekcUpateApplication() {
         try {
             final String currentVersionApp = BuildConfig.VERSION_NAME;
             final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Utils.APP_CONFIG).child(Utils.APP_VERSION);
@@ -299,7 +308,7 @@ public class UserProfileActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = cm.getAllNetworkInfo();
 
-        for (NetworkInfo ni : netInfo) {
+        for (NetworkInfo ni: netInfo) {
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
                 if (ni.isConnected())
                     haveConnectedWifi = true;
@@ -322,31 +331,25 @@ public class UserProfileActivity extends AppCompatActivity {
                     finish();
                 }
             });
-
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         } else {
-            //Get the user data
-            getUserData();
-            //Set status Online
-            setStatusOnline();
-            //Check if the user profile is complete
-            checkIfProfileIsComplete();
+            if (isLoginAuth()) {
+                checkIfProfileIsComplete();
+                //setStatusOnline();
+            } else {
+                sendToStart();
+            }
+
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //If there is no one logged in to Firebase then it sends you to the SignIn screen.
-        mUser = mAuth.getCurrentUser();
-        if (mUser == null) {
-            sendToStart();
-        } else {
-            //Check Internet Connection
-            checkInternetConnection();
-            setLastSeen();
-        }
+        checkInternetConnection();
+        //setLastSeen();
+
     }
 
     private void setLastSeen() {
@@ -367,20 +370,24 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mUser = mAuth.getCurrentUser();
-        //Chek if the user is logged
-        if (mUser != null) {
-            //Set status Offline
-            setStatusOffline();
-        }
+
     }
 
     private void sendToStart() {
-        //Method that displaces the user and sends to the SignIn screen
-        mAuth.signOut();
         Intent intent = new Intent(UserProfileActivity.this, SignInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+
+    private boolean isLoginAuth() {
+        SharedPreferences preferences = getSharedPreferences(Utils.PREF_NAME, MODE_PRIVATE);
+        idUser = preferences.getString(Utils.ID_USER, "");
+        if (Objects.equals(idUser, "")) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     //Check if the username and image profile isn't null
@@ -390,48 +397,41 @@ public class UserProfileActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                final String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                final String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
+        Ion.with(this)
+                .load(Utils.URL_CHECK_COMPLETE_PROFILE)
+                .setBodyParameter(Utils.ID_USER_APP, idUser)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.CHECK_COMPLETE_PROFILE).getAsString();
 
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                HashMap<String, Object> user = new HashMap<>();
-                user.put(Utils.UID, mAuth.getCurrentUser().getUid());
-                database.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            if (Objects.equals(username, "") || Objects.equals(username, null) || Objects.equals(image, "")) {
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
                                 if (dialog.isShowing()) {
                                     dialog.dismiss();
                                 }
-                                Intent intent = new Intent(UserProfileActivity.this, ImageUsernameProfileActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            } else {
+                                getUserData();
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
                                 if (dialog.isShowing()) {
                                     dialog.dismiss();
                                 }
+                                goToCompleteProfile(idUser);
                             }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
                     }
                 });
 
-            }
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private void goToCompleteProfile(String idUser) {
+        Intent intent = new Intent(UserProfileActivity.this, ImageUsernameProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(Utils.ID_USER_APP, idUser);
+        startActivity(intent);
     }
 
     private void setStatusOnline() {

@@ -15,6 +15,7 @@ public class Utils {
     public static final String APP_CONFIG = "app_config";
     public static final String APP_VERSION = "app_version";
     public static final String CURRENT_VERSION = "current_version";
+    public static final String PREF_NAME = "preferencesYeslap";
 
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
@@ -60,11 +61,20 @@ public class Utils {
     public static final String LONGITUDE_USER = "longitudeUser";
     public static final String AGE_USER = "ageUser";
 
-    //TODO: Colocar a URL de onde esta o arquivo
-    public static final String URL_SIGN_UP = "";
+    public static final String URL_SIGN_UP = "http://yeslap-eu.umbler.net/signup/signup.php";
+    public static final String URL_CHECK_COMPLETE_PROFILE = "http://yeslap-eu.umbler.net/userprofile/checkcompleteprofile.php";
+    public static final String URL_GET_USER_DATA = "http://yeslap-eu.umbler.net/userprofile/getuserdata.php";
+    public static final String URL_UPDATE_USERNAME = "http://yeslap-eu.umbler.net/userprofile/updateusername.php";
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
+    public static final String ID_USER_APP = "id_user_app";
     public static final String SIGN_UP_CODE = "signUp";
+    public static final String ID_USER = "id_user";
+    public static final String CHECK_COMPLETE_PROFILE = "checkcompleteprofile";
+    public static final String GET_USER_DATA = "getuserdata";
+    public static final String USERNAME_USER = "username_user";
+    public static final String UPDATE_USERNAME = "update_username";
+    public static final String IMAGE_USER_1 = "image_user_1";
 
     public static final String CODE_SUCCESS = "200";
     public static final String CODE_ERROR_EMAIL = "201";

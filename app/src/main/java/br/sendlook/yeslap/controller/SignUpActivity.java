@@ -2,12 +2,11 @@ package br.sendlook.yeslap.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
@@ -16,6 +15,8 @@ import com.koushikdutta.ion.Ion;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Utils;
@@ -23,8 +24,8 @@ import br.sendlook.yeslap.view.Utils;
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText etEmail, etPassword, etRetypePassword;
-    private TextView tvHaveAccount;
     private ProgressDialog dialog;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,92 +37,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         etPassword = (EditText) findViewById(R.id.etPassword);
         etRetypePassword = (EditText) findViewById(R.id.etRetypePassword);
         findViewById(R.id.btnSignUp).setOnClickListener(this);
-        tvHaveAccount = (TextView) findViewById(R.id.tvHaveAccount);
+        findViewById(R.id.tvHaveAccount).setOnClickListener(this);
 
-        /** //Button Event
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-                String retypePassword = etRetypePassword.getText().toString();
-
-                if (Objects.equals(email, "")) {
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_email));
-                } else if (Objects.equals(password, "")) {
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_password));
-                } else if (Objects.equals(retypePassword, "")) {
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.retype_password));
-                } else if (!Objects.equals(password, retypePassword)) {
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.password_not_match));
-                } else {
-
-                    dialog = new ProgressDialog(SignUpActivity.this);
-                    dialog.setTitle(getString(R.string.loading));
-                    dialog.setMessage(getString(R.string.loading_msg));
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-
-                    //Function to create a new user account with email and password
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull final Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                //Fucntion to put the user data at Firebase Database
-                                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                                final HashMap<String, String> user = new HashMap<>();
-                                user.put(Utils.USERNAME, "");
-                                user.put(Utils.EMAIL, (email));
-                                user.put(Utils.IMAGE_1, "");
-                                user.put(Utils.IMAGE_2, "");
-                                user.put(Utils.IMAGE_3, "");
-                                user.put(Utils.SPOTLIGHT, "false");
-                                //user.put(Utils.SINCE, getTime());
-                                mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            dialog.dismiss();
-                                            Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
-                                            Intent intent = new Intent(SignUpActivity.this, ImageUsernameProfileActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(intent);
-                                        }
-                                    }
-                                });
-                            } else {
-                                //Errors Messages
-                                try {
-                                    throw task.getException();
-                                } catch (FirebaseAuthWeakPasswordException f) {
-                                    dialog.dismiss();
-                                    Utils.toastyError(getApplicationContext(), getString(R.string.weak_password));
-                                } catch (FirebaseAuthInvalidCredentialsException g) {
-                                    dialog.dismiss();
-                                    Utils.toastyError(getApplicationContext(), getString(R.string.invalid_credential));
-                                } catch (FirebaseAuthUserCollisionException h) {
-                                    dialog.dismiss();
-                                    Utils.toastyError(getApplicationContext(), getString(R.string.email_used));
-                                } catch (Exception i) {
-                                    dialog.dismiss();
-                                    Utils.toastyError(getApplicationContext(), i.getMessage());
-                                }
-                            }
-                        }
-                    });
-
-                }
-
-            }
-        });*/
-
-        //tvHaveAccount Event Button
-        tvHaveAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
     }
 
@@ -142,6 +59,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.retype_password));
                 } else if (!Objects.equals(password, retypePassword)) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.password_not_match));
+                } else if (!validar(email)) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.valid_email));
+                } else if (password.length() < 6) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.password_size_msg));
                 } else {
 
                     dialog = new ProgressDialog(SignUpActivity.this);
@@ -165,21 +86,22 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                             case Utils.CODE_SUCCESS:
                                                 dialog.dismiss();
                                                 Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
-                                                Intent intent = new Intent(SignUpActivity.this, ImageUsernameProfileActivity.class);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
+                                                id = Integer.parseInt(result.get(Utils.ID_USER).getAsString());
+                                                Utils.toastyInfo(getApplicationContext(), String.valueOf(id));
+                                                saveLogin(id);
+                                                goToUserProfile();
                                                 break;
                                             case Utils.CODE_ERROR_EMAIL:
                                                 if (dialog.isShowing()) {
                                                     dialog.dismiss();
                                                 }
-                                                Utils.toastyError(SignUpActivity.this, "This email is already being used");
+                                                Utils.toastyError(SignUpActivity.this, getString(R.string.email_used));
                                                 break;
                                             case Utils.CODE_ERROR:
                                                 if (dialog.isShowing()) {
                                                     dialog.dismiss();
                                                 }
-                                                Utils.toastyError(SignUpActivity.this, "Excuse me! An unexpected error has occurred!");
+                                                Utils.toastyError(SignUpActivity.this, getString(R.string.error_signup));
                                                 break;
                                         }
 
@@ -195,8 +117,38 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
                 break;
+            case R.id.tvHaveAccount:
+                finish();
+                break;
         }
     }
+
+    private void saveLogin(int id) {
+        SharedPreferences.Editor editor = getSharedPreferences(Utils.PREF_NAME, MODE_PRIVATE).edit();
+        editor.putString(Utils.ID_USER, String.valueOf(id));
+        editor.apply();
+    }
+
+    private void goToUserProfile() {
+        Intent intent = new Intent(SignUpActivity.this, ImageUsernameProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    public static boolean validar(String email)
+    {
+        boolean isEmailIdValid = false;
+        if (email != null && email.length() > 0) {
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(email);
+            if (matcher.matches()) {
+                isEmailIdValid = true;
+            }
+        }
+        return isEmailIdValid;
+    }
+
 
     //Function to get the actual Date and Time
     private String getTime() {

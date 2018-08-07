@@ -22,10 +22,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.net.IDN;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -51,13 +55,15 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
     private ProgressDialog dialog;
 
+    private String id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_username_profile);
 
-        mAuth = FirebaseAuth.getInstance();
-        mStorage = FirebaseStorage.getInstance().getReference().child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid());
+        Bundle bundle = getIntent().getExtras();
+        id = bundle.getString(Utils.ID_USER_APP);
 
         etUsername = (AppCompatEditText) findViewById(R.id.etUsername);
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
@@ -81,9 +87,10 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 boolean b = m.find();
                 boolean s = username.contains(" ");
 
-                if (downloadURL == null || downloadURL.equals("")) {
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.select_image_to_your_profile));
-                } else if (username.equals("")) {
+                //if (downloadURL == null || downloadURL.equals("")) {
+                    //Utils.toastyInfo(getApplicationContext(), getString(R.string.select_image_to_your_profile));
+                //} else
+                if (username.equals("")) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_username_field));
                 } else if (b || s) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.username_must_have_only));
@@ -95,7 +102,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                     dialog.setCancelable(false);
                     dialog.show();
 
-                    saveUsernameAndUpdateProfile(username);
+                    saveUsernameAndUpdateProfile(username, id);
                 }
             }
         });
@@ -124,48 +131,10 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 mainImageURI = result.getUri();
                 cvImageUser.setImageURI(mainImageURI);
 
-                StorageReference filePath = mStorage.child(Utils.IMAGE_1 + ".jpg");
-                filePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                //TODO: METODO PARA SALVAR A IMAGEM NO MYSQL
 
-                        if (task.isSuccessful()) {
-                            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                            final HashMap<String, String> image = new HashMap<>();
-                            final String taskDownload = task.getResult().getDownloadUrl().toString();
-                            image.put(Utils.IMAGE_1, taskDownload);
-                            database.setValue(image).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
 
-                                    if (task.isSuccessful()) {
-                                        Utils.toastySuccess(getApplicationContext(), "Profile Image Up-To-Date");
-                                        downloadURL = taskDownload;
-                                        btnSave.setVisibility(View.VISIBLE);
-                                    }
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    if (dialog.isShowing()) {
-                                        dialog.dismiss();
-                                    }
-                                    Utils.toastyError(getApplicationContext(), e.getMessage());
-                                }
-                            });
-
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (dialog.isShowing()) {
-                            dialog.dismiss();
-                        }
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                    }
-                });
+                btnSave.setVisibility(View.VISIBLE);
 
             }
 
@@ -174,68 +143,42 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void saveUsernameAndUpdateProfile(final String username) {
-        mDatabase2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(username);
-        mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //Utils.toastyInfo(getApplicationContext(), String.valueOf(dataSnapshot.child("uid").toString()));
-                if (dataSnapshot.getChildrenCount() == 0) {
+    private void saveUsernameAndUpdateProfile(String username, String id) {
 
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                    HashMap<String, Object> profile = new HashMap<>();
-                    //profile.put("image1", downloadURL);
-                    profile.put("username", username);
-                    mDatabase.updateChildren(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
+        Ion.with(this)
+                .load(Utils.URL_UPDATE_USERNAME)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .setBodyParameter(Utils.USERNAME_USER, username)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.UPDATE_USERNAME).getAsString();
 
-                            if (task.isSuccessful()) {
-                                mDatabase1 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(username);
-                                HashMap<String, String> username = new HashMap<>();
-                                username.put("uid", mAuth.getCurrentUser().getUid());
-                                mDatabase1.setValue(username).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-
-                                        if (task.isSuccessful()) {
-
-                                            dialog.dismiss();
-                                            Intent intent = new Intent(ImageUsernameProfileActivity.this, UserProfileActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(intent);
-
-                                        }
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        dialog.dismiss();
-                                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                                    }
-                                });
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                if (dialog.isShowing() ){
+                                    dialog.dismiss();
+                                }
+                                goToUserProfile();
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                if (dialog.isShowing() ){
+                                    dialog.dismiss();
+                                }
                             }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            dialog.dismiss();
-                            Utils.toastyError(getApplicationContext(), e.getMessage());
-                        }
-                    });
+                    }
+                });
 
-                } else {
-                    dialog.dismiss();
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.username_already_used));
-                }
+    }
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private void goToUserProfile() {
+        Intent intent = new Intent(ImageUsernameProfileActivity.this, UserProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private void CheckIfProfileIsComplete() {
@@ -291,24 +234,20 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        CheckIfProfileIsComplete();
+        //CheckIfProfileIsComplete();
         super.onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mAuth != null) {
-            setStatusOnline();
-        }
+        // setStatusOnline();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuth != null) {
-            setStatusOffline();
-        }
+        //setStatusOffline();
     }
 
     private void setStatusOnline() {

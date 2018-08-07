@@ -124,4 +124,7 @@
     <string name="email_changed">You E-mail has been changed!</string>
     <string name="change_email">Change E-mail</string>
     <string name="email_equal_new">New email just like your current one</string>
+    <string name="valid_email">Enter a valid email address</string>
+    <string name="password_size_msg">Enter a password longer than 6 characters</string>
+    <string name="error_signup">Excuse me! An unexpected error has occurred!</string>
 </resources>
