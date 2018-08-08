@@ -11,55 +11,35 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.TimeZone;
 
 import br.sendlook.yeslap.BuildConfig;
 import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Utils;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //Variables
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private FirebaseUser mUser;
-    private FloatingActionButton btnEditUserProfile;
-    private ImageView btnGotoProfile, btnGoToSettings, btnFavorite;
-    private RelativeLayout btnChat, btnCalendar, btnSearch;
     private TextView tvUsername;
-    private CircleImageView cvImageUser;
     private ProgressDialog dialog;
 
     private String idUser;
@@ -285,7 +265,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = cm.getAllNetworkInfo();
 
-        for (NetworkInfo ni: netInfo) {
+        for (NetworkInfo ni : netInfo) {
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
                 if (ni.isConnected())
                     haveConnectedWifi = true;
@@ -312,8 +292,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             alertDialog.show();
         } else {
             if (isLoginAuth()) {
+                //if (existProfile()) {
                 checkIfProfileIsComplete();
-                //setStatusOnline();
+                updateStatus(idUser, Utils.ONLINE);
+                setLastSeen();
+                //} else {
+                //    sendToStart();
+                //}
             } else {
                 sendToStart();
             }
@@ -321,19 +306,60 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    private boolean existProfile() {
+        Ion.with(this)
+                .load(Utils.URL_EXIST_PROFILE)
+                .setBodyParameter(Utils.ID_USER_APP, idUser)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.EXIST_PROFILE).getAsString();
+
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                //return true;
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                //return false;
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+        return false;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         checkInternetConnection();
-        //setLastSeen();
-
     }
 
     private void setLastSeen() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> user = new HashMap<>();
-        user.put(Utils.LAST_SEEN, getDateNow());
-        database.updateChildren(user);
+        Ion.with(this)
+                .load(Utils.URL_LAST_SEEN)
+                .setBodyParameter(Utils.ID_USER_APP, idUser)
+                .setBodyParameter(Utils.LAST_SEEN, getDateNow())
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.LAST_SEEN).getAsString();
+
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.LAST_SEEN, "Last seen Updated: " + getDateNow());
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.LAST_SEEN, "Last seen Updated Failed");
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
     private String getDateNow() {
@@ -346,8 +372,10 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onPause() {
+        if (isLoginAuth()) {
+            updateStatus(idUser, Utils.OFFLINE);
+        }
         super.onPause();
-
     }
 
     private void sendToStart() {
@@ -412,11 +440,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         startActivity(intent);
     }
 
-    private void updateStatus(String id_user, String status) {
+    private void updateStatus(final String id_user, final String status) {
         Ion.with(this)
                 .load(Utils.URL_STATUS_USER)
-                .setBodyParameter(Utils.ID_USER, id_user)
-                .setBodyParameter(Utils.STATUS, status)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -425,9 +453,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                             String resultApp = result.get(Utils.STATUS).getAsString();
 
                             if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
-                                Log.d(Utils.STATUS, "updated status success");
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
                             } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
-                                Log.d(Utils.STATUS, "updated status failes");
+                                Log.d(Utils.STATUS, "updated status failed");
                             }
 
                         } catch (Exception x) {

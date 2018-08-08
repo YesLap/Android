@@ -25,13 +25,13 @@ public class Utils {
     public static final String SINCE = "since";
     public static final String UID = "uid";
     public static final String STATUS = "statususer";
+    public static final String STATUS_USER_APP = "status_user_app";
     public static final String SPOTLIGHT = "spotlight";
     public static final String DONE = "done";
     public static final String FAVORITES = "favorites";
     public static final String MESSAGE = "message";
     public static final String MESSAGES = "messages";
     public static final String CALENDAR = "calendar";
-    public static final String LAST_SEEN = "lastSeen";
     public static final String CHAT_MESSAGES = "chatmessages";
     public static final String MESSAGES_STATUS = "messages_status";
     public static final String DATE = "date";
@@ -54,6 +54,9 @@ public class Utils {
     public static final String PLAYSTORE_LINK = "playstore_link";
     public static final String REPORTS = "reports";
 
+    public static final String OFFLINE = "offline";
+    public static final String ONLINE = "online";
+
     public static final String GENDER_USER = "genderUser";
     public static final String GENDER_SEARCH = "genderSearch";
     public static final String AGE_SEARCH_MIN = "ageSearchMin";
@@ -68,9 +71,13 @@ public class Utils {
     public static final String URL_GET_USER_DATA = "http://yeslap-eu.umbler.net/userprofile/getuserdata.php";
     public static final String URL_UPDATE_USERNAME = "http://yeslap-eu.umbler.net/userprofile/updateusername.php";
     public static final String URL_STATUS_USER = "http://yeslap-eu.umbler.net/userprofile/statususer.php";
+    public static final String URL_EXIST_PROFILE = "http://yeslap-eu.umbler.net/userprofile/existprofile.php";
+    public static final String URL_LAST_SEEN = "http://yeslap-eu.umbler.net/userprofile/lastseen.php";
+
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
     public static final String ID_USER_APP = "id_user_app";
+    public static final String LAST_SEEN = "last_seen_app";
     public static final String SIGN_UP_CODE = "signUp";
     public static final String SIGN_IN_CODE = "signin";
     public static final String ID_USER = "id_user";
@@ -79,6 +86,7 @@ public class Utils {
     public static final String USERNAME_USER = "username_user";
     public static final String UPDATE_USERNAME = "update_username";
     public static final String IMAGE_USER_1 = "image_user_1";
+    public static final String EXIST_PROFILE = "existprofile";
 
     public static final String CODE_SUCCESS = "200";
     public static final String CODE_ERROR_EMAIL = "201";

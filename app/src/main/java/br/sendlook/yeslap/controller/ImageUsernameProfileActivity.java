@@ -65,7 +65,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             id = bundle.getString(Utils.ID_USER_APP);
-            Utils.toastyInfo(getApplicationContext(), id);
+            //Utils.toastyInfo(getApplicationContext(), id);
         }
 
         etUsername = (AppCompatEditText) findViewById(R.id.etUsername);
