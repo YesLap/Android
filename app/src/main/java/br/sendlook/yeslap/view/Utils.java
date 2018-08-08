@@ -24,8 +24,9 @@ public class Utils {
     public static final String IMAGE_3 = "image3";
     public static final String SINCE = "since";
     public static final String UID = "uid";
-    public static final String STATUS = "status";
+    public static final String STATUS = "statususer";
     public static final String SPOTLIGHT = "spotlight";
+    public static final String DONE = "done";
     public static final String FAVORITES = "favorites";
     public static final String MESSAGE = "message";
     public static final String MESSAGES = "messages";
@@ -62,13 +63,16 @@ public class Utils {
     public static final String AGE_USER = "ageUser";
 
     public static final String URL_SIGN_UP = "http://yeslap-eu.umbler.net/signup/signup.php";
+    public static final String URL_SIGN_IN = "http://yeslap-eu.umbler.net/signin/signin.php";
     public static final String URL_CHECK_COMPLETE_PROFILE = "http://yeslap-eu.umbler.net/userprofile/checkcompleteprofile.php";
     public static final String URL_GET_USER_DATA = "http://yeslap-eu.umbler.net/userprofile/getuserdata.php";
     public static final String URL_UPDATE_USERNAME = "http://yeslap-eu.umbler.net/userprofile/updateusername.php";
+    public static final String URL_STATUS_USER = "http://yeslap-eu.umbler.net/userprofile/statususer.php";
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
     public static final String ID_USER_APP = "id_user_app";
     public static final String SIGN_UP_CODE = "signUp";
+    public static final String SIGN_IN_CODE = "signin";
     public static final String ID_USER = "id_user";
     public static final String CHECK_COMPLETE_PROFILE = "checkcompleteprofile";
     public static final String GET_USER_DATA = "getuserdata";
@@ -79,6 +83,7 @@ public class Utils {
     public static final String CODE_SUCCESS = "200";
     public static final String CODE_ERROR_EMAIL = "201";
     public static final String CODE_ERROR = "300";
+    public static final String CODE_ERROR_USERNAME_NULL = "202";
 
     public static void toastySuccess(Context context, String msg) {
         Toasty.success(context, msg, Toast.LENGTH_LONG, true).show();

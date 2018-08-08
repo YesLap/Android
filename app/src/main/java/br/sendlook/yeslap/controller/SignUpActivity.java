@@ -87,9 +87,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                                 dialog.dismiss();
                                                 Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
                                                 id = Integer.parseInt(result.get(Utils.ID_USER).getAsString());
-                                                Utils.toastyInfo(getApplicationContext(), String.valueOf(id));
                                                 saveLogin(id);
-                                                goToUserProfile();
+                                                goToUserProfile(String.valueOf(id));
                                                 break;
                                             case Utils.CODE_ERROR_EMAIL:
                                                 if (dialog.isShowing()) {
@@ -129,9 +128,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         editor.apply();
     }
 
-    private void goToUserProfile() {
+    private void goToUserProfile(String id_user) {
         Intent intent = new Intent(SignUpActivity.this, ImageUsernameProfileActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(Utils.ID_USER_APP, id_user);
         startActivity(intent);
     }
 

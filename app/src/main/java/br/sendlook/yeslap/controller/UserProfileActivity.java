@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -48,7 +49,7 @@ import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Variables
     private FirebaseAuth mAuth;
@@ -69,157 +70,128 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
 
         //Cast
-        btnEditUserProfile = (FloatingActionButton) findViewById(R.id.btnEditUserProfile);
-        btnGotoProfile = (ImageView) findViewById(R.id.btnGoToProfile);
-        btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
-        cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
-        btnChat = (RelativeLayout) findViewById(R.id.btnChat);
-        btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
-        btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
-        btnFavorite = (ImageView) findViewById(R.id.ivFavorite);
+        findViewById(R.id.btnEditUserProfile).setOnClickListener(this);
+        //findViewById(R.id.btnGoToProfile).setOnClickListener(this);
+        findViewById(R.id.btnGoToSettings).setOnClickListener(this);
+        findViewById(R.id.cvImageUser).setOnClickListener(this);
+        findViewById(R.id.btnChat).setOnClickListener(this);
+        findViewById(R.id.btnCalendar).setOnClickListener(this);
+        findViewById(R.id.btnSearch).setOnClickListener(this);
+        findViewById(R.id.ivFavorite).setOnClickListener(this);
 
         //chekcUpateApplication();
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendToStart();
-            }
-        });
+    }
 
-        //btnEditUserProfile Event Button
-        btnEditUserProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //btnGoToSetting Event Button
-        btnGoToSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UserProfileActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //btnCalendar Event Button
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UserProfileActivity.this, CalendarActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //btnSearch Event Button
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //checkUsernameAndImage();
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnSearch:
                 Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
                 startActivity(intent);
-            }
-        });
+                break;
+            case R.id.btnEditUserProfile:
+                Intent intentuserprofile = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
+                startActivity(intentuserprofile);
+                break;
+            case R.id.btnGoToSettings:
+                Intent intentsettings = new Intent(UserProfileActivity.this, SettingsActivity.class);
+                startActivity(intentsettings);
+                break;
+            case R.id.btnCalendar:
+                Intent intentcalendar = new Intent(UserProfileActivity.this, CalendarActivity.class);
+                startActivity(intentcalendar);
+                break;
+            case R.id.btnChat:
+                Intent intentchat = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
+                startActivity(intentchat);
+                break;
+            case R.id.ivFavorite:
+                Intent intentfavorite = new Intent(UserProfileActivity.this, FavoritesActivity.class);
+                startActivity(intentfavorite);
+                break;
 
-        //btnChat Event Button
-        btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //btnFavorite Event Button
-        btnFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UserProfileActivity.this, FavoritesActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        }
     }
 
     private void showSpotlight() {
-        new TapTargetSequence(this)
-                .targets(
-                        TapTarget.forView(findViewById(R.id.ivChats), "Chats", "Here you can see all your chats!")
-                                //Cor de fora transparente
-                                .dimColor(R.color.colorLightBlue)
-                                //Cor de dentro do circulo
-                                .outerCircleColor(R.color.colorLightBlue)
-                                //Cor de dentro do alvo
-                                .targetCircleColor(android.R.color.white)
-                                //Cor do texto
-                                .textColor(android.R.color.white)
-                                .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.ivCalendar), "Calendar", "here you can change the days that you will be or not available")
-                                //Cor de fora transparente
-                                .dimColor(R.color.colorLightBlue)
-                                //Cor de dentro do circulo
-                                .outerCircleColor(R.color.colorLightBlue)
-                                //Cor de dentro do alvo
-                                .targetCircleColor(android.R.color.white)
-                                //Cor do texto
-                                .textColor(android.R.color.white)
-                                .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.ivSearch), "Search", "Here you can find the people you will talk to")
-                                //Cor de fora transparente
-                                .dimColor(R.color.colorLightBlue)
-                                //Cor de dentro do circulo
-                                .outerCircleColor(R.color.colorLightBlue)
-                                //Cor de dentro do alvo
-                                .targetCircleColor(android.R.color.white)
-                                //Cor do texto
-                                .textColor(android.R.color.white)
-                                .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.ivFavorite), "Favorites", "Here you can see your favorite contacts")
-                                //Cor de fora transparente
-                                .dimColor(R.color.colorLightBlue)
-                                //Cor de dentro do circulo
-                                .outerCircleColor(R.color.colorLightBlue)
-                                //Cor de dentro do alvo
-                                .targetCircleColor(android.R.color.white)
-                                //Cor do texto
-                                .textColor(android.R.color.white)
-                                .cancelable(false),
-                        TapTarget.forView(findViewById(R.id.btnEditUserProfile), "Your Profile", "here you can edit your username and add your photos")
-                                //Cor de fora transparente
-                                .dimColor(R.color.colorLightBlue)
-                                //Cor de dentro do circulo
-                                .outerCircleColor(R.color.colorLightBlue)
-                                //Cor de dentro do alvo
-                                .targetCircleColor(android.R.color.white)
-                                //Cor do texto
-                                .textColor(android.R.color.white)
-                                .cancelable(false)
-                ).listener(new TapTargetSequence.Listener() {
-            @Override
-            public void onSequenceFinish() {
-                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                HashMap<String, Object> spotlight = new HashMap<>();
-                spotlight.put("spotlight", "true");
-                mDatabase.updateChildren(spotlight);
-            }
+        SharedPreferences preferences = getSharedPreferences(Utils.PREF_NAME, MODE_PRIVATE);
+        String spotlight = preferences.getString(Utils.SPOTLIGHT, "");
+        if (!Objects.equals(spotlight, Utils.DONE)) {
+            new TapTargetSequence(this)
+                    .targets(
+                            TapTarget.forView(findViewById(R.id.ivChats), "Chats", "Here you can see all your chats!")
+                                    //Cor de fora transparente
+                                    .dimColor(R.color.colorLightBlue)
+                                    //Cor de dentro do circulo
+                                    .outerCircleColor(R.color.colorLightBlue)
+                                    //Cor de dentro do alvo
+                                    .targetCircleColor(android.R.color.white)
+                                    //Cor do texto
+                                    .textColor(android.R.color.white)
+                                    .cancelable(false),
+                            TapTarget.forView(findViewById(R.id.ivCalendar), "Calendar", "here you can change the days that you will be or not available")
+                                    //Cor de fora transparente
+                                    .dimColor(R.color.colorLightBlue)
+                                    //Cor de dentro do circulo
+                                    .outerCircleColor(R.color.colorLightBlue)
+                                    //Cor de dentro do alvo
+                                    .targetCircleColor(android.R.color.white)
+                                    //Cor do texto
+                                    .textColor(android.R.color.white)
+                                    .cancelable(false),
+                            TapTarget.forView(findViewById(R.id.ivSearch), "Search", "Here you can find the people you will talk to")
+                                    //Cor de fora transparente
+                                    .dimColor(R.color.colorLightBlue)
+                                    //Cor de dentro do circulo
+                                    .outerCircleColor(R.color.colorLightBlue)
+                                    //Cor de dentro do alvo
+                                    .targetCircleColor(android.R.color.white)
+                                    //Cor do texto
+                                    .textColor(android.R.color.white)
+                                    .cancelable(false),
+                            TapTarget.forView(findViewById(R.id.ivFavorite), "Favorites", "Here you can see your favorite contacts")
+                                    //Cor de fora transparente
+                                    .dimColor(R.color.colorLightBlue)
+                                    //Cor de dentro do circulo
+                                    .outerCircleColor(R.color.colorLightBlue)
+                                    //Cor de dentro do alvo
+                                    .targetCircleColor(android.R.color.white)
+                                    //Cor do texto
+                                    .textColor(android.R.color.white)
+                                    .cancelable(false),
+                            TapTarget.forView(findViewById(R.id.btnEditUserProfile), "Your Profile", "here you can edit your username and add your photos")
+                                    //Cor de fora transparente
+                                    .dimColor(R.color.colorLightBlue)
+                                    //Cor de dentro do circulo
+                                    .outerCircleColor(R.color.colorLightBlue)
+                                    //Cor de dentro do alvo
+                                    .targetCircleColor(android.R.color.white)
+                                    //Cor do texto
+                                    .textColor(android.R.color.white)
+                                    .cancelable(false)
+                    ).listener(new TapTargetSequence.Listener() {
+                @Override
+                public void onSequenceFinish() {
+                    SharedPreferences.Editor editor = getSharedPreferences(Utils.PREF_NAME, MODE_PRIVATE).edit();
+                    editor.putString(Utils.SPOTLIGHT, Utils.DONE);
+                    editor.apply();
+                }
 
-            @Override
-            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+                @Override
+                public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
 
-            }
+                }
 
-            @Override
-            public void onSequenceCanceled(TapTarget lastTarget) {
+                @Override
+                public void onSequenceCanceled(TapTarget lastTarget) {
 
-            }
-        }).start();
+                }
+            }).start();
+        }
     }
 
-    //Get the user data from Firebase
     private void getUserData() {
         dialog = new ProgressDialog(UserProfileActivity.this);
         dialog.setMessage(getString(R.string.loading));
@@ -242,7 +214,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 }
 
                                 String username = result.get(Utils.USERNAME_USER).getAsString();
-                                String image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
+                                //String image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
 
                                 tvUsername.setText(username);
                                 //TODO: CRIAR METODO PARA CARREGAR O LINK DA IMAGEM DO FIREBASE
@@ -252,6 +224,11 @@ public class UserProfileActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                                 Utils.toastyError(getApplicationContext(), "Error: " + Utils.CODE_ERROR);
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR_USERNAME_NULL)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                goToCompleteProfile(idUser);
                             }
 
                         } catch (Exception x) {
@@ -412,6 +389,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                                 getUserData();
+                                showSpotlight();
                             } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
                                 if (dialog.isShowing()) {
                                     dialog.dismiss();
@@ -434,18 +412,29 @@ public class UserProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setStatusOnline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put(Utils.STATUS, "online");
-        mDatabase.updateChildren(status);
-    }
+    private void updateStatus(String id_user, String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER, id_user)
+                .setBodyParameter(Utils.STATUS, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
 
-    private void setStatusOffline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put(Utils.STATUS, "offline");
-        mDatabase.updateChildren(status);
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "updated status success");
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failes");
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
 }

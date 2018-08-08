@@ -63,7 +63,10 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_username_profile);
 
         Bundle bundle = getIntent().getExtras();
-        id = bundle.getString(Utils.ID_USER_APP);
+        if (bundle != null) {
+            id = bundle.getString(Utils.ID_USER_APP);
+            Utils.toastyInfo(getApplicationContext(), id);
+        }
 
         etUsername = (AppCompatEditText) findViewById(R.id.etUsername);
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
@@ -88,7 +91,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 boolean s = username.contains(" ");
 
                 //if (downloadURL == null || downloadURL.equals("")) {
-                    //Utils.toastyInfo(getApplicationContext(), getString(R.string.select_image_to_your_profile));
+                //Utils.toastyInfo(getApplicationContext(), getString(R.string.select_image_to_your_profile));
                 //} else
                 if (username.equals("")) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_username_field));
@@ -157,12 +160,12 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                             String returnApp = result.get(Utils.UPDATE_USERNAME).getAsString();
 
                             if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
-                                if (dialog.isShowing() ){
+                                if (dialog.isShowing()) {
                                     dialog.dismiss();
                                 }
                                 goToUserProfile();
                             } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
-                                if (dialog.isShowing() ){
+                                if (dialog.isShowing()) {
                                     dialog.dismiss();
                                 }
                             }

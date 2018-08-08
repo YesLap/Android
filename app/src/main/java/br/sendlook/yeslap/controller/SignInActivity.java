@@ -9,22 +9,17 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
+import com.google.gson.JsonObject;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,13 +27,9 @@ import java.util.Objects;
 import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Utils;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText etEmail, etPassword;
-    private TextView tvForgotPassword, tvNewAccount;
-    private ImageView btnSignIn;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
     private ProgressDialog dialog;
 
     @Override
@@ -49,20 +40,21 @@ public class SignInActivity extends AppCompatActivity {
         showMessage();
         grantPermissions();
 
-        //Instantiate Firebase
-        mAuth = FirebaseAuth.getInstance();
 
         //Cast
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
-        tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
-        tvNewAccount = (TextView) findViewById(R.id.tvNewAccount);
-        btnSignIn = (ImageView) findViewById(R.id.btnSignIn);
+        findViewById(R.id.tvForgotPassword).setOnClickListener(this);
+        findViewById(R.id.tvNewAccount).setOnClickListener(this);
+        findViewById(R.id.btnSignIn).setOnClickListener(this);
 
-        //Button Event
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnSignIn:
 
                 //Get the fields data
                 String email = etEmail.getText().toString();
@@ -81,47 +73,58 @@ public class SignInActivity extends AppCompatActivity {
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
 
-                    //Login in
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                dialog.dismiss();
-                                Intent intent = new Intent(SignInActivity.this, UserProfileActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            dialog.dismiss();
-                            Utils.toastyError(getApplicationContext(), e.getMessage());
-                        }
-                    });
+                    Ion.with(this)
+                            .load(Utils.URL_SIGN_IN)
+                            .setBodyParameter(Utils.EMAIL_APP, email)
+                            .setBodyParameter(Utils.PASSWORD_APP, password)
+                            .asJsonObject()
+                            .setCallback(new FutureCallback<JsonObject>() {
+                                @Override
+                                public void onCompleted(Exception e, JsonObject result) {
+                                    try {
+
+                                        String returnApp = result.get(Utils.SIGN_IN_CODE).getAsString();
+
+                                        if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                            if (dialog.isShowing()) {
+                                                dialog.dismiss();
+                                            }
+                                            saveLogin(Integer.parseInt(result.get(Utils.ID_USER).getAsString()));
+                                            Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(intent);
+                                        } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                            if (dialog.isShowing()) {
+                                                dialog.dismiss();
+                                            }
+                                            Utils.toastyError(getApplicationContext(), getString(R.string.email_or_password_incorrect));
+                                        }
+
+                                    } catch (Exception x) {
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                        Utils.toastyError(getApplicationContext(), x.getMessage());
+                                    }
+                                }
+                            });
                 }
+                break;
+            case R.id.tvNewAccount:
+                Intent intentnewacc = new Intent(SignInActivity.this, SignUpActivity.class);
+                startActivity(intentnewacc);
+                break;
+            case R.id.tvForgotPassword:
+                Intent intentforgot = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
+                startActivity(intentforgot);
+                break;
+        }
+    }
 
-            }
-        });
-
-        //tvNewAccount Event Button
-        tvNewAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //tvForgotPassword Event Button
-        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
-                startActivity(intent);
-            }
-        });
-
+    private void saveLogin(int id) {
+        SharedPreferences.Editor editor = getSharedPreferences(Utils.PREF_NAME, MODE_PRIVATE).edit();
+        editor.putString(Utils.ID_USER, String.valueOf(id));
+        editor.apply();
     }
 
     private void showMessage() {
