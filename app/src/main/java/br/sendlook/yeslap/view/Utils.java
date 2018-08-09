@@ -59,9 +59,11 @@ public class Utils {
 
     public static final String GENDER_USER = "gender_user";
     public static final String AGE_USER_APP = "age_user_app";
-    public static final String GENDER_SEARCH = "genderSearch";
-    public static final String AGE_SEARCH_MIN = "ageSearchMin";
-    public static final String AGE_SEARCH_MAX = "ageSearchMax";
+    public static final String AGE_SEARCH_MIN_APP = "age_search_min_app";
+    public static final String AGE_SEARCH_MAX_APP = "age_search_max_app";
+    public static final String GENDER_SEARCH = "gender_search";
+    public static final String GENDER_SEARCH_APP = "gender_search_app";
+    public static final String AGE_SEARCH = "age_search";
     public static final String LATITUDE_USER = "latitudeUser";
     public static final String LONGITUDE_USER = "longitudeUser";
     public static final String AGE_USER = "age_user";
@@ -76,6 +78,8 @@ public class Utils {
     public static final String URL_LAST_SEEN = "http://yeslap-eu.umbler.net/userprofile/lastseen.php";
     public static final String URL_UPDATE_GENDER_USER = "http://yeslap-eu.umbler.net/userprofile/updategenderuser.php";
     public static final String URL_UPDATE_AGE_USER = "http://yeslap-eu.umbler.net/userprofile/updateageuser.php";
+    public static final String URL_UPDATE_AGE_SEARCH = "http://yeslap-eu.umbler.net/userprofile/updateagesearch.php";
+    public static final String URL_UPDATE_GENDER_SEARCH = "http://yeslap-eu.umbler.net/userprofile/updategendersearch.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";

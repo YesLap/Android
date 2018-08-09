@@ -97,6 +97,8 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
 
         findViewById(R.id.btnGenderUser).setOnClickListener(this);
         btnGenderUser = (Button) findViewById(R.id.btnGenderUser);
+        findViewById(R.id.btnGenderSearch).setOnClickListener(this);
+        btnGenderSearch = (Button) findViewById(R.id.btnGenderSearch);
 
         ivGoToProfile = (ImageView) findViewById(R.id.imgGoToProfile);
         ivGoToChat = (ImageView) findViewById(R.id.imgGoToChat);
@@ -106,7 +108,6 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnEmailUser = (Button) findViewById(R.id.btnEmailUser);
 
         btnLocationSearch = (Button) findViewById(R.id.btnLocationSearch);
-        btnGenderSearch = (Button) findViewById(R.id.btnGenderSearch);
         tvAgeSearch = (TextView) findViewById(R.id.tvRangeAgeSearch);
         rbAgeSearch = (CrystalRangeSeekbar) findViewById(R.id.rangeAgeSearch);
         tvRangeAgeSearch = (TextView) findViewById(R.id.tvRangeAgeSearch);
@@ -232,86 +233,6 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
             }
         });
 
-        btnGenderSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-
-                switch (genderSearch) {
-                    case "male":
-
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
-                        genderSearch = "female";
-                        btnGenderSearch.setText(getString(R.string.female));
-
-                        HashMap<String, Object> searchFemale = new HashMap<>();
-                        searchFemale.put(Utils.GENDER_SEARCH, genderSearch);
-                        database.updateChildren(searchFemale).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d("Gender Search Updated", String.format("Gender Search Updated: %s", genderUser));
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                            }
-                        });
-
-                        break;
-                    case "female":
-
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
-                        genderSearch = "gay";
-                        btnGenderSearch.setText(getString(R.string.gay));
-
-                        HashMap<String, Object> searchGay = new HashMap<>();
-                        searchGay.put(Utils.GENDER_SEARCH, genderSearch);
-                        database.updateChildren(searchGay).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d("Gender Search Updated", String.format("Gender Search Updated: %s", genderUser));
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                            }
-                        });
-
-                        break;
-                    case "gay":
-
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
-                        genderSearch = "male";
-                        btnGenderSearch.setText(getString(R.string.male));
-
-                        HashMap<String, Object> searchMale = new HashMap<>();
-                        searchMale.put(Utils.GENDER_SEARCH, genderSearch);
-                        database.updateChildren(searchMale).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d("Gender Search Updated", String.format("Gender Search Updated: %s", genderUser));
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                            }
-                        });
-
-                        break;
-                }
-            }
-        });
-
         btnEmailUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -324,23 +245,46 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         rbAgeSearch.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
             public void valueChanged(final Number minValue, final Number maxValue) {
-                //TODO
+                dialog = new ProgressDialog(SettingsActivity.this);
+                dialog.setMessage(getString(R.string.loading));
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+
                 tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
-                /**DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                 HashMap<String, Object> ageSearch = new HashMap<>();
-                 ageSearch.put(Utils.AGE_SEARCH_MIN, String.valueOf(minValue));
-                 ageSearch.put(Utils.AGE_SEARCH_MAX, String.valueOf(maxValue));
-                 database.updateChildren(ageSearch).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                Log.d("AGE SEARCH", String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
-                }
-                }
-                }).addOnFailureListener(new OnFailureListener() {
-                @Override public void onFailure(@NonNull Exception e) {
-                Utils.toastyError(getApplicationContext(), e.getMessage());
-                }
-                });*/
+
+                Ion.with(getApplicationContext())
+                        .load(Utils.URL_UPDATE_AGE_SEARCH)
+                        .setBodyParameter(Utils.ID_USER_APP, id)
+                        .setBodyParameter(Utils.AGE_SEARCH_MIN_APP, String.valueOf(minValue))
+                        .setBodyParameter(Utils.AGE_SEARCH_MAX_APP, String.valueOf(maxValue))
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                try {
+                                    String returnApp = result.get(Utils.AGE_SEARCH).getAsString();
+
+                                    if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                        Log.d("AGE SEARCH", String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
+                                    } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                    }
+
+                                } catch (Exception x) {
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
+                                    }
+                                    Utils.toastyError(getApplicationContext(), x.getMessage());
+                                }
+                            }
+                        });
+
             }
         });
 
@@ -464,7 +408,77 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 }
 
                 break;
+            case R.id.btnGenderSearch:
+                switch (genderSearch) {
+                    case "male":
+
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
+                        genderSearch = "female";
+                        btnGenderSearch.setText(getString(R.string.female));
+
+                        updateGenderSearch(id, genderSearch);
+
+                        break;
+                    case "female":
+
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
+                        genderSearch = "gay";
+                        btnGenderSearch.setText(getString(R.string.gay));
+
+                        updateGenderSearch(id, genderSearch);
+
+                        break;
+                    case "gay":
+
+                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
+                        genderSearch = "male";
+                        btnGenderSearch.setText(getString(R.string.male));
+
+                        updateGenderSearch(id, genderSearch);
+
+                        break;
+                }
+                break;
         }
+    }
+
+    private void updateGenderSearch(String id, String gender) {
+        dialog = new ProgressDialog(SettingsActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        Ion.with(getApplicationContext())
+                .load(Utils.URL_UPDATE_GENDER_SEARCH)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .setBodyParameter(Utils.GENDER_SEARCH_APP, gender)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.GENDER_SEARCH).getAsString();
+
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Log.d("Gender Search Updated", "Gender Search Updated");
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+
+                        } catch (Exception x) {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
     private void checkIfGpsIsOn() {
@@ -537,8 +551,8 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 String genderUser = dataSnapshot.child(Utils.GENDER_USER).getValue(String.class);
 
                 String genderSearch = dataSnapshot.child(Utils.GENDER_SEARCH).getValue(String.class);
-                String ageSearchMin = dataSnapshot.child(Utils.AGE_SEARCH_MIN).getValue(String.class);
-                String ageSearchMax = dataSnapshot.child(Utils.AGE_SEARCH_MAX).getValue(String.class);
+                //String ageSearchMin = dataSnapshot.child(Utils.AGE_SEARCH_MIN).getValue(String.class);
+                //String ageSearchMax = dataSnapshot.child(Utils.AGE_SEARCH_MAX).getValue(String.class);
 
                 //AGE
                 if (ageUser != null) {
@@ -599,11 +613,11 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 btnEmailUser.setText(mAuth.getCurrentUser().getEmail());
 
                 //AGE SEARCH
-                if (ageSearchMin != null && ageSearchMax != null) {
-                    rbAgeSearch.setMinStartValue(Float.valueOf(ageSearchMin)).apply();
-                    rbAgeSearch.setMaxStartValue(Float.valueOf(ageSearchMax)).apply();
-                    tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(ageSearchMin), String.valueOf(ageSearchMax)));
-                }
+                //if (ageSearchMin != null && ageSearchMax != null) {
+                //    rbAgeSearch.setMinStartValue(Float.valueOf(ageSearchMin)).apply();
+                //    rbAgeSearch.setMaxStartValue(Float.valueOf(ageSearchMax)).apply();
+                //    tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(ageSearchMin), String.valueOf(ageSearchMax)));
+                //}
 
             }
 
