@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -28,6 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -43,14 +47,12 @@ import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditUserProfileActivity extends AppCompatActivity {
+public class EditUserProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Variables
     private ImageView btnGoToProfile, btnGotToSettings;
     private CircleImageView cvImageUser;
     private TextView tvUsername;
-    private RelativeLayout btnChat, btnCalendar, btnSearch;
-    private FloatingActionButton btnEditUserProfile, btnEditUsername, btnChangeImage1, btnChangeImage2, btnChangeImage3;
     private RoundedImageView ivImage1, ivImage2, ivImage3;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -66,6 +68,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     private Boolean isExistUsername = false;
     private String oldUsername;
     private Uri mainImageURI = null;
+    private String id;
 
 
     @Override
@@ -73,84 +76,59 @@ public class EditUserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_profile);
 
-        //Instantiate Firebase
-        mAuth = FirebaseAuth.getInstance();
-        mStorage = FirebaseStorage.getInstance().getReference().child(Utils.USER_IMAGES).child(mAuth.getCurrentUser().getUid());
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            id = bundle.getString(Utils.ID_USER);
+        }
 
         //Cast
-        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
-        btnGotToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
-        btnChat = (RelativeLayout) findViewById(R.id.btnChat);
-        btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
-        btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
-        btnEditUserProfile = (FloatingActionButton) findViewById(R.id.btnEditUserProfile);
-        btnEditUsername = (FloatingActionButton) findViewById(R.id.btnEditUsername);
-        btnChangeImage1 = (FloatingActionButton) findViewById(R.id.btnChamgeImage1);
-        btnChangeImage2 = (FloatingActionButton) findViewById(R.id.btnChangeImage2);
-        btnChangeImage3 = (FloatingActionButton) findViewById(R.id.btnChangeImage3);
         ivImage1 = (RoundedImageView) findViewById(R.id.ivImage1);
         ivImage2 = (RoundedImageView) findViewById(R.id.ivImage2);
         ivImage3 = (RoundedImageView) findViewById(R.id.ivImage3);
+        findViewById(R.id.btnGoToProfile).setOnClickListener(this);
+        findViewById(R.id.btnGoToSettings).setOnClickListener(this);
+        findViewById(R.id.btnChat).setOnClickListener(this);
+        findViewById(R.id.btnCalendar).setOnClickListener(this);
+        findViewById(R.id.btnSearch).setOnClickListener(this);
+        findViewById(R.id.btnEditUsername).setOnClickListener(this);
+        findViewById(R.id.btnChamgeImage1).setOnClickListener(this);
+        findViewById(R.id.btnChangeImage2).setOnClickListener(this);
+        findViewById(R.id.btnChangeImage3).setOnClickListener(this);
 
         //Function to get the user data
         getUserData();
 
-        //GotoProfile Event Button
-        btnGoToProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnGoToProfile:
                 finish();
-            }
-        });
-
-        //GoToSetting Event Button
-        btnGotToSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EditUserProfileActivity.this, FindUsersActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //EditUsername Button Event
-        btnEditUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Function to update username
+                break;
+            case R.id.btnGoToSettings:
+                Intent intentsettings = new Intent(EditUserProfileActivity.this, FindUsersActivity.class);
+                intentsettings.putExtra(Utils.ID_USER, id);
+                startActivity(intentsettings);
+                break;
+            case R.id.btnEditUsername:
                 updateUsername();
-            }
-        });
-
-        btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EditUserProfileActivity.this, ChatMessagesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EditUserProfileActivity.this, CalendarActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EditUserProfileActivity.this, FindUsersActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //ChangeImage1 Event Button
-        btnChangeImage1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btnChat:
+                Intent intentchat = new Intent(EditUserProfileActivity.this, ChatMessagesActivity.class);
+                startActivity(intentchat);
+                break;
+            case R.id.btnCalendar:
+                Intent intentcalendar = new Intent(EditUserProfileActivity.this, CalendarActivity.class);
+                startActivity(intentcalendar);
+                break;
+            case R.id.btnSearch:
+                Intent intentsearch = new Intent(EditUserProfileActivity.this, FindUsersActivity.class);
+                startActivity(intentsearch);
+                break;
+            case R.id.btnChamgeImage1:
                 dialog = new ProgressDialog(EditUserProfileActivity.this);
                 dialog.setTitle(getString(R.string.uploading_image));
                 dialog.setMessage(getString(R.string.uploading_image_msg));
@@ -160,14 +138,8 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 ImageStatus = 1;
 
                 imagePicker();
-
-            }
-        });
-
-        //ChangeIamge2 Event Button
-        btnChangeImage2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btnChangeImage2:
                 dialog = new ProgressDialog(EditUserProfileActivity.this);
                 dialog.setTitle(getString(R.string.uploading_image));
                 dialog.setMessage(getString(R.string.uploading_image_msg));
@@ -177,13 +149,8 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 ImageStatus = 2;
 
                 imagePicker();
-            }
-        });
-
-        //ChangeImage3 Event Button
-        btnChangeImage3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btnChangeImage3:
                 dialog = new ProgressDialog(EditUserProfileActivity.this);
                 dialog.setTitle(getString(R.string.uploading_image));
                 dialog.setMessage(getString(R.string.uploading_image_msg));
@@ -193,15 +160,14 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 ImageStatus = 3;
 
                 imagePicker();
-            }
-        });
-
+                break;
+        }
     }
 
     private void imagePicker() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1,1)
+                .setAspectRatio(1, 1)
                 .start(this);
     }
 
@@ -277,17 +243,13 @@ public class EditUserProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mAuth != null) {
-            setStatusOnline();
-        }
+        updateStatus(id, Utils.ONLINE);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuth != null) {
-            setStatusOffline();
-        }
+        updateStatus(id, Utils.OFFLINE);
     }
 
     private void updateUsername() {
@@ -311,99 +273,52 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         } else if (Objects.equals(username, "")) {
                             Utils.toastyInfo(getApplicationContext(), getString(R.string.insert_username));
                         } else {
-                            DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(username);
-                            mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.getChildrenCount() == 0) {
-                                        //Progress Dialog
-                                        final ProgressDialog dialog;
-                                        dialog = new ProgressDialog(EditUserProfileActivity.this);
-                                        dialog.setTitle(getString(R.string.loading));
-                                        dialog.setMessage(getString(R.string.loading_msg));
-                                        dialog.setCanceledOnTouchOutside(false);
-                                        dialog.show();
 
-                                        //get the username
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                                        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                oldUsername = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+                            final ProgressDialog dialogs;
+                            dialogs = new ProgressDialog(EditUserProfileActivity.this);
+                            dialogs.setTitle(getString(R.string.loading));
+                            dialogs.setMessage(getString(R.string.loading_msg));
+                            dialogs.setCanceledOnTouchOutside(false);
+                            dialogs.show();
 
-                                                //delete the old username from Firebase: Username
-                                                DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(oldUsername);
-                                                mDatabase1.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
+                            Ion.with(getApplicationContext())
+                                    .load(Utils.URL_UPDATE_USERNAME)
+                                    .setBodyParameter(Utils.ID_USER_APP, id)
+                                    .setBodyParameter(Utils.USERNAME_USER, username)
+                                    .asJsonObject()
+                                    .setCallback(new FutureCallback<JsonObject>() {
+                                        @Override
+                                        public void onCompleted(Exception e, JsonObject result) {
+                                            try {
+                                                String returnApp = result.get(Utils.UPDATE_USERNAME).getAsString();
 
-                                                            //save the new username in Firebase: Username
-                                                            DatabaseReference mDatabase3 = FirebaseDatabase.getInstance().getReference().child(Utils.USERNAME).child(username);
-                                                            HashMap<String, String> usernames = new HashMap<>();
-                                                            usernames.put("uid", mAuth.getCurrentUser().getUid());
-                                                            mDatabase3.setValue(usernames).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-                                                                    if (task.isSuccessful()) {
-
-                                                                        //Function to save the user data at Firebase: Users > UID > user data
-                                                                        Map<String, Object> user = new HashMap<>();
-                                                                        user.put(Utils.USERNAME, username);
-                                                                        mDatabase.updateChildren(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                            @Override
-                                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                                if (task.isSuccessful()) {
-                                                                                    dialog.dismiss();
-                                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.username_changed));
-                                                                                }
-                                                                            }
-                                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                                            @Override
-                                                                            public void onFailure(@NonNull Exception e) {
-                                                                                dialog.dismiss();
-                                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                                                                            }
-                                                                        });
-
-                                                                    }
-                                                                }
-                                                            }).addOnFailureListener(new OnFailureListener() {
-                                                                @Override
-                                                                public void onFailure(@NonNull Exception e) {
-                                                                    dialog.dismiss();
-                                                                    Utils.toastyError(getApplicationContext(), e.getMessage());
-                                                                }
-                                                            });
-
-                                                        }
+                                                if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                                    if (dialogs.isShowing()) {
+                                                        dialogs.dismiss();
                                                     }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        dialog.dismiss();
-                                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                    tvUsername.setText(username);
+                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.username_changed));
+                                                } else if (Objects.equals(returnApp, Utils.CODE_ERROR_USERNAME_EXISTS)) {
+                                                    if (dialogs.isShowing()) {
+                                                        dialogs.dismiss();
                                                     }
-                                                });
+                                                    Utils.toastyInfo(getApplicationContext(), getString(R.string.username_already_used));
+                                                } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                                    if (dialogs.isShowing()) {
+                                                        dialogs.dismiss();
+                                                    }
+                                                }
+
+                                            } catch (Exception x) {
+                                                if (dialogs.isShowing()) {
+                                                    dialogs.dismiss();
+                                                }
+                                                Utils.toastyError(getApplicationContext(), x.getMessage());
                                             }
+                                        }
+                                    });
 
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
 
-                                            }
-                                        });
-
-                                    } else if (dataSnapshot.getChildrenCount() >= 1) {
-                                        Utils.toastyInfo(getApplicationContext(), getString(R.string.username_already_used));
-                                    }
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
                         }
 
                     }
@@ -420,62 +335,72 @@ public class EditUserProfileActivity extends AppCompatActivity {
     }
 
     private void getUserData() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
 
-        dialog = new ProgressDialog(this);
-        dialog.setTitle(getString(R.string.loading));
-        dialog.setMessage(getString(R.string.loading_msg));
+        dialog = new ProgressDialog(EditUserProfileActivity.this);
+        dialog.setMessage(getString(R.string.loading));
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                String image1 = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
-                String image2 = dataSnapshot.child(Utils.IMAGE_2).getValue(String.class);
-                String image3 = dataSnapshot.child(Utils.IMAGE_3).getValue(String.class);
+        Ion.with(this)
+                .load(Utils.URL_GET_USER_DATA)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.GET_USER_DATA).getAsString();
 
-                if (!(username == null || Objects.equals(username, ""))) {
-                    tvUsername.setText(username);
-                }
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
 
-                if (image1 != null && !Objects.equals(image1, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(image1).placeholder(R.drawable.img_profile).into(ivImage1);
-                    Picasso.with(EditUserProfileActivity.this).load(image1).placeholder(R.drawable.img_profile).into(cvImageUser);
-                }
-                if (image2 != null && !Objects.equals(image2, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load(image2).placeholder(R.drawable.img_profile).into(ivImage2);
-                }
-                if (image3 != null && !Objects.equals(image3, "")) {
-                    Picasso.with(EditUserProfileActivity.this).load((image3)).placeholder(R.drawable.img_profile).into(ivImage3);
-                }
+                                String username = result.get(Utils.USERNAME_USER).getAsString();
+                                //String image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
 
-                dialog.dismiss();
+                                tvUsername.setText(username);
+                                //TODO: CRIAR METODO PARA CARREGAR O LINK DA IMAGEM DO FIREBASE
 
-            }
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Utils.toastyError(getApplicationContext(), "Error: " + Utils.CODE_ERROR);
+                            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
 
 
     }
 
-    private void setStatusOnline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "online");
-        mDatabase.updateChildren(status);
-    }
+    private void updateStatus(final String id_user, final String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
 
-    private void setStatusOffline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "offline");
-        mDatabase.updateChildren(status);
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failed");
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
 

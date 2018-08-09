@@ -37,6 +37,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import org.w3c.dom.Text;
 
@@ -51,7 +54,7 @@ import br.sendlook.yeslap.view.DialogNewEmail;
 import br.sendlook.yeslap.view.Utils;
 import im.delight.android.location.SimpleLocation;
 
-public class SettingsActivity extends AppCompatActivity implements DialogNewEmail.DialogNewEmailListener {
+public class SettingsActivity extends AppCompatActivity implements DialogNewEmail.DialogNewEmailListener, View.OnClickListener {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -80,18 +83,24 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
 
     private SimpleLocation location;
     private ProgressDialog dialog;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        mAuth = FirebaseAuth.getInstance();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            id = bundle.getString(Utils.ID_USER);
+        }
+
+        findViewById(R.id.btnGenderUser).setOnClickListener(this);
+        btnGenderUser = (Button) findViewById(R.id.btnGenderUser);
 
         ivGoToProfile = (ImageView) findViewById(R.id.imgGoToProfile);
         ivGoToChat = (ImageView) findViewById(R.id.imgGoToChat);
         btnLocationUser = (Button) findViewById(R.id.btnLocationUser);
-        btnGenderUser = (Button) findViewById(R.id.btnGenderUser);
         tvAgeUser = (TextView) findViewById(R.id.tvRangeAgeUser);
         rbAgeUser = (CrystalSeekbar) findViewById(R.id.rangeAgeUser);
         btnEmailUser = (Button) findViewById(R.id.btnEmailUser);
@@ -110,8 +119,8 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnPasswordUser = (Button) findViewById(R.id.btnPasswordUser);
 
 
-        getCurrentLocation();
-        getUserConfig();
+        //getCurrentLocation();
+        //getUserConfig();
 
         // click events
         ivGoToProfile.setOnClickListener(new View.OnClickListener() {
@@ -129,83 +138,10 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
             }
         });
 
-        btnGenderUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-
-                switch (genderUser) {
-                    case "male":
-
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
-                        genderUser = "female";
-                        btnGenderUser.setText(getString(R.string.female));
-
-                        HashMap<String, Object> gender = new HashMap<>();
-                        gender.put(Utils.GENDER_USER, genderUser);
-                        database.updateChildren(gender).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.d("Gender User Updated", String.format("Gender User Updated: %s", genderUser));
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                            }
-                        });
-
-                        break;
-                    case "female":
-
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
-                        genderUser = "gay";
-                        btnGenderUser.setText(getString(R.string.gay));
-
-                        HashMap<String, Object> gender1 = new HashMap<>();
-                        gender1.put(Utils.GENDER_USER, genderUser);
-                        database.updateChildren(gender1).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.d("Gender Updated", String.format("Gender Updated: %s", genderUser));
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                            }
-                        });
-
-                        break;
-                    case "gay":
-
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
-                        genderUser = "male";
-                        btnGenderUser.setText(getString(R.string.male));
-
-                        HashMap<String, Object> gender2 = new HashMap<>();
-                        gender2.put(Utils.GENDER_USER, genderUser);
-                        database.updateChildren(gender2).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.d("Gender Updated", String.format("Gender Updated: %s", genderUser));
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                            }
-                        });
-
-                        break;
-                }
-            }
-        });
-
         btnPasswordUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO
                 new MaterialDialog.Builder(SettingsActivity.this)
                         .title(R.string.reset_password)
                         .content(R.string.reset_password_msg)
@@ -248,22 +184,43 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         rbAgeUser.setOnSeekbarFinalValueListener(new OnSeekbarFinalValueListener() {
             @Override
             public void finalValue(final Number value) {
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                HashMap<String, Object> age = new HashMap<>();
-                age.put(Utils.AGE_USER, String.valueOf(value));
-                database.updateChildren(age).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("age updated", "Age: " + value);
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                    }
-                });
+                dialog = new ProgressDialog(SettingsActivity.this);
+                dialog.setMessage(getString(R.string.loading));
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+
+                Ion.with(getApplicationContext())
+                        .load(Utils.URL_UPDATE_AGE_USER)
+                        .setBodyParameter(Utils.ID_USER_APP, id)
+                        .setBodyParameter(Utils.AGE_USER_APP, String.valueOf(value))
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                try {
+                                    String returnApp = result.get(Utils.AGE_USER).getAsString();
+
+                                    if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                        Log.d("Age User Updated", "Gender User Updated");
+                                    } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                    }
+
+                                } catch (Exception x) {
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
+                                    }
+                                    Utils.toastyError(getApplicationContext(), x.getMessage());
+                                }
+                            }
+                        });
+
             }
         });
 
@@ -278,7 +235,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnGenderSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //TODO
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
 
                 switch (genderSearch) {
@@ -358,6 +315,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnEmailUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO
                 DialogNewEmail newEmail = new DialogNewEmail();
                 newEmail.show(getSupportFragmentManager(), "newEmail");
             }
@@ -366,24 +324,23 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         rbAgeSearch.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
             public void valueChanged(final Number minValue, final Number maxValue) {
+                //TODO
                 tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                HashMap<String, Object> ageSearch = new HashMap<>();
-                ageSearch.put(Utils.AGE_SEARCH_MIN, String.valueOf(minValue));
-                ageSearch.put(Utils.AGE_SEARCH_MAX, String.valueOf(maxValue));
-                database.updateChildren(ageSearch).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("AGE SEARCH", String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
-                        }
-                    }
+                /**DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
+                 HashMap<String, Object> ageSearch = new HashMap<>();
+                 ageSearch.put(Utils.AGE_SEARCH_MIN, String.valueOf(minValue));
+                 ageSearch.put(Utils.AGE_SEARCH_MAX, String.valueOf(maxValue));
+                 database.updateChildren(ageSearch).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                Log.d("AGE SEARCH", String.format("%s - %s", String.valueOf(minValue), String.valueOf(maxValue)));
+                }
+                }
                 }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                    }
-                });
+                @Override public void onFailure(@NonNull Exception e) {
+                Utils.toastyError(getApplicationContext(), e.getMessage());
+                }
+                });*/
             }
         });
 
@@ -411,8 +368,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setStatusOffline();
-                mAuth.signOut();
+                //TODO
                 Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -424,11 +380,91 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnDeleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO
                 Utils.toastyInfo(getApplicationContext(), "Delete Account");
                 callActivity(UserProfileActivity.class);
             }
         });
 
+    }
+
+    private void updateGenderUser(String id, String genderUser) {
+
+        dialog = new ProgressDialog(SettingsActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        Ion.with(getApplicationContext())
+                .load(Utils.URL_UPDATE_GENDER_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .setBodyParameter(Utils.GENDER_USER_APP, genderUser)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.GENDER_USER).getAsString();
+
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Log.d("Gender User Updated", "Gender User Updated");
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                            }
+
+                        } catch (Exception x) {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnGenderUser:
+                switch (genderUser) {
+                    case "male":
+
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
+                        genderUser = "female";
+                        btnGenderUser.setText(getString(R.string.female));
+
+                        updateGenderUser(id, genderUser);
+
+                        break;
+                    case "female":
+
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
+                        genderUser = "gay";
+                        btnGenderUser.setText(getString(R.string.gay));
+
+                        updateGenderUser(id, genderUser);
+
+                        break;
+                    case "gay":
+
+                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
+                        genderUser = "male";
+                        btnGenderUser.setText(getString(R.string.male));
+
+                        updateGenderUser(id, genderUser);
+
+                        break;
+                }
+
+                break;
+        }
     }
 
     private void checkIfGpsIsOn() {
@@ -639,36 +675,38 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
     @Override
     protected void onResume() {
         super.onResume();
-        mUser = mAuth.getCurrentUser();
-        if (mUser != null) {
-            checkIfGpsIsOn();
-            location.beginUpdates();
-            setStatusOnline();
-        }
+        updateStatus(id, Utils.ONLINE);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mUser = mAuth.getCurrentUser();
-        if (mUser != null) {
-            setStatusOffline();
-            location.endUpdates();
-        }
+        updateStatus(id, Utils.OFFLINE);
     }
 
-    private void setStatusOnline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "online");
-        mDatabase.updateChildren(status);
-    }
+    private void updateStatus(final String id_user, final String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
 
-    private void setStatusOffline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "offline");
-        mDatabase.updateChildren(status);
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failed");
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
 

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -164,6 +165,11 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                                 goToUserProfile();
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR_USERNAME_EXISTS)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Utils.toastyInfo(getApplicationContext(), getString(R.string.username_already_used));
                             } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
                                 if (dialog.isShowing()) {
                                     dialog.dismiss();
@@ -244,27 +250,38 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // setStatusOnline();
+        updateStatus(id, Utils.ONLINE);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //setStatusOffline();
+        updateStatus(id, Utils.OFFLINE);
     }
 
-    private void setStatusOnline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "online");
-        mDatabase.updateChildren(status);
-    }
+    private void updateStatus(final String id_user, final String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
 
-    private void setStatusOffline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "offline");
-        mDatabase.updateChildren(status);
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failed");
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
 }

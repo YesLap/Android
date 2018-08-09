@@ -73,10 +73,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.btnEditUserProfile:
                 Intent intentuserprofile = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
+                intentuserprofile.putExtra(Utils.ID_USER, idUser);
                 startActivity(intentuserprofile);
                 break;
             case R.id.btnGoToSettings:
                 Intent intentsettings = new Intent(UserProfileActivity.this, SettingsActivity.class);
+                intentsettings.putExtra(Utils.ID_USER, idUser);
                 startActivity(intentsettings);
                 break;
             case R.id.btnCalendar:

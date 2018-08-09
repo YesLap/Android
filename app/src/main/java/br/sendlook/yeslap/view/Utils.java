@@ -57,13 +57,14 @@ public class Utils {
     public static final String OFFLINE = "offline";
     public static final String ONLINE = "online";
 
-    public static final String GENDER_USER = "genderUser";
+    public static final String GENDER_USER = "gender_user";
+    public static final String AGE_USER_APP = "age_user_app";
     public static final String GENDER_SEARCH = "genderSearch";
     public static final String AGE_SEARCH_MIN = "ageSearchMin";
     public static final String AGE_SEARCH_MAX = "ageSearchMax";
     public static final String LATITUDE_USER = "latitudeUser";
     public static final String LONGITUDE_USER = "longitudeUser";
-    public static final String AGE_USER = "ageUser";
+    public static final String AGE_USER = "age_user";
 
     public static final String URL_SIGN_UP = "http://yeslap-eu.umbler.net/signup/signup.php";
     public static final String URL_SIGN_IN = "http://yeslap-eu.umbler.net/signin/signin.php";
@@ -73,6 +74,8 @@ public class Utils {
     public static final String URL_STATUS_USER = "http://yeslap-eu.umbler.net/userprofile/statususer.php";
     public static final String URL_EXIST_PROFILE = "http://yeslap-eu.umbler.net/userprofile/existprofile.php";
     public static final String URL_LAST_SEEN = "http://yeslap-eu.umbler.net/userprofile/lastseen.php";
+    public static final String URL_UPDATE_GENDER_USER = "http://yeslap-eu.umbler.net/userprofile/updategenderuser.php";
+    public static final String URL_UPDATE_AGE_USER = "http://yeslap-eu.umbler.net/userprofile/updateageuser.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
@@ -80,6 +83,7 @@ public class Utils {
     public static final String LAST_SEEN = "last_seen_app";
     public static final String SIGN_UP_CODE = "signUp";
     public static final String SIGN_IN_CODE = "signin";
+    public static final String GENDER_USER_APP = "gender_user_app";
     public static final String ID_USER = "id_user";
     public static final String CHECK_COMPLETE_PROFILE = "checkcompleteprofile";
     public static final String GET_USER_DATA = "getuserdata";
@@ -91,6 +95,7 @@ public class Utils {
     public static final String CODE_SUCCESS = "200";
     public static final String CODE_ERROR_EMAIL = "201";
     public static final String CODE_ERROR = "300";
+    public static final String CODE_ERROR_USERNAME_EXISTS = "202";
     public static final String CODE_ERROR_USERNAME_NULL = "202";
 
     public static void toastySuccess(Context context, String msg) {
