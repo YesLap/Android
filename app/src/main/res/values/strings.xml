@@ -1,4 +1,5 @@
 <resources>
+    <string name="version_app" >Version 2.0.6</string>
     <string name="app_name">YesLap!</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
@@ -29,7 +30,6 @@
     <string name="enter_your_message">Enter your message</string>
     <string name="logout">Log Out</string>
     <string name="delete_account">Delete Account</string>
-    <string name="version_app" >Version 1.0.76</string>
     <string name="legal" translatable="false">LEGAL</string>
     <string name="licenses">Licenses</string>
     <string name="terms_of_service">Terms of Service</string>
@@ -128,4 +128,8 @@
     <string name="password_size_msg">Enter a password longer than 6 characters</string>
     <string name="error_signup">Excuse me! An unexpected error has occurred!</string>
     <string name="email_or_password_incorrect">Email or password are incorrect</string>
+    <string name="change_password">Change Password</string>
+    <string name="new_password">New Password</string>
+    <string name="fill_new_password">fill in your New E-mail</string>
+    <string name="changed_password">You E-mail has been changed!</string>
 </resources>

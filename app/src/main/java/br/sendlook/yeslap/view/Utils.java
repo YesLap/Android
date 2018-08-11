@@ -19,6 +19,8 @@ public class Utils {
 
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
+    public static final String EMAIL_USER = "email_user";
+    public static final String PASSWORD = "password_user";
     public static final String IMAGE_1 = "image1";
     public static final String IMAGE_2 = "image2";
     public static final String IMAGE_3 = "image3";
@@ -61,11 +63,14 @@ public class Utils {
     public static final String AGE_USER_APP = "age_user_app";
     public static final String AGE_SEARCH_MIN_APP = "age_search_min_app";
     public static final String AGE_SEARCH_MAX_APP = "age_search_max_app";
+    public static final String AGE_SEARCH_MIN = "age_search_min";
+    public static final String AGE_SEARCH_MAX = "age_search_max";
     public static final String GENDER_SEARCH = "gender_search";
     public static final String GENDER_SEARCH_APP = "gender_search_app";
     public static final String AGE_SEARCH = "age_search";
-    public static final String LATITUDE_USER = "latitudeUser";
-    public static final String LONGITUDE_USER = "longitudeUser";
+    public static final String LATITUDE_USER_APP = "latitude_user_app";
+    public static final String LONGITUDE_USER_APP = "longitude_user_app";
+    public static final String LOCATION_USER = "location_user";
     public static final String AGE_USER = "age_user";
 
     public static final String URL_SIGN_UP = "http://yeslap-eu.umbler.net/signup/signup.php";
@@ -80,6 +85,9 @@ public class Utils {
     public static final String URL_UPDATE_AGE_USER = "http://yeslap-eu.umbler.net/userprofile/updateageuser.php";
     public static final String URL_UPDATE_AGE_SEARCH = "http://yeslap-eu.umbler.net/userprofile/updateagesearch.php";
     public static final String URL_UPDATE_GENDER_SEARCH = "http://yeslap-eu.umbler.net/userprofile/updategendersearch.php";
+    public static final String URL_UPDATE_LOCATION_USER = "http://yeslap-eu.umbler.net/userprofile/updatelocationuser.php";
+    public static final String URL_UPDATE_EMAIL_USER = "http://yeslap-eu.umbler.net/userprofile/updateemailuser.php";
+    public static final String URL_UPDATE_PASSWORD_USER = "http://yeslap-eu.umbler.net/userprofile/updatepassworduser.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";

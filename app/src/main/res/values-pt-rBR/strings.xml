@@ -1,4 +1,5 @@
 <resources>
+    <string name="version_app">Versão 2.0.6</string>
     <string name="app_name">YesLap</string>
     <string name="email">E-mail</string>
     <string name="password">Senha</string>
@@ -97,7 +98,6 @@
     <string name="delete_favorite_msg">Tem certeza de que deseja excluir este favorito?</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
-    <string name="version_app">Versão 1.0.76</string>
     <string name="favorites">Favoritos</string>
     <string name="you_still_have_not_talked_say_hello">Vocês ainda não conversaram \n Diga Olá</string>
     <string name="new_username_msg">Digite seu novo nome de usuário</string>

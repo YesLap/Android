@@ -10,15 +10,12 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import br.sendlook.yeslap.R;
 
-public class DialogNewEmail extends AppCompatDialogFragment {
+public class DialogNewPassword extends AppCompatDialogFragment {
 
-    private TextInputEditText etCurrentEmail, etCurrentPassword, etNewEmail;
-    private DialogNewEmailListener listener;
+    private TextInputEditText etCurrentPassword, etNewPassword;
+    private DialogNewPasswordListener listener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -26,10 +23,10 @@ public class DialogNewEmail extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_dialog_email_user, null);
+        View view = inflater.inflate(R.layout.layout_dialog_password_user, null);
 
         builder.setView(view)
-                .setTitle(R.string.change_email)
+                .setTitle(R.string.change_password)
                 .setNegativeButton(getString(R.string.cancels), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -40,13 +37,13 @@ public class DialogNewEmail extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String currentPassword = etCurrentPassword.getText().toString();
-                String newEmail = etNewEmail.getText().toString();
-                listener.changeEmail(currentPassword, newEmail);
+                String newPassword = etNewPassword.getText().toString();
+                listener.changePassword(currentPassword, newPassword);
             }
         });
 
         etCurrentPassword = view.findViewById(R.id.etCurrentPassword);
-        etNewEmail = view.findViewById(R.id.etNewEmail);
+        etNewPassword = view.findViewById(R.id.etNewPassword);
 
         return builder.create();
     }
@@ -55,14 +52,14 @@ public class DialogNewEmail extends AppCompatDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (DialogNewEmailListener) context;
+            listener = (DialogNewPasswordListener) context;
         } catch (ClassCastException e) {
-            throw  new ClassCastException(context.toString() + "must implement DialogNewEmailListener");
+            throw  new ClassCastException(context.toString() + "must implement DialogNewPasswordListener");
         }
     }
 
-    public interface DialogNewEmailListener {
-        void changeEmail(String currentPassword, String newEmail);
+    public interface DialogNewPasswordListener {
+        void changePassword(String currentPassword, String newPassowrd);
     }
 
 }
