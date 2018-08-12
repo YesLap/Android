@@ -83,6 +83,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.btnCalendar:
                 Intent intentcalendar = new Intent(UserProfileActivity.this, CalendarActivity.class);
+                intentcalendar.putExtra(Utils.ID_USER, idUser);
                 startActivity(intentcalendar);
                 break;
             case R.id.btnChat:

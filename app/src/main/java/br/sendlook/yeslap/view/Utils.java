@@ -38,16 +38,32 @@ public class Utils {
     public static final String MESSAGES_STATUS = "messages_status";
     public static final String DATE = "date";
     public static final String KEY = "key";
+    public static final String TURN_APP = "turn_app";
     public static final String UID_SENDER = "uidSender";
     public static final String UID_ADDRESSEE = "uidAddressee";
 
-    public static final String SUNDAY = "1";
-    public static final String MONDAY = "2";
-    public static final String TUESDAY = "3";
-    public static final String WEDNESDAY = "4";
-    public static final String THURSDAY = "5";
-    public static final String FRIDAY = "6";
-    public static final String SATURDAY = "7";
+
+    public static final String SUNDAY_M = "1m";
+    public static final String SUNDAY_A = "1a";
+    public static final String SUNDAY_N = "1n";
+    public static final String MONDAY_M = "2m";
+    public static final String MONDAY_A = "2a";
+    public static final String MONDAY_N = "2n";
+    public static final String TUESDAY_M = "3m";
+    public static final String TUESDAY_A = "3a";
+    public static final String TUESDAY_N = "3n";
+    public static final String WEDNESDAY_M = "4m";
+    public static final String WEDNESDAY_A = "4a";
+    public static final String WEDNESDAY_N = "4n";
+    public static final String THURSDAY_M = "5m";
+    public static final String THURSDAY_A = "5a";
+    public static final String THURSDAY_N = "5n";
+    public static final String FRIDAY_M = "6m";
+    public static final String FRIDAY_A = "6a";
+    public static final String FRIDAY_N = "6n";
+    public static final String SATURDAY_M = "7m";
+    public static final String SATURDAY_A = "7a";
+    public static final String SATURDAY_N = "7n";
 
     public static final String MORNING = "morning";
     public static final String AFTERNOON = "afternoon";
@@ -88,6 +104,7 @@ public class Utils {
     public static final String URL_UPDATE_LOCATION_USER = "http://yeslap-eu.umbler.net/userprofile/updatelocationuser.php";
     public static final String URL_UPDATE_EMAIL_USER = "http://yeslap-eu.umbler.net/userprofile/updateemailuser.php";
     public static final String URL_UPDATE_PASSWORD_USER = "http://yeslap-eu.umbler.net/userprofile/updatepassworduser.php";
+    public static final String URL_UPDATE_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/updatecalendaruser.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
