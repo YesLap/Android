@@ -2,32 +2,17 @@ package br.sendlook.yeslap.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ToggleButton;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Objects;
 
 import br.sendlook.yeslap.R;
@@ -35,8 +20,6 @@ import br.sendlook.yeslap.view.Utils;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
     private ImageView ivMorningSun, ivMorningMon, ivMorningTue, ivMorningWed, ivMorningThu, ivMorningFri, ivMorningSat;
     private ImageView ivAfternoonSun, ivAfternoonMon, ivAfternoonTue, ivAfternoonWed, ivAfternoonThu, ivAfternoonFri, ivAfternoonSat;
     private ImageView ivNightSun, ivNightMon, ivNightTue, ivNightWed, ivNightThu, ivNightFri, ivNightSat;
@@ -139,7 +122,8 @@ public class CalendarActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkUsernameAndImage();
+                Intent intent = new Intent(CalendarActivity.this, FindUsersActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -148,8 +132,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (MorningSun) {
-                    //removeCalendar(Utils.SUNDAY, Utils.MORNING, ivMorningSun);
-                    MorningSun = false;
+                    removeCalendar(Utils.SUNDAY_M ,ivMorningSun);
                 } else {
                     setCalendar(Utils.SUNDAY_M, tbAvailabilitySun);
                 }
@@ -161,8 +144,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (AfternoonSun) {
-                    //removeCalendar(Utils.SUNDAY, Utils.AFTERNOON, ivAfternoonSun);
-                    AfternoonSun = false;
+                    removeCalendar(Utils.SUNDAY_A, ivAfternoonSun);
                 } else {
                     setCalendar(Utils.SUNDAY_A, tbAvailabilitySun);
                 }
@@ -174,8 +156,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (NightSun) {
-                    //removeCalendar(Utils.SUNDAY, Utils.NIGHT, ivNightSun);
-                    NightSun = false;
+                    removeCalendar(Utils.SUNDAY_N, ivNightSun);
                 } else {
                     setCalendar(Utils.SUNDAY_N, tbAvailabilitySun);
                 }
@@ -188,8 +169,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (MorningMon) {
-                    //removeCalendar(Utils.MONDAY, Utils.MORNING, ivMorningMon);
-                    MorningMon = false;
+                    removeCalendar(Utils.MONDAY_M, ivMorningMon);
                 } else {
                     setCalendar(Utils.MONDAY_M, tbAvailabilityMon);
                 }
@@ -202,8 +182,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (AfternoonMon) {
-                    //removeCalendar(Utils.MONDAY, Utils.AFTERNOON, ivAfternoonMon);
-                    AfternoonMon = false;
+                    removeCalendar(Utils.MONDAY_A, ivAfternoonMon);
                 } else {
                     setCalendar(Utils.MONDAY_A, tbAvailabilityMon);
                 }
@@ -215,8 +194,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (NightMon) {
-                    //removeCalendar(Utils.MONDAY, Utils.NIGHT, ivNightMon);
-                    NightMon = false;
+                    removeCalendar(Utils.MONDAY_N, ivNightMon);
                 } else {
                     setCalendar(Utils.MONDAY_N, tbAvailabilityMon);
                 }
@@ -230,7 +208,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (MorningTue) {
-                    //removeCalendar(Utils.TUESDAY, Utils.MORNING, ivMorningTue);
+                    removeCalendar(Utils.TUESDAY_M, ivMorningTue);
                     MorningTue = false;
                 } else {
                     setCalendar(Utils.TUESDAY_M, tbAvailabilityTue);
@@ -244,8 +222,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (AfternoonTue) {
-                    //removeCalendar(Utils.TUESDAY, Utils.AFTERNOON, ivAfternoonTue);
-                    AfternoonTue = false;
+                    removeCalendar(Utils.TUESDAY_A, ivAfternoonTue);
                 } else {
                     setCalendar(Utils.TUESDAY_A, tbAvailabilityTue);
                 }
@@ -258,8 +235,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (NightTue) {
-                    //removeCalendar(Utils.TUESDAY, Utils.NIGHT, ivNightTue);
-                    NightTue = false;
+                    removeCalendar(Utils.TUESDAY_N, ivNightTue);
                 } else {
                     setCalendar(Utils.TUESDAY_N, tbAvailabilityTue);
                 }
@@ -273,8 +249,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (MorningWed) {
-                    //removeCalendar(Utils.WEDNESDAY, Utils.MORNING, ivMorningWed);
-                    MorningWed = false;
+                    removeCalendar(Utils.WEDNESDAY_M, ivMorningWed);
                 } else {
                     setCalendar(Utils.WEDNESDAY_M, tbAvailabilityWed);
                 }
@@ -287,8 +262,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (AfternoonWed) {
-                    //removeCalendar(Utils.WEDNESDAY, Utils.AFTERNOON, ivAfternoonWed);
-                    AfternoonWed = false;
+                    removeCalendar(Utils.WEDNESDAY_A, ivAfternoonWed);
                 } else {
                     setCalendar(Utils.WEDNESDAY_A, tbAvailabilityWed);
                 }
@@ -301,8 +275,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (NightWed) {
-                    //removeCalendar(Utils.WEDNESDAY, Utils.NIGHT, ivNightWed);
-                    NightWed = false;
+                    removeCalendar(Utils.WEDNESDAY_N, ivNightWed);
                 } else {
                     setCalendar(Utils.WEDNESDAY_N, tbAvailabilityWed);
                 }
@@ -316,8 +289,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (MorningThu) {
-                    //removeCalendar(Utils.THURSDAY, Utils.MORNING, ivMorningThu);
-                    MorningThu = false;
+                    removeCalendar(Utils.THURSDAY_M, ivMorningThu);
                 } else {
                     setCalendar(Utils.THURSDAY_M, tbAvailabilityThu);
                 }
@@ -330,8 +302,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (AfternoonThu) {
-                    //removeCalendar(Utils.THURSDAY, Utils.AFTERNOON, ivAfternoonThu);
-                    AfternoonThu = false;
+                    removeCalendar(Utils.THURSDAY_A, ivAfternoonThu);
                 } else {
                     setCalendar(Utils.THURSDAY_A, tbAvailabilityThu);
                 }
@@ -344,8 +315,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (NightThu) {
-                    //removeCalendar(Utils.THURSDAY, Utils.NIGHT, ivNightThu);
-                    NightThu = false;
+                    removeCalendar(Utils.THURSDAY_N, ivNightThu);
                 } else {
                     setCalendar(Utils.THURSDAY_N, tbAvailabilityThu);
                 }
@@ -359,8 +329,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (MorningFri) {
-                    //removeCalendar(Utils.FRIDAY, Utils.MORNING, ivMorningFri);
-                    MorningFri = false;
+                    removeCalendar(Utils.FRIDAY_M, ivMorningFri);
                 } else {
                     setCalendar(Utils.FRIDAY_M, tbAvailabilityFri);
                 }
@@ -373,8 +342,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (AfternoonFri) {
-                    //removeCalendar(Utils.FRIDAY, Utils.AFTERNOON, ivAfternoonFri);
-                    AfternoonFri = false;
+                    removeCalendar(Utils.FRIDAY_A, ivAfternoonFri);
                 } else {
                     setCalendar(Utils.FRIDAY_A, tbAvailabilityFri);
                 }
@@ -387,8 +355,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (NightFri) {
-                    //removeCalendar(Utils.FRIDAY, Utils.NIGHT, ivNightFri);
-                    NightFri = false;
+                    removeCalendar(Utils.FRIDAY_N, ivNightFri);
                 } else {
                     setCalendar(Utils.FRIDAY_N, tbAvailabilityFri);
                 }
@@ -402,8 +369,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (MorningSat) {
-                    //removeCalendar(Utils.SATURDAY, Utils.MORNING, ivMorningSat);
-                    MorningSat = false;
+                    removeCalendar(Utils.SATURDAY_M,ivMorningSat);
                 } else {
                     setCalendar(Utils.SATURDAY_M, tbAvailabilitySat);
                 }
@@ -416,8 +382,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (AfternoonSat) {
-                    //removeCalendar(Utils.SATURDAY, Utils.AFTERNOON, ivAfternoonSat);
-                    AfternoonSat = false;
+                    removeCalendar(Utils.SATURDAY_A, ivAfternoonSat);
                 } else {
                     setCalendar(Utils.SATURDAY_A, tbAvailabilitySat);
                 }
@@ -430,8 +395,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (NightSat) {
-                    //removeCalendar(Utils.SATURDAY, Utils.NIGHT, ivNightSat);
-                    NightSat = false;
+                    removeCalendar(Utils.SATURDAY_N, ivNightSat);
                 } else {
                     setCalendar(Utils.SATURDAY_N, tbAvailabilitySat);
                 }
@@ -546,30 +510,113 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
-    //TODO
-    private void removeCalendar(String week, final String turn, final ImageView imageView) {
+    private void removeCalendar(final String turn, final ImageView imageView) {
         dialog = new ProgressDialog(CalendarActivity.this);
         dialog.setMessage(getString(R.string.loading));
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
-        switch (turn) {
-            case Utils.MORNING:
-                imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
-                break;
-            case Utils.AFTERNOON:
-                imageView.setImageDrawable(getDrawable(R.drawable.iconafternoonoff));
-                break;
-            case Utils.NIGHT:
-                imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
-                break;
-        }
+        Ion.with(this)
+                .load(Utils.URL_DELETE_CALENDAR_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .setBodyParameter(Utils.TURN_APP, turn)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.CALENDAR).getAsString();
+
+                            switch (returnApp) {
+                                case Utils.CODE_SUCCESS:
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
+                                    }
+                                    if (Objects.equals(turn, Utils.SUNDAY_M)) {
+                                        MorningSun = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
+                                    } else if (Objects.equals(turn, Utils.SUNDAY_A)) {
+                                        AfternoonSun = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconafternoonoff));
+                                    } else if (Objects.equals(turn, Utils.SUNDAY_N)) {
+                                        NightSun = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
+                                    } else if (Objects.equals(turn, Utils.MONDAY_M)) {
+                                        MorningMon = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
+                                    } else if (Objects.equals(turn, Utils.MONDAY_A)) {
+                                        AfternoonMon = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconafternoonoff));
+                                    } else if (Objects.equals(turn, Utils.MONDAY_N)) {
+                                        NightMon = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
+                                    } else if (Objects.equals(turn, Utils.TUESDAY_M)) {
+                                        MorningTue = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
+                                    } else if (Objects.equals(turn, Utils.TUESDAY_A)) {
+                                        AfternoonTue = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconafternoonoff));
+                                    } else if (Objects.equals(turn, Utils.TUESDAY_N)) {
+                                        NightTue = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
+                                    } else if (Objects.equals(turn, Utils.WEDNESDAY_M)) {
+                                        MorningWed = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
+                                    } else if (Objects.equals(turn, Utils.WEDNESDAY_A)) {
+                                        AfternoonWed = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconafternoonoff));
+                                    } else if (Objects.equals(turn, Utils.WEDNESDAY_N)) {
+                                        NightWed = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
+                                    } else if (Objects.equals(turn, Utils.THURSDAY_M)) {
+                                        MorningThu = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
+                                    } else if (Objects.equals(turn, Utils.THURSDAY_A)) {
+                                        AfternoonThu = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconafternoonoff));
+                                    } else if (Objects.equals(turn, Utils.THURSDAY_N)) {
+                                        NightThu = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
+                                    } else if (Objects.equals(turn, Utils.FRIDAY_M)) {
+                                        MorningFri = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
+                                    } else if (Objects.equals(turn, Utils.FRIDAY_A)) {
+                                        AfternoonFri = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconafternoonoff));
+                                    } else if (Objects.equals(turn, Utils.FRIDAY_N)) {
+                                        NightFri = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
+                                    } else if (Objects.equals(turn, Utils.SATURDAY_M)) {
+                                        MorningSat = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
+                                    } else if (Objects.equals(turn, Utils.SATURDAY_A)) {
+                                        AfternoonSat = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconafternoonoff));
+                                    } else if (Objects.equals(turn, Utils.SATURDAY_N)) {
+                                        NightSat = false;
+                                        imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
+                                    }
+                                    break;
+                                case Utils.CODE_ERROR:
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
+                                    }
+                                    Utils.toastyInfo(getApplicationContext(), e.getMessage());
+                                    break;
+                            }
+                        } catch (Exception x) {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+
+
+
 
     }
-
 
     private void getDayAndTurn(final String turn, final ImageView imageview, final com.suke.widget.SwitchButton toggleButton) {
 
@@ -666,41 +713,6 @@ public class CalendarActivity extends AppCompatActivity {
                 });
 
 
-    }
-
-    /*private void isOn(String week, String turn) {
-        if (Objects.equals(week, Utils.SUNDAY) && Objects.equals(turn, Utils.MORNING)) {
-            MorningSun = true;
-        } else if (Objects.equals(week, Utils.SUNDAY) && Objects.equals(turn, Utils.AFTERNOON)) {
-            AfternoonSun = true;
-        } else if (Objects.equals(week, Utils.SUNDAY) && Objects.equals(turn, Utils.NIGHT)) {
-            NightFri = true;
-        }
-    }*/
-
-
-    private void checkUsernameAndImage() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
-
-                if (Objects.equals(username, Utils.USERNAME) || Objects.equals(image, "")) {
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.please_change_image_username));
-                } else {
-                    Intent intent = new Intent(CalendarActivity.this, FindUsersActivity.class);
-                    startActivity(intent);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void updateStatus(final String id_user, final String status) {

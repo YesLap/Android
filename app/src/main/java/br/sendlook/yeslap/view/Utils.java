@@ -106,6 +106,7 @@ public class Utils {
     public static final String URL_UPDATE_PASSWORD_USER = "http://yeslap-eu.umbler.net/userprofile/updatepassworduser.php";
     public static final String URL_UPDATE_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/updatecalendaruser.php";
     public static final String URL_GET_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/getcalendaruser.php";
+    public static final String URL_DELETE_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/deletecalendaruser.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
