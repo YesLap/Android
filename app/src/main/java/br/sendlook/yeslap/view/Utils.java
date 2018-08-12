@@ -105,6 +105,7 @@ public class Utils {
     public static final String URL_UPDATE_EMAIL_USER = "http://yeslap-eu.umbler.net/userprofile/updateemailuser.php";
     public static final String URL_UPDATE_PASSWORD_USER = "http://yeslap-eu.umbler.net/userprofile/updatepassworduser.php";
     public static final String URL_UPDATE_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/updatecalendaruser.php";
+    public static final String URL_GET_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/getcalendaruser.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
@@ -126,6 +127,7 @@ public class Utils {
     public static final String CODE_ERROR = "300";
     public static final String CODE_ERROR_USERNAME_EXISTS = "202";
     public static final String CODE_ERROR_USERNAME_NULL = "202";
+    public static final String CODE_ERROR_NO_CALENDAR = "206";
 
     public static void toastySuccess(Context context, String msg) {
         Toasty.success(context, msg, Toast.LENGTH_LONG, true).show();
