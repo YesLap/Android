@@ -1,8 +1,10 @@
 package br.sendlook.yeslap.controller;
 
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +21,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -35,17 +40,19 @@ public class ReportActivity extends AppCompatActivity {
     private EditText etMsgReport;
     private Button btnSend;
     private TextView tvUsername;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private String uid;
-    private String reason;
+    private String id, idReported, reason;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
-        mAuth = FirebaseAuth.getInstance();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            id = bundle.getString(Utils.ID_USER);
+            idReported = bundle.getString(Utils.ID_FAVORITE_USER_APP);
+        }
 
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
         rgOptions = (RadioGroup) findViewById(R.id.rgOptions);
@@ -53,7 +60,6 @@ public class ReportActivity extends AppCompatActivity {
         btnSend = (Button) findViewById(R.id.btnSend);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
 
-        getIntentBundle();
         getUserData();
 
         rgOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -69,59 +75,135 @@ public class ReportActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (Objects.equals(reason, null)) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.select_option_to_send_message));
+                } else if (Objects.equals(etMsgReport.getText().toString().trim(), "")) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.msg_report));
                 } else {
-                    String message = etMsgReport.getText().toString().trim();
-                    String userWhoReported = mAuth.getCurrentUser().getUid();
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.REPORTS).child(userWhoReported).child(uid).push();
-                    HashMap<String, String> report = new HashMap<>();
-                    report.put("reason", reason);
-                    report.put("message", message);
-                    mDatabase.setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Utils.toastySuccess(getApplicationContext(), getString(R.string.report_sended));
-                                finish();
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Utils.toastyError(getApplicationContext(), e.getMessage());
-                        }
-                    });
+
+                    dialog = new ProgressDialog(ReportActivity.this);
+                    dialog.setMessage(getString(R.string.loading));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
+                    Ion.with(getApplicationContext())
+                            .load(Utils.URL_ADD_NEW_REPORT)
+                            .setBodyParameter(Utils.ID_USER_APP, id)
+                            .setBodyParameter(Utils.ID_REPORTED_APP, idReported)
+                            .setBodyParameter(Utils.MSG_REPORT_APP, etMsgReport.getText().toString().trim())
+                            .setBodyParameter(Utils.REASON_REPORT_APP, reason)
+                            .asJsonObject()
+                            .setCallback(new FutureCallback<JsonObject>() {
+                                @Override
+                                public void onCompleted(Exception e, JsonObject result) {
+                                    try {
+                                        String returnApp = result.get(Utils.REPORTS).getAsString();
+
+                                        switch (returnApp) {
+                                            case Utils.CODE_SUCCESS:
+                                                if (dialog.isShowing()) {
+                                                    dialog.dismiss();
+                                                }
+                                                Utils.toastySuccess(getApplicationContext(), getString(R.string.report_sended));
+                                                finish();
+                                                break;
+                                            case Utils.CODE_ERROR:
+                                                if (dialog.isShowing()) {
+                                                    dialog.dismiss();
+                                                }
+                                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                break;
+                                        }
+                                    } catch (Exception x) {
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                        Utils.toastyError(getApplicationContext(), x.getMessage());
+                                    }
+
+                                }
+                            });
                 }
             }
         });
 
     }
 
-    private void getIntentBundle() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            uid = bundle.getString("uid");
-        }
+    @Override
+    protected void onResume() {
+        updateStatus(id, Utils.ONLINE);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        updateStatus(id, Utils.OFFLINE);
+        super.onPause();
     }
 
     private void getUserData() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(uid);
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                String image = dataSnapshot.child("image1").getValue(String.class);
+        dialog = new ProgressDialog(ReportActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
-                tvUsername.setText(username);
-                if (image != null && !Objects.equals(image, "")) {
-                    Picasso.with(ReportActivity.this).load(image).placeholder(R.drawable.img_profile).into(cvImageUser);
-                }
+        Ion.with(this)
+                .load(Utils.URL_GET_USER_DATA)
+                .setBodyParameter(Utils.ID_USER_APP, idReported)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        String returnApp = result.get(Utils.GET_USER_DATA).getAsString();
 
-            }
+                        try {
+                            switch (returnApp) {
+                                case Utils.CODE_SUCCESS:
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
+                                    }
+                                    tvUsername.setText(result.get(Utils.USERNAME_USER).getAsString());
+                                    //TODO: CARREGAR AS IMAGENS
+                                    break;
+                                case Utils.CODE_ERROR:
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
+                                    }
+                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                    break;
+                            }
+                        } catch (Exception x) {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                    }
+                });
     }
+
+    private void updateStatus(final String id_user, final String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
+
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failed");
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+    }
+
 }

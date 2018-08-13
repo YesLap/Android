@@ -111,10 +111,14 @@ public class Utils {
     public static final String URL_DELETE_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/deletecalendaruser.php";
     public static final String URL_FIND_USERS = "http://yeslap-eu.umbler.net/finduser/findusers.php";
     public static final String URL_ADD_NEW_FAVORITE = "http://yeslap-eu.umbler.net/userprofile/addnewfavorite.php";
+    public static final String URL_ADD_NEW_REPORT = "http://yeslap-eu.umbler.net/userprofile/addnewreport.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
     public static final String ID_USER_APP = "id_user_app";
+    public static final String ID_REPORTED_APP = "id_reported_app";
+    public static final String MSG_REPORT_APP = "msg_report_app";
+    public static final String REASON_REPORT_APP = "reason_report_app";
     public static final String ID_FAVORITE_USER_APP = "id_favorite_user_app";
     public static final String LAST_SEEN = "last_seen_app";
     public static final String SIGN_UP_CODE = "signUp";

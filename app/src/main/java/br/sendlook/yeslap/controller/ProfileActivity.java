@@ -134,6 +134,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, ReportActivity.class);
                 intent.putExtra(Utils.ID_USER, id);
+                intent.putExtra(Utils.ID_FAVORITE_USER_APP, idSearch);
                 startActivity(intent);
             }
         });

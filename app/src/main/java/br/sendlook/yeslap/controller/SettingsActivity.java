@@ -511,7 +511,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                                 password = result.get(Utils.PASSWORD).getAsString();
 
                                 //AGE
-                                if (ageUser != null) {
+                                if (ageUser != "") {
                                     tvAgeUser.setText(String.valueOf(ageUser));
                                     rbAgeUser.setMinStartValue(Float.valueOf(ageUser)).apply();
                                     if (dialog.isShowing()) {
@@ -524,7 +524,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                                 }
 
                                 //GENDER USER
-                                if (genderUser != null) {
+                                if (genderUser != "") {
                                     switch (genderUser) {
                                         case "male":
                                             btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
@@ -545,7 +545,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                                 }
 
                                 //GENDER SEARCH
-                                if (genderSearch != null) {
+                                if (genderSearch != "") {
                                     switch (genderSearch) {
                                         case "male":
                                             btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
@@ -569,7 +569,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                                 btnEmailUser.setText(email);
 
                                 //AGE SEARCH
-                                if (ageSearchMin != null && ageSearchMax != null) {
+                                if (ageSearchMin != "" && ageSearchMax != "") {
                                     rbAgeSearch.setMinStartValue(Float.valueOf(ageSearchMin)).apply();
                                     rbAgeSearch.setMaxStartValue(Float.valueOf(ageSearchMax)).apply();
                                     tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(ageSearchMin), String.valueOf(ageSearchMax)));

@@ -109,7 +109,7 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
                 finish();
                 break;
             case R.id.btnGoToSettings:
-                Intent intentsettings = new Intent(EditUserProfileActivity.this, FindUsersActivity.class);
+                Intent intentsettings = new Intent(EditUserProfileActivity.this, SettingsActivity.class);
                 intentsettings.putExtra(Utils.ID_USER, id);
                 startActivity(intentsettings);
                 break;
@@ -122,10 +122,12 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
                 break;
             case R.id.btnCalendar:
                 Intent intentcalendar = new Intent(EditUserProfileActivity.this, CalendarActivity.class);
+                intentcalendar.putExtra(Utils.ID_USER, id);
                 startActivity(intentcalendar);
                 break;
             case R.id.btnSearch:
                 Intent intentsearch = new Intent(EditUserProfileActivity.this, FindUsersActivity.class);
+                intentsearch.putExtra(Utils.ID_USER, id);
                 startActivity(intentsearch);
                 break;
             case R.id.btnChamgeImage1:

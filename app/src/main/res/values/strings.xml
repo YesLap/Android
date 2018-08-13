@@ -133,4 +133,5 @@
     <string name="fill_new_password">fill in your New E-mail</string>
     <string name="changed_password">You E-mail has been changed!</string>
     <string name="already_exist_favorite">This user is already on your list of favorite users</string>
+    <string name="msg_report">Enter any comments to report this user</string>
 </resources>

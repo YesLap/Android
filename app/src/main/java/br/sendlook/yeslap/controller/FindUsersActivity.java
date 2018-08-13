@@ -85,6 +85,7 @@ public class FindUsersActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(FindUsersActivity.this, SettingsActivity.class);
+                intent.putExtra(Utils.ID_USER, id);
                 startActivity(intent);
             }
         });
