@@ -27,6 +27,7 @@ public class Utils {
     public static final String SINCE = "since";
     public static final String UID = "uid";
     public static final String STATUS = "statususer";
+    public static final String STATUS_USER = "status_user";
     public static final String STATUS_USER_APP = "status_user_app";
     public static final String SPOTLIGHT = "spotlight";
     public static final String DONE = "done";
@@ -36,8 +37,9 @@ public class Utils {
     public static final String CALENDAR = "calendar";
     public static final String CHAT_MESSAGES = "chatmessages";
     public static final String MESSAGES_STATUS = "messages_status";
-    public static final String DATE = "date";
+    public static final String DATE = "date_app";
     public static final String KEY = "key";
+    public static final String USER_SEARCH = "user_search";
     public static final String TURN_APP = "turn_app";
     public static final String UID_SENDER = "uidSender";
     public static final String UID_ADDRESSEE = "uidAddressee";
@@ -107,10 +109,13 @@ public class Utils {
     public static final String URL_UPDATE_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/updatecalendaruser.php";
     public static final String URL_GET_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/getcalendaruser.php";
     public static final String URL_DELETE_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/deletecalendaruser.php";
+    public static final String URL_FIND_USERS = "http://yeslap-eu.umbler.net/finduser/findusers.php";
+    public static final String URL_ADD_NEW_FAVORITE = "http://yeslap-eu.umbler.net/userprofile/addnewfavorite.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
     public static final String ID_USER_APP = "id_user_app";
+    public static final String ID_FAVORITE_USER_APP = "id_favorite_user_app";
     public static final String LAST_SEEN = "last_seen_app";
     public static final String SIGN_UP_CODE = "signUp";
     public static final String SIGN_IN_CODE = "signin";
@@ -129,6 +134,7 @@ public class Utils {
     public static final String CODE_ERROR_USERNAME_EXISTS = "202";
     public static final String CODE_ERROR_USERNAME_NULL = "202";
     public static final String CODE_ERROR_NO_CALENDAR = "206";
+    public static final String CODE_FAVORITE = "205";
 
     public static void toastySuccess(Context context, String msg) {
         Toasty.success(context, msg, Toast.LENGTH_LONG, true).show();

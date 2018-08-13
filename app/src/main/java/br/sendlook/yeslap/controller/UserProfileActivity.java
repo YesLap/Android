@@ -69,6 +69,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.btnSearch:
                 Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
+                intent.putExtra(Utils.ID_USER, idUser);
                 startActivity(intent);
                 break;
             case R.id.btnEditUserProfile:

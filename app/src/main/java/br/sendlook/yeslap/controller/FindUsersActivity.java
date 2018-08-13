@@ -1,65 +1,55 @@
 package br.sendlook.yeslap.controller;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.model.UsersAdapter;
 import br.sendlook.yeslap.view.Users;
 import br.sendlook.yeslap.view.Utils;
-import de.hdodenhof.circleimageview.CircleImageView;
-import ru.whalemare.sheetmenu.SheetMenu;
 
 public class FindUsersActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private RecyclerView rvUsers;
+    private ListView lstUsers;
     private ImageView ivBgOffSun, ivBgOffMon, ivBgOffTue, ivBgOffWed, ivBgOffThu, ivBgOffFri, ivBgOffSat;
     private TextView tvSun, tvMon, tvTue, tvWed, tvThu, tvFri, tvSat;
     private ImageView ivMorning, ivAfternoon, ivNight;
     private ImageView btnGoToProfile, btnGoToSettings;
-    private ArrayList<String> arrayUsers;
-    private ArrayAdapter<String> adapter;
     private ProgressDialog dialog;
+    private String id;
+
+    private UsersAdapter adapter;
+    private List<Users> usersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_users);
 
-        //Instantiate Firebase and Iniciate the DatabaseReference
-        mAuth = FirebaseAuth.getInstance();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            id = bundle.getString(Utils.ID_USER);
+        }
 
-        arrayUsers = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayUsers);
-
-        rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
-        rvUsers.setHasFixedSize(true);
-        rvUsers.setLayoutManager(new LinearLayoutManager(this));
+        lstUsers = (ListView) findViewById(R.id.lstUsers);
 
         ivBgOffSun = (ImageView) findViewById(R.id.ivBgOffSun);
         ivBgOffMon = (ImageView) findViewById(R.id.ivBgOffMon);
@@ -176,6 +166,17 @@ public class FindUsersActivity extends AppCompatActivity {
             }
         });
 
+        lstUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+                Users u = (Users) parent.getAdapter().getItem(i);
+                Intent intent = new Intent(FindUsersActivity.this, ProfileActivity.class);
+                intent.putExtra(Utils.ID_USER, id);
+                intent.putExtra(Utils.ID_FAVORITE_USER_APP, u.getId_user());
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -188,17 +189,13 @@ public class FindUsersActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mAuth != null) {
-            setStatusOnline();
-        }
+        updateStatus(id, Utils.ONLINE);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuth != null) {
-            setStatusOffline();
-        }
+        updateStatus(id, Utils.OFFLINE);
     }
 
     private void loadUsers() {
@@ -208,120 +205,73 @@ public class FindUsersActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS);
+        usersList = new ArrayList<Users>();
+        adapter = new UsersAdapter(FindUsersActivity.this, usersList);
+        lstUsers.setAdapter(adapter);
 
-        final FirebaseRecyclerAdapter<Users, FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<Users, FindUsersViewHolder>(Users.class, R.layout.list_users, FindUsersViewHolder.class, mDatabase) {
-            @Override
-            protected void populateViewHolder(final FindUsersViewHolder v, final Users m, int position) {
-                //if (Objects.equals(m.getUidSender(), mAuth.getCurrentUser().getUidSender())) {
-                //arrayUsers.remove(position);
-
-                //notifyDataSetChanged();
-                //Utils.toastyInfo(getApplicationContext(), "m.getUidSender(): " + m.getUidSender() + "\n" + "Current User: " + mAuth.getCurrentUser().getUidSender() + "\n" + "ArraySize: " + arrayUsers.size() + "\n" + "Position: " + position);
-                //} else {
-                v.setName(m.getUsername());
-                v.setImage(m.getImage1(), getApplicationContext());
-
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(m.getUid());
-                database.addListenerForSingleValueEvent(new ValueEventListener() {
+        Ion.with(getApplicationContext())
+                .load(Utils.URL_FIND_USERS)
+                .asJsonArray()
+                .setCallback(new FutureCallback<JsonArray>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        v.setStatus(dataSnapshot.child(Utils.STATUS).getValue(String.class));
-                    }
+                    public void onCompleted(Exception e, JsonArray result) {
+                         try {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                             for (int i = 0; i < result.size(); i++) {
+                                 JsonObject jsonObject = result.get(i).getAsJsonObject();
 
-                    }
-                });
-                //}
+                                 if (!Objects.equals(jsonObject.get(Utils.ID_USER).getAsString(), id)) {
+                                     Users u = new Users();
 
-                v.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                                     u.setId_user(jsonObject.get(Utils.ID_USER).getAsString());
+                                     u.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
+                                     u.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());
 
-                        SheetMenu.with(FindUsersActivity.this)
-                                .setTitle(m.getUsername())
-                                .setMenu(R.menu.menu_find)
-                                .setClick(new MenuItem.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(MenuItem menuItem) {
-                                        switch (menuItem.getItemId()) {
-                                            case R.id.nav_menu_chat:
-                                                Intent intent = new Intent(FindUsersActivity.this, ChatActivity.class);
-                                                intent.putExtra(Utils.UID, (m.getUid()));
-                                                startActivity(intent);
-                                                break;
-                                            case R.id.nav_menu_view_profile:
-                                                Intent intentProfile = new Intent(FindUsersActivity.this, ProfileActivity.class);
-                                                intentProfile.putExtra(Utils.UID, (m.getUid()));
-                                                startActivity(intentProfile);
-                                                break;
-                                        }
-                                        return false;
-                                    }
-                                }).show();
+                                     usersList.add(u);
+                                 }
 
+                             }
+
+                             adapter.notifyDataSetChanged();
+
+                             if (dialog.isShowing()) {
+                                 dialog.dismiss();
+                             }
+
+                         } catch (Exception x) {
+                             if (dialog.isShowing()) {
+                                 dialog.dismiss();
+                             }
+                             Utils.toastyError(getApplicationContext(), x.getMessage());
+                         }
                     }
                 });
-            }
-        };
-        
-        rvUsers.setAdapter(adapter);
 
     }
 
-    private void setStatusOnline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put(Utils.STATUS, "online");
-        mDatabase.updateChildren(status);
-    }
+    private void updateStatus(final String id_user, final String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
 
-    private void setStatusOffline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put(Utils.STATUS, "offline");
-        mDatabase.updateChildren(status);
-    }
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failed");
+                            }
 
-    public static class FindUsersViewHolder extends RecyclerView.ViewHolder {
-
-        View mView;
-
-        public FindUsersViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-        }
-
-        public void setUID(String uid, Context context) {
-            Utils.toastyInfo(context, (uid));
-        }
-
-        public void setName(String name) {
-            TextView tvUsername = (TextView) mView.findViewById(R.id.tvUsername);
-            tvUsername.setText((name));
-        }
-
-        public void setImage(String image, Context context) {
-            CircleImageView ivUser = (CircleImageView) mView.findViewById(R.id.cvImageUser);
-            if (Objects.equals(image, "") || image == null) {
-                ivUser.setImageResource(R.drawable.img_profile);
-            } else {
-                Picasso.with(context).load((image)).placeholder(R.drawable.img_profile).into(ivUser);
-            }
-        }
-
-        public void setStatus(String status) {
-            ImageView ivStatus = (ImageView) mView.findViewById(R.id.ivStatus);
-            if (Objects.equals(status, "online")) {
-                ivStatus.setImageResource(R.drawable.on_user);
-            } else {
-                ivStatus.setImageResource(R.drawable.off_user);
-            }
-        }
-
-
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
 }

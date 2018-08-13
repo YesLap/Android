@@ -254,8 +254,8 @@
         android:layout_below="@id/linearDays"
         android:layout_above="@id/imageView5">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvUsers"
+        <ListView
+            android:id="@+id/lstUsers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cacheColorHint="@color/colorLightBlue"

@@ -133,6 +133,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 Utils.toastyInfo(getApplicationContext(), getString(R.string.sending_image));
 
                 mainImageURI = result.getUri();
+                Utils.toastyInfo(getApplicationContext(), String.valueOf(mainImageURI));
                 cvImageUser.setImageURI(mainImageURI);
 
                 //TODO: METODO PARA SALVAR A IMAGEM NO MYSQL

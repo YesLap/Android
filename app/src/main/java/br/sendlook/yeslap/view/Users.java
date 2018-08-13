@@ -2,51 +2,42 @@ package br.sendlook.yeslap.view;
 
 public class Users {
 
-    private String uid;
-    private String username;
-    private String image1;
-    private String status;
+    private String id_user;
+    private String username_user;
+    private String status_user;
+
 
     public Users() {
 
     }
 
-    public String getUid() {
-        return uid;
+    public Users(String id_user, String username_user, String status_user) {
+        this.id_user = id_user;
+        this.username_user = username_user;
+        this.status_user = status_user;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public String getId_user() {
+        return id_user;
     }
 
-    public String getUsername() {
-        return username;
+    public void setId_user(String id_user) {
+        this.id_user = id_user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getUsername_user() {
+        return username_user;
     }
 
-    public String getImage1() {
-        return image1;
+    public void setUsername_user(String username_user) {
+        this.username_user = username_user;
     }
 
-    public void setImage1(String image1) {
-        this.image1 = image1;
+    public String getStatus_user() {
+        return status_user;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Users(String uid, String username, String image1, String status) {
-        this.uid = uid;
-        this.username = username;
-        this.image1 = image1;
-        this.status = status;
+    public void setStatus_user(String status_user) {
+        this.status_user = status_user;
     }
 }
