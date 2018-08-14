@@ -43,7 +43,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private GridView gvFavorite;
     private ImageView btnGoToProfile, btnGoToSettings;
     private TextView tvFavorite;
-    private ProgressDialog dialog;
+    private ProgressDialog dialogs;
     private String id;
     private FavoritesAdapter adapter;
     private List<Favorites> favoritesList;
@@ -65,80 +65,94 @@ public class FavoritesActivity extends AppCompatActivity {
 
         gvFavorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, final long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, final long ids) {
                 //TODO: FAZER O CLICK NO FAVORITO
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS);
-                database.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                final Favorites favorites = (Favorites) parent.getAdapter().getItem(position);
 
-                        final String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
+                SheetMenu.with(FavoritesActivity.this)
+                        .setTitle(favorites.getUsername_user())
+                        .setMenu(R.menu.menu_favorite)
+                        .setClick(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.nav_menu_view_profile:
+                                        Intent intent = new Intent(FavoritesActivity.this, ProfileActivity.class);
+                                        intent.putExtra(Utils.ID_FAVORITE_USER_APP, favorites.getId_user());
+                                        intent.putExtra(Utils.ID_USER, id);
+                                        startActivity(intent);
+                                        break;
+                                    case R.id.nav_menu_delete_favorite:
 
-                        SheetMenu.with(FavoritesActivity.this)
-                                .setTitle(username)
-                                .setMenu(R.menu.menu_favorite)
-                                .setClick(new MenuItem.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(MenuItem item) {
-                                        switch (item.getItemId()) {
-                                            case R.id.nav_menu_view_profile:
-                                                Intent intent = new Intent(FavoritesActivity.this, ProfileActivity.class);
-                                                //intent.putExtra(Utils.UID, (arrayFavorites.get(position).getUid()));
-                                                startActivity(intent);
-                                                break;
-                                            case R.id.nav_menu_delete_favorite:
+                                        new MaterialDialog.Builder(FavoritesActivity.this)
+                                                .title(favorites.getUsername_user())
+                                                .content(R.string.delete_favorite_msg)
+                                                .positiveText(R.string.confirm)
+                                                .negativeText(R.string.cancel)
+                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                    @Override
+                                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        dialogs = new ProgressDialog(FavoritesActivity.this);
+                                                        dialogs.setMessage(getString(R.string.loading));
+                                                        dialogs.setCanceledOnTouchOutside(false);
+                                                        dialogs.show();
 
-                                                new MaterialDialog.Builder(FavoritesActivity.this)
-                                                        .title(username)
-                                                        .content(R.string.delete_favorite_msg)
-                                                        .positiveText(R.string.confirm)
-                                                        .negativeText(R.string.cancel)
-                                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                                            @Override
-                                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child("a");
-                                                                database.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        Ion.with(getApplicationContext())
+                                                                .load(Utils.URL_DELETE_FAVORITE)
+                                                                .setBodyParameter(Utils.ID_USER_APP, id)
+                                                                .setBodyParameter(Utils.ID_FAVORITE_USER_APP, favorites.getId_user())
+                                                                .asJsonObject()
+                                                                .setCallback(new FutureCallback<JsonObject>() {
                                                                     @Override
-                                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                                        if (task.isSuccessful()) {
-                                                                            Utils.toastySuccess(getApplicationContext(), getString(R.string.favorite_removed));
-                                                                            //checkFavorite();
+                                                                    public void onCompleted(Exception e, JsonObject result) {
+                                                                        try {
+                                                                            String returnApp = result.get(Utils.FAVORITES).getAsString();
+                                                                            switch (returnApp) {
+                                                                                case Utils.CODE_SUCCESS:
+                                                                                    if (dialogs.isShowing()) {
+                                                                                        dialogs.dismiss();
+                                                                                    }
+                                                                                    loadFavorites();
+                                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.favorite_removed));
+                                                                                    break;
+                                                                                case Utils.CODE_ERROR:
+                                                                                    if (dialogs.isShowing()) {
+                                                                                        dialogs.dismiss();
+                                                                                    }
+                                                                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                                                    break;
+                                                                            }
+                                                                        } catch (Exception x) {
+                                                                            if (dialogs.isShowing()) {
+                                                                                dialogs.dismiss();
+                                                                            }
+                                                                            Utils.toastyError(getApplicationContext(), x.getMessage());
                                                                         }
                                                                     }
-                                                                }).addOnFailureListener(new OnFailureListener() {
-                                                                    @Override
-                                                                    public void onFailure(@NonNull Exception e) {
-                                                                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                                                                    }
                                                                 });
-                                                            }
-                                                        })
-                                                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                                                            @Override
-                                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                                dialog.dismiss();
-                                                            }
-                                                        }).show();
+
+                                                    }
+                                                })
+                                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                                    @Override
+                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                }).show();
 
 
-                                                break;
-                                            case R.id.nav_menu_chat:
-                                                Intent intentChat = new Intent(FavoritesActivity.this, ChatActivity.class);
-                                                //intentChat.putExtra(Utils.UID, (arrayFavorites.get(position).getUid()));
-                                                startActivity(intentChat);
-                                                break;
-                                        }
-                                        return false;
-                                    }
-                                }).show();
+                                        break;
+                                    case R.id.nav_menu_chat:
+                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.soon));
+                                        //Intent intentChat = new Intent(FavoritesActivity.this, ChatActivity.class);
+                                        //intentChat.putExtra(Utils.UID, (arrayFavorites.get(position).getUid()));
+                                        //startActivity(intentChat);
+                                        break;
+                                }
+                                return false;
+                            }
+                        }).show();
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
             }
         });
 
@@ -162,10 +176,10 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     private void loadFavorites() {
-        dialog = new ProgressDialog(FavoritesActivity.this);
-        dialog.setMessage(getString(R.string.loading));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        dialogs = new ProgressDialog(FavoritesActivity.this);
+        dialogs.setMessage(getString(R.string.loading));
+        dialogs.setCanceledOnTouchOutside(false);
+        dialogs.show();
 
         favoritesList = new ArrayList<Favorites>();
         adapter = new FavoritesAdapter(FavoritesActivity.this, favoritesList);
@@ -196,14 +210,14 @@ public class FavoritesActivity extends AppCompatActivity {
 
                                 }
                                 adapter.notifyDataSetChanged();
-                                if (dialog.isShowing()) {
-                                    dialog.dismiss();
+                                if (dialogs.isShowing()) {
+                                    dialogs.dismiss();
                                 }
                             }
 
                         } catch (Exception x) {
-                            if (dialog.isShowing()) {
-                                dialog.dismiss();
+                            if (dialogs.isShowing()) {
+                                dialogs.dismiss();
                             }
                             Utils.toastyError(getApplicationContext(), x.getMessage());
                         }
