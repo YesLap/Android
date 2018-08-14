@@ -42,6 +42,7 @@ public class Utils {
     public static final String USER_SEARCH = "user_search";
     public static final String TURN_APP = "turn_app";
     public static final String UID_SENDER = "uidSender";
+    public static final String LAST_SEEN_USER = "last_seen";
     public static final String UID_ADDRESSEE = "uidAddressee";
 
 
@@ -112,6 +113,7 @@ public class Utils {
     public static final String URL_FIND_USERS = "http://yeslap-eu.umbler.net/finduser/findusers.php";
     public static final String URL_ADD_NEW_FAVORITE = "http://yeslap-eu.umbler.net/userprofile/addnewfavorite.php";
     public static final String URL_ADD_NEW_REPORT = "http://yeslap-eu.umbler.net/userprofile/addnewreport.php";
+    public static final String URL_GET_FAVORITES = "http://yeslap-eu.umbler.net/userprofile/getfavorites.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";

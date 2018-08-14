@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,15 +18,19 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Favorites;
@@ -36,62 +40,34 @@ import ru.whalemare.sheetmenu.SheetMenu;
 
 public class FavoritesActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private DatabaseReference database;
     private GridView gvFavorite;
-    private ArrayAdapter<Favorites> adapter;
     private ImageView btnGoToProfile, btnGoToSettings;
     private TextView tvFavorite;
-    private ArrayList<Favorites> arrayFavorites;
-    private ValueEventListener valueEventListener;
     private ProgressDialog dialog;
-    private String username = "";
+    private String id;
+    private FavoritesAdapter adapter;
+    private List<Favorites> favoritesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        mAuth = FirebaseAuth.getInstance();
-
-        String uid = mAuth.getCurrentUser().getUid();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            id = bundle.getString(Utils.ID_USER);
+        }
 
         gvFavorite = (GridView) findViewById(R.id.gvFavorites);
         btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
         btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
         tvFavorite = (TextView) findViewById(R.id.tvFavorite);
 
-        arrayFavorites = new ArrayList<>();
-        adapter = new FavoritesAdapter(getApplicationContext(), arrayFavorites);
-        gvFavorite.setAdapter(adapter);
-
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(uid);
-        valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                arrayFavorites.clear();
-                for (DataSnapshot favorite : dataSnapshot.getChildren()) {
-                    try {
-                        Favorites favorites = favorite.getValue(Favorites.class);
-                        arrayFavorites.add(favorites);
-                    } catch (Exception e) {
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-
         gvFavorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, final long id) {
-
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(arrayFavorites.get(position).getUid());
+                //TODO: FAZER O CLICK NO FAVORITO
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS);
                 database.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -107,7 +83,7 @@ public class FavoritesActivity extends AppCompatActivity {
                                         switch (item.getItemId()) {
                                             case R.id.nav_menu_view_profile:
                                                 Intent intent = new Intent(FavoritesActivity.this, ProfileActivity.class);
-                                                intent.putExtra(Utils.UID, (arrayFavorites.get(position).getUid()));
+                                                //intent.putExtra(Utils.UID, (arrayFavorites.get(position).getUid()));
                                                 startActivity(intent);
                                                 break;
                                             case R.id.nav_menu_delete_favorite:
@@ -120,13 +96,13 @@ public class FavoritesActivity extends AppCompatActivity {
                                                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                                                             @Override
                                                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid()).child(arrayFavorites.get(position).getUid());
+                                                                DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child("a");
                                                                 database.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                     @Override
                                                                     public void onComplete(@NonNull Task<Void> task) {
                                                                         if (task.isSuccessful()) {
                                                                             Utils.toastySuccess(getApplicationContext(), getString(R.string.favorite_removed));
-                                                                            checkFavorite();
+                                                                            //checkFavorite();
                                                                         }
                                                                     }
                                                                 }).addOnFailureListener(new OnFailureListener() {
@@ -148,7 +124,7 @@ public class FavoritesActivity extends AppCompatActivity {
                                                 break;
                                             case R.id.nav_menu_chat:
                                                 Intent intentChat = new Intent(FavoritesActivity.this, ChatActivity.class);
-                                                intentChat.putExtra(Utils.UID, (arrayFavorites.get(position).getUid()));
+                                                //intentChat.putExtra(Utils.UID, (arrayFavorites.get(position).getUid()));
                                                 startActivity(intentChat);
                                                 break;
                                         }
@@ -177,6 +153,7 @@ public class FavoritesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FavoritesActivity.this, SettingsActivity.class);
+                intent.putExtra(Utils.ID_USER, id);
                 startActivity(intent);
             }
         });
@@ -184,51 +161,93 @@ public class FavoritesActivity extends AppCompatActivity {
 
     }
 
-    private void checkFavorite() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.FAVORITES).child(mAuth.getCurrentUser().getUid());
-        database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == 0) {
-                    gvFavorite.setVisibility(View.INVISIBLE);
-                    tvFavorite.setVisibility(View.VISIBLE);
-                }
-            }
+    private void loadFavorites() {
+        dialog = new ProgressDialog(FavoritesActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        favoritesList = new ArrayList<Favorites>();
+        adapter = new FavoritesAdapter(FavoritesActivity.this, favoritesList);
+        gvFavorite.setAdapter(adapter);
 
-            }
-        });
-    }
+        Ion.with(getApplicationContext())
+                .load(Utils.URL_GET_FAVORITES)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .asJsonArray()
+                .setCallback(new FutureCallback<JsonArray>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonArray result) {
+                        try {
+                            if (result.size() == 0) {
+                                gvFavorite.setVisibility(View.INVISIBLE);
+                                tvFavorite.setVisibility(View.VISIBLE);
+                            } else {
+                                for (int i = 0; i < result.size(); i++) {
+                                    JsonObject jsonObject = result.get(i).getAsJsonObject();
+                                    Favorites f = new Favorites();
 
-    private void setStatusOnline() {
-        database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put(Utils.STATUS, "online");
-        database.updateChildren(status);
-    }
+                                    f.setId_user(jsonObject.get(Utils.ID_USER).getAsString());
+                                    f.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
+                                    f.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());
+                                    f.setLast_seen(jsonObject.get(Utils.LAST_SEEN_USER).getAsString());
 
-    private void setStatusOffline() {
-        database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put(Utils.STATUS, "offline");
-        database.updateChildren(status);
+                                    favoritesList.add(f);
+
+                                }
+                                adapter.notifyDataSetChanged();
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                            }
+
+                        } catch (Exception x) {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+
     }
 
     @Override
     protected void onPause() {
+        updateStatus(id, Utils.OFFLINE);
         super.onPause();
-        setStatusOffline();
-        mDatabase.removeEventListener(valueEventListener);
     }
 
     @Override
     protected void onResume() {
+        updateStatus(id, Utils.ONLINE);
+        loadFavorites();
         super.onResume();
-        setStatusOnline();
-        checkFavorite();
-        mDatabase.addValueEventListener(valueEventListener);
+    }
+
+    private void updateStatus(final String id_user, final String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
+
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failed");
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
 }

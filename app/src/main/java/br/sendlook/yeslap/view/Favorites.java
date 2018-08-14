@@ -2,31 +2,51 @@ package br.sendlook.yeslap.view;
 
 public class Favorites {
 
-    private String uid;
-    private String lastSeen;
+    private String id_user;
+    private String status_user;
+    private String username_user;
+    private String last_seen;
 
     public Favorites() {
 
     }
 
-    public Favorites(String uid, String lastSeen) {
-        this.uid = uid;
-        this.lastSeen = lastSeen;
+    public Favorites(String id_user, String status_user, String username_user, String last_seen) {
+        this.id_user = id_user;
+        this.status_user = status_user;
+        this.username_user = username_user;
+        this.last_seen = last_seen;
     }
 
-    public String getUid() {
-        return uid;
+    public String getId_user() {
+        return id_user;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setId_user(String id_user) {
+        this.id_user = id_user;
     }
 
-    public String getLastSeen() {
-        return lastSeen;
+    public String getStatus_user() {
+        return status_user;
     }
 
-    public void setLastSeen(String lastSeen) {
-        this.lastSeen = lastSeen;
+    public void setStatus_user(String status_user) {
+        this.status_user = status_user;
+    }
+
+    public String getUsername_user() {
+        return username_user;
+    }
+
+    public void setUsername_user(String username_user) {
+        this.username_user = username_user;
+    }
+
+    public String getLast_seen() {
+        return last_seen;
+    }
+
+    public void setLast_seen(String last_seen) {
+        this.last_seen = last_seen;
     }
 }

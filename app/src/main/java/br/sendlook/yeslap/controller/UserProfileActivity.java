@@ -93,6 +93,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.ivFavorite:
                 Intent intentfavorite = new Intent(UserProfileActivity.this, FavoritesActivity.class);
+                intentfavorite.putExtra(Utils.ID_USER, idUser);
                 startActivity(intentfavorite);
                 break;
 

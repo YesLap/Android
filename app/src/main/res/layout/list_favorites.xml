@@ -35,18 +35,18 @@
         android:textColor="@android:color/black"
         android:textStyle="bold" />
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/ivGhost"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignBottom="@+id/cvUserImageFav"
         android:layout_alignStart="@+id/cvUserImageFav"
-        android:layout_marginBottom="7dp"
+        android:layout_alignBottom="@+id/cvUserImageFav"
         android:layout_marginStart="7dp"
+        android:layout_marginBottom="7dp"
         android:adjustViewBounds="true"
         android:cropToPadding="true"
         android:scaleType="fitCenter"
         android:visibility="visible"
-        app:srcCompat="@drawable/icon_ghost" />
+        app:srcCompat="@drawable/icon_ghost" /> -->
 
 </RelativeLayout>
