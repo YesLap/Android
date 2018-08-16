@@ -34,7 +34,7 @@ public class FindUsersActivity extends AppCompatActivity {
     private ImageView ivMorning, ivAfternoon, ivNight;
     private ImageView btnGoToProfile, btnGoToSettings;
     private ProgressDialog dialog;
-    private String id;
+    private String id, genderSearch, ageSearchMin, ageSearchMax;
 
     private UsersAdapter adapter;
     private List<Users> usersList;
@@ -47,6 +47,9 @@ public class FindUsersActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             id = bundle.getString(Utils.ID_USER);
+            genderSearch = bundle.getString(Utils.GENDER_SEARCH);
+            ageSearchMin = bundle.getString(Utils.AGE_SEARCH_MIN);
+            ageSearchMax = bundle.getString(Utils.AGE_SEARCH_MAX);
         }
 
         lstUsers = (ListView) findViewById(R.id.lstUsers);
@@ -212,39 +215,42 @@ public class FindUsersActivity extends AppCompatActivity {
 
         Ion.with(getApplicationContext())
                 .load(Utils.URL_FIND_USERS)
+                .setBodyParameter(Utils.GENDER_SEARCH_APP, genderSearch)
+                .setBodyParameter(Utils.AGE_SEARCH_MIN_APP, ageSearchMin)
+                .setBodyParameter(Utils.AGE_SEARCH_MAX_APP, ageSearchMax)
                 .asJsonArray()
                 .setCallback(new FutureCallback<JsonArray>() {
                     @Override
                     public void onCompleted(Exception e, JsonArray result) {
-                         try {
+                        try {
 
-                             for (int i = 0; i < result.size(); i++) {
-                                 JsonObject jsonObject = result.get(i).getAsJsonObject();
+                            for (int i = 0; i < result.size(); i++) {
+                                JsonObject jsonObject = result.get(i).getAsJsonObject();
 
-                                 if (!Objects.equals(jsonObject.get(Utils.ID_USER).getAsString(), id)) {
-                                     Users u = new Users();
+                                if (!Objects.equals(jsonObject.get(Utils.ID_USER).getAsString(), id) && !Objects.equals(genderSearch, " ") && !Objects.equals(ageSearchMin, " ") && !Objects.equals(ageSearchMax, " ")) {
+                                    Users u = new Users();
 
-                                     u.setId_user(jsonObject.get(Utils.ID_USER).getAsString());
-                                     u.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
-                                     u.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());
+                                    u.setId_user(jsonObject.get(Utils.ID_USER).getAsString());
+                                    u.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
+                                    u.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());
 
-                                     usersList.add(u);
-                                 }
+                                    usersList.add(u);
+                                }
 
-                             }
+                            }
 
-                             adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
 
-                             if (dialog.isShowing()) {
-                                 dialog.dismiss();
-                             }
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
 
-                         } catch (Exception x) {
-                             if (dialog.isShowing()) {
-                                 dialog.dismiss();
-                             }
-                             Utils.toastyError(getApplicationContext(), x.getMessage());
-                         }
+                        } catch (Exception x) {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
                     }
                 });
 

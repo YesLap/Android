@@ -42,7 +42,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private TextView tvUsername;
     private ProgressDialog dialog;
 
-    private String idUser;
+    private String idUser, genderSearch, ageSearchMin, ageSearchMax, ageUser, genderUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +68,24 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSearch:
-                Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
-                intent.putExtra(Utils.ID_USER, idUser);
-                startActivity(intent);
+                if (Objects.equals(genderUser, " ")) {
+                    completePerfil("Vá em configurações e selecione o seu gênero.");
+                } else  if (Objects.equals(ageUser, " ")) {
+                    completePerfil("Vá em configurações e selecione a sua idade.");
+                } else if (Objects.equals(genderSearch, " ")) {
+                    completePerfil("Vá em configurações e selecione o gênero que deseja procurar.");
+                } else if (Objects.equals(ageSearchMax, " ") || Objects.equals(ageSearchMin, " ")) {
+                    completePerfil("Vá em configurações e selecione o a idade da pessoa que voce deseja procurar.");
+                } else {
+                    Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
+                    intent.putExtra(Utils.ID_USER, idUser);
+                    intent.putExtra(Utils.GENDER_SEARCH, genderSearch);
+                    intent.putExtra(Utils.AGE_SEARCH_MIN, ageSearchMin);
+                    intent.putExtra(Utils.AGE_SEARCH_MAX, ageSearchMax);
+                    intent.putExtra(Utils.GENDER_USER, genderUser);
+                    intent.putExtra(Utils.AGE_USER, ageUser);
+                    startActivity(intent);
+                }
                 break;
             case R.id.btnEditUserProfile:
                 Intent intentuserprofile = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
@@ -98,6 +113,37 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
 
         }
+    }
+
+    private void completePerfil(String description) {
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.btnGoToSettings), "Complete Seu Perfil", description)
+                                //Cor de fora transparente
+                                .dimColor(R.color.colorLightBlue)
+                                //Cor de dentro do circulo
+                                .outerCircleColor(R.color.colorLightBlue)
+                                //Cor de dentro do alvo
+                                .targetCircleColor(android.R.color.white)
+                                //Cor do texto
+                                .textColor(android.R.color.white)
+                                .cancelable(false))
+                .listener(new TapTargetSequence.Listener() {
+                    @Override
+                    public void onSequenceFinish() {
+
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                }).start();
     }
 
     private void showSpotlight() {
@@ -199,6 +245,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                                 }
 
                                 String username = result.get(Utils.USERNAME_USER).getAsString();
+                                genderSearch = result.get(Utils.GENDER_SEARCH).getAsString();
+                                ageSearchMin = result.get(Utils.AGE_SEARCH_MIN).getAsString();
+                                ageSearchMax = result.get(Utils.AGE_SEARCH_MAX).getAsString();
+                                ageUser = result.get(Utils.AGE_USER).getAsString();
+                                genderUser = result.get(Utils.GENDER_USER).getAsString();
                                 //String image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
 
                                 tvUsername.setText(username);

@@ -123,6 +123,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CalendarActivity.this, FindUsersActivity.class);
+                intent.putExtra(Utils.ID_USER, id);
                 startActivity(intent);
             }
         });

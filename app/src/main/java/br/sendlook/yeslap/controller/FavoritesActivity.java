@@ -66,7 +66,6 @@ public class FavoritesActivity extends AppCompatActivity {
         gvFavorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, final long ids) {
-                //TODO: FAZER O CLICK NO FAVORITO
                 final Favorites favorites = (Favorites) parent.getAdapter().getItem(position);
 
                 SheetMenu.with(FavoritesActivity.this)

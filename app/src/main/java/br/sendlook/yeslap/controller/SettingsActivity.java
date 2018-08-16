@@ -47,13 +47,13 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
     private ImageView ivGoToChat;
     private Button btnLocationUser;
     private Button btnGenderUser;
-    private String genderUser = "female";
+    private String genderUser;
     private TextView tvAgeUser, tvAgeSearch;
     private CrystalSeekbar rbAgeUser;
 
     private Button btnLocationSearch;
     private Button btnGenderSearch;
-    private String genderSearch = "female";
+    private String genderSearch;
     private TextView tvRangeAgeSearch;
     private CrystalRangeSeekbar rbAgeSearch;
     private Button btnEmailUser;
@@ -98,7 +98,6 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         findViewById(R.id.btnLogOut).setOnClickListener(this);
         findViewById(R.id.btnDeleteAccount).setOnClickListener(this);
         findViewById(R.id.btnPasswordUser).setOnClickListener(this);
-
 
         getCurrentLocation();
         getUserConfig();
@@ -258,65 +257,47 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 callActivity(UserProfileActivity.class);
                 break;
             case R.id.btnGenderUser:
-                switch (genderUser) {
-                    case "male":
+                Utils.toastySuccess(getApplicationContext(), genderUser);
+                if (Objects.equals(genderUser, "male")) {
+                    btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
+                    genderUser = "female";
+                    btnGenderUser.setText(getString(R.string.female));
 
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
-                        genderUser = "female";
-                        btnGenderUser.setText(getString(R.string.female));
+                    updateGenderUser(id, genderUser);
+                } else if (Objects.equals(genderUser, "female")) {
+                    btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
+                    genderUser = "gay";
+                    btnGenderUser.setText(getString(R.string.gay));
 
-                        updateGenderUser(id, genderUser);
+                    updateGenderUser(id, genderUser);
+                } else if (Objects.equals(genderUser, "gay")) {
+                    btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
+                    genderUser = "male";
+                    btnGenderUser.setText(getString(R.string.male));
 
-                        break;
-                    case "female":
-
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
-                        genderUser = "gay";
-                        btnGenderUser.setText(getString(R.string.gay));
-
-                        updateGenderUser(id, genderUser);
-
-                        break;
-                    case "gay":
-
-                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
-                        genderUser = "male";
-                        btnGenderUser.setText(getString(R.string.male));
-
-                        updateGenderUser(id, genderUser);
-
-                        break;
+                    updateGenderUser(id, genderUser);
                 }
                 break;
             case R.id.btnGenderSearch:
-                switch (genderSearch) {
-                    case "male":
+                Utils.toastySuccess(getApplicationContext(), genderSearch);
+                if (Objects.equals(genderSearch, "male")) {
+                    btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
+                    genderSearch = "female";
+                    btnGenderSearch.setText(getString(R.string.female));
 
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
-                        genderSearch = "female";
-                        btnGenderSearch.setText(getString(R.string.female));
+                    updateGenderSearch(id, genderSearch);
+                } else if (Objects.equals(genderSearch, "female")) {
+                    btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
+                    genderSearch = "gay";
+                    btnGenderSearch.setText(getString(R.string.gay));
 
-                        updateGenderSearch(id, genderSearch);
+                    updateGenderSearch(id, genderSearch);
+                } else if (Objects.equals(genderSearch, "gay")) {
+                    btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
+                    genderSearch = "male";
+                    btnGenderSearch.setText(getString(R.string.male));
 
-                        break;
-                    case "female":
-
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, 0, 0);
-                        genderSearch = "gay";
-                        btnGenderSearch.setText(getString(R.string.gay));
-
-                        updateGenderSearch(id, genderSearch);
-
-                        break;
-                    case "gay":
-
-                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, 0, 0);
-                        genderSearch = "male";
-                        btnGenderSearch.setText(getString(R.string.male));
-
-                        updateGenderSearch(id, genderSearch);
-
-                        break;
+                    updateGenderSearch(id, genderSearch);
                 }
                 break;
         }
@@ -495,81 +476,111 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                         try {
                             String returnApp = result.get(Utils.GET_USER_DATA).getAsString();
 
+                            //Utils.toastySuccess(getApplicationContext(), "Gender User: " + result.get(Utils.GENDER_USER).getAsString());
+                            //Utils.toastySuccess(getApplicationContext(), "Gender Search: " + result.get(Utils.GENDER_SEARCH).getAsString());
+                            //Utils.toastySuccess(getApplicationContext(), "Age User: " + result.get(Utils.AGE_USER).getAsString());
+                            //Utils.toastySuccess(getApplicationContext(), "Age Search Min: " + result.get(Utils.AGE_SEARCH_MIN).getAsString());
+                            //Utils.toastySuccess(getApplicationContext(), "Age Search Max: " + result.get(Utils.AGE_SEARCH_MAX).getAsString());
+
+                            //if (Objects.equals(result.get(Utils.GENDER_USER).getAsString(), " ")) {
+                            //    Utils.toastySuccess(getApplicationContext(), "GENDER USER: " + result.get(Utils.GENDER_USER).getAsString());
+                            //} else  if (Objects.equals(result.get(Utils.GENDER_SEARCH).getAsString(), " ")) {
+                            //    Utils.toastySuccess(getApplicationContext(), "GENDER SEARCH: " + result.get(Utils.GENDER_SEARCH).getAsString());
+                            //} else if (Objects.equals(result.get(Utils.AGE_USER).getAsString(), " ")) {
+                            //    Utils.toastySuccess(getApplicationContext(), "AGE USER: " + result.get(Utils.AGE_USER).getAsString());
+                            //} else if (Objects.equals(result.get(Utils.AGE_SEARCH_MIN).getAsString(), " ")) {
+                            //   Utils.toastySuccess(getApplicationContext(), "AGE S MIN: " + result.get(Utils.AGE_SEARCH_MIN).getAsString());
+                            //} else if (Objects.equals(result.get(Utils.AGE_SEARCH_MAX).getAsString(), " ")) {
+                            //    Utils.toastySuccess(getApplicationContext(), "AGE S MAX: " + result.get(Utils.AGE_SEARCH_MAX).getAsString());
+                            //}
+
                             if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
                                 if (dialog.isShowing()) {
                                     dialog.dismiss();
                                 }
 
-                                String ageUser = result.get(Utils.AGE_USER).getAsString();
-                                genderUser = result.get(Utils.GENDER_USER).getAsString();
+                                if (!Objects.equals(result.get(Utils.GENDER_USER).getAsString(), " ")) {
+                                    genderUser = result.get(Utils.GENDER_USER).getAsString();
+                                } else {
+                                    //genderUser = "female";
+                                }
 
-                                genderSearch = result.get(Utils.GENDER_SEARCH).getAsString();
-                                String ageSearchMin = result.get(Utils.AGE_SEARCH_MIN).getAsString();
-                                String ageSearchMax = result.get(Utils.AGE_SEARCH_MAX).getAsString();
+                                if (!Objects.equals(result.get(Utils.GENDER_SEARCH).getAsString(), " ")) {
+                                    genderSearch = result.get(Utils.GENDER_SEARCH).getAsString();
+                                } else {
+                                    //genderSearch = "female";
+                                }
 
-                                String email = result.get(Utils.EMAIL).getAsString();
                                 password = result.get(Utils.PASSWORD).getAsString();
 
                                 //AGE
-                                if (ageUser != "") {
+                                String ageUser = " ";
+                                if (!Objects.equals(result.get(Utils.AGE_USER).getAsString(), " ")) {
+                                    ageUser = result.get(Utils.AGE_USER).getAsString();
+
                                     tvAgeUser.setText(String.valueOf(ageUser));
                                     rbAgeUser.setMinStartValue(Float.valueOf(ageUser)).apply();
-                                    if (dialog.isShowing()) {
-                                        dialog.dismiss();
-                                    }
-                                } else {
-                                    if (dialog.isShowing()) {
-                                        dialog.dismiss();
-                                    }
                                 }
 
                                 //GENDER USER
-                                if (genderUser != "") {
-                                    switch (genderUser) {
-                                        case "male":
-                                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
-                                            SettingsActivity.this.genderUser = genderUser;
-                                            btnGenderUser.setText(genderUser);
-                                            break;
-                                        case "female":
-                                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, R.drawable.settings_right_arrow, 0);
-                                            SettingsActivity.this.genderUser = genderUser;
-                                            btnGenderUser.setText(genderUser);
-                                            break;
-                                        case "gay":
-                                            btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
-                                            SettingsActivity.this.genderUser = genderUser;
-                                            btnGenderUser.setText(genderUser);
-                                            break;
+                                Utils.toastySuccess(getApplicationContext(), genderUser);
+                                if (!Objects.equals(genderUser, " ")) {
+                                    if (Objects.equals(genderUser, "male")) {
+                                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
+                                        SettingsActivity.this.genderUser = genderUser;
+                                        btnGenderUser.setText(genderUser);
+                                    } else if (Objects.equals(genderUser, "female")) {
+                                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, R.drawable.settings_right_arrow, 0);
+                                        SettingsActivity.this.genderUser = genderUser;
+                                        btnGenderUser.setText(genderUser);
+                                    } else if (Objects.equals(genderUser, "gay")) {
+                                        btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
+                                        SettingsActivity.this.genderUser = genderUser;
+                                        btnGenderUser.setText(genderUser);
                                     }
+                                } else {
+                                    btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
+                                    SettingsActivity.this.genderUser = "female";
+                                    btnGenderUser.setText(getString(R.string.choose_your_gender));
                                 }
 
                                 //GENDER SEARCH
-                                if (genderSearch != "") {
-                                    switch (genderSearch) {
-                                        case "male":
-                                            btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
-                                            SettingsActivity.this.genderSearch = genderSearch;
-                                            btnGenderSearch.setText(genderSearch);
-                                            break;
-                                        case "female":
-                                            btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, R.drawable.settings_right_arrow, 0);
-                                            SettingsActivity.this.genderSearch = genderSearch;
-                                            btnGenderSearch.setText(genderSearch);
-                                            break;
-                                        case "gay":
-                                            btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
-                                            SettingsActivity.this.genderSearch = genderSearch;
-                                            btnGenderSearch.setText(genderSearch);
-                                            break;
+                                Utils.toastySuccess(getApplicationContext(), genderSearch);
+                                if (!Objects.equals(genderSearch, " ")) {
+                                    if (Objects.equals(genderSearch, "male")) {
+                                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
+                                        SettingsActivity.this.genderSearch = genderSearch;
+                                        btnGenderSearch.setText(genderSearch);
+                                    } else if (Objects.equals(genderSearch, "female")) {
+                                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, R.drawable.settings_right_arrow, 0);
+                                        SettingsActivity.this.genderSearch = genderSearch;
+                                        btnGenderSearch.setText(genderSearch);
+                                    } else if (Objects.equals(genderSearch, "gay")) {
+                                        btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
+                                        SettingsActivity.this.genderSearch = genderSearch;
+                                        btnGenderSearch.setText(genderSearch);
                                     }
+                                } else {
+                                    btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_gay, 0, R.drawable.settings_right_arrow, 0);
+                                    SettingsActivity.this.genderSearch = "female";
+                                    btnGenderSearch.setText(getString(R.string.choose_partner_gender));
                                 }
 
                                 //EMAIL USER
-                                btnEmailUser.setText(email);
+                                btnEmailUser.setText(result.get(Utils.EMAIL).getAsString());
 
                                 //AGE SEARCH
-                                if (ageSearchMin != "" && ageSearchMax != "") {
+                                String ageSearchMin = " ";
+                                if (!Objects.equals(result.get(Utils.AGE_SEARCH_MIN).getAsString(), " ")) {
+                                    ageSearchMin = result.get(Utils.AGE_SEARCH_MIN).getAsString();
+                                }
+
+                                String ageSearchMax = " ";
+                                if (!Objects.equals(result.get(Utils.AGE_SEARCH_MAX).getAsString(), " ")) {
+                                    ageSearchMax = result.get(Utils.AGE_SEARCH_MAX).getAsString();
+                                }
+
+                                if (!Objects.equals(ageSearchMin, " ") && !Objects.equals(ageSearchMax, " ")) {
                                     rbAgeSearch.setMinStartValue(Float.valueOf(ageSearchMin)).apply();
                                     rbAgeSearch.setMaxStartValue(Float.valueOf(ageSearchMax)).apply();
                                     tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(ageSearchMin), String.valueOf(ageSearchMax)));

@@ -134,4 +134,6 @@
     <string name="changed_password">You E-mail has been changed!</string>
     <string name="already_exist_favorite">This user is already on your list of favorite users</string>
     <string name="msg_report">Enter any comments to report this user</string>
+    <string name="choose_partner_gender">choose the partner\'s gender</string>
+    <string name="choose_your_gender">Choose your gender</string>
 </resources>
