@@ -42,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView btnFavorite, btnReport, btnChatMessage, ivImage1, ivImage2, ivImage3, btnGoToProfile, btnGoToSettings;
     private RelativeLayout btnChat, btnCalendar, btnFind;
     private TextView tvUsername;
-    private String id, idSearch;
+    private String id, idSearch, username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,9 +142,11 @@ public class ProfileActivity extends AppCompatActivity {
         btnChatMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
-                //intent.putExtra(Utils.ID_USER, id);
-                //startActivity(intent);
+                Intent intentChat = new Intent(ProfileActivity.this, ChatActivity.class);
+                intentChat.putExtra(Utils.UID_SENDER, id);
+                intentChat.putExtra(Utils.UID_ADDRESSEE, idSearch);
+                intentChat.putExtra(Utils.USERNAME, username);
+                startActivity(intentChat);
             }
         });
 
@@ -249,7 +251,8 @@ public class ProfileActivity extends AppCompatActivity {
                                     if (dialog.isShowing()) {
                                         dialog.dismiss();
                                     }
-                                    tvUsername.setText(result.get(Utils.USERNAME_USER).getAsString());
+                                    username = result.get(Utils.USERNAME_USER).getAsString();
+                                    tvUsername.setText(username);
                                     //TODO: CARREGAR AS IMAGENS
                                     break;
                                 case Utils.CODE_ERROR:

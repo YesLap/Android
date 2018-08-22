@@ -47,13 +47,13 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
     private ImageView ivGoToChat;
     private Button btnLocationUser;
     private Button btnGenderUser;
-    private String genderUser;
+    private String genderUser = "";
     private TextView tvAgeUser, tvAgeSearch;
     private CrystalSeekbar rbAgeUser;
 
     private Button btnLocationSearch;
     private Button btnGenderSearch;
-    private String genderSearch;
+    private String genderSearch = "";
     private TextView tvRangeAgeSearch;
     private CrystalRangeSeekbar rbAgeSearch;
     private Button btnEmailUser;
@@ -502,13 +502,13 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                                 if (!Objects.equals(result.get(Utils.GENDER_USER).getAsString(), " ")) {
                                     genderUser = result.get(Utils.GENDER_USER).getAsString();
                                 } else {
-                                    //genderUser = "female";
+                                    genderUser = " ";
                                 }
 
                                 if (!Objects.equals(result.get(Utils.GENDER_SEARCH).getAsString(), " ")) {
                                     genderSearch = result.get(Utils.GENDER_SEARCH).getAsString();
                                 } else {
-                                    //genderSearch = "female";
+                                    genderSearch = " ";
                                 }
 
                                 password = result.get(Utils.PASSWORD).getAsString();
@@ -523,7 +523,6 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                                 }
 
                                 //GENDER USER
-                                Utils.toastySuccess(getApplicationContext(), genderUser);
                                 if (!Objects.equals(genderUser, " ")) {
                                     if (Objects.equals(genderUser, "male")) {
                                         btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);
@@ -545,7 +544,6 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                                 }
 
                                 //GENDER SEARCH
-                                Utils.toastySuccess(getApplicationContext(), genderSearch);
                                 if (!Objects.equals(genderSearch, " ")) {
                                     if (Objects.equals(genderSearch, "male")) {
                                         btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_male, 0, R.drawable.settings_right_arrow, 0);

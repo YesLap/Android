@@ -128,8 +128,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void showMessage() {
-        final SharedPreferences sharedPreferences = getSharedPreferences(Utils.MESSAGE, MODE_PRIVATE);
-        String result = sharedPreferences.getString(Utils.MESSAGE, "");
+        final SharedPreferences sharedPreferences = getSharedPreferences(Utils.MESSAGE_APP, MODE_PRIVATE);
+        String result = sharedPreferences.getString(Utils.MESSAGE_APP, "");
 
         if (Objects.equals(result, "")) {
             new MaterialDialog.Builder(this)
@@ -140,7 +140,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(Utils.MESSAGE, "checked");
+                            editor.putString(Utils.MESSAGE_APP, "checked");
                             editor.apply();
                         }
                     })

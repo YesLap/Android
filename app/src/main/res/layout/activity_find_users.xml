@@ -50,7 +50,7 @@
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/ivBgOffSun"
+                android:id="@+id/ivBgSun"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/iconbubbleweekoff" />
@@ -74,7 +74,7 @@
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/ivBgOffMon"
+                android:id="@+id/ivBgMon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/iconbubbleweekoff" />
@@ -98,7 +98,7 @@
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/ivBgOffTue"
+                android:id="@+id/ivBgTue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/iconbubbleweekoff" />
@@ -123,7 +123,7 @@
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/ivBgOffWed"
+                android:id="@+id/ivBgWed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/iconbubbleweekoff" />
@@ -147,7 +147,7 @@
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/ivBgOffThu"
+                android:id="@+id/ivBgThu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/iconbubbleweekoff" />
@@ -171,7 +171,7 @@
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/ivBgOffFri"
+                android:id="@+id/ivBgFri"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/iconbubbleweekoff" />
@@ -194,7 +194,7 @@
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/ivBgOffSat"
+                android:id="@+id/ivBgSat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/iconbubbleweekoff" />

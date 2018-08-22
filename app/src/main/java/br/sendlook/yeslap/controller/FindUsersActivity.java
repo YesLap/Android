@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -25,11 +26,12 @@ import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.model.UsersAdapter;
 import br.sendlook.yeslap.view.Users;
 import br.sendlook.yeslap.view.Utils;
+import ru.whalemare.sheetmenu.SheetMenu;
 
-public class FindUsersActivity extends AppCompatActivity {
+public class FindUsersActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ListView lstUsers;
-    private ImageView ivBgOffSun, ivBgOffMon, ivBgOffTue, ivBgOffWed, ivBgOffThu, ivBgOffFri, ivBgOffSat;
+    private ImageView ivBgSun, ivBgMon, ivBgTue, ivBgWed, ivBgThu, ivBgFri, ivBgSat;
     private TextView tvSun, tvMon, tvTue, tvWed, tvThu, tvFri, tvSat;
     private ImageView ivMorning, ivAfternoon, ivNight;
     private ImageView btnGoToProfile, btnGoToSettings;
@@ -54,13 +56,20 @@ public class FindUsersActivity extends AppCompatActivity {
 
         lstUsers = (ListView) findViewById(R.id.lstUsers);
 
-        ivBgOffSun = (ImageView) findViewById(R.id.ivBgOffSun);
-        ivBgOffMon = (ImageView) findViewById(R.id.ivBgOffMon);
-        ivBgOffTue = (ImageView) findViewById(R.id.ivBgOffTue);
-        ivBgOffWed = (ImageView) findViewById(R.id.ivBgOffWed);
-        ivBgOffThu = (ImageView) findViewById(R.id.ivBgOffThu);
-        ivBgOffFri = (ImageView) findViewById(R.id.ivBgOffFri);
-        ivBgOffSat = (ImageView) findViewById(R.id.ivBgOffSat);
+        ivBgSun = (ImageView) findViewById(R.id.ivBgSun);
+        findViewById(R.id.ivBgSun).setOnClickListener(this);
+        ivBgMon = (ImageView) findViewById(R.id.ivBgMon);
+        findViewById(R.id.ivBgMon).setOnClickListener(this);
+        ivBgTue = (ImageView) findViewById(R.id.ivBgTue);
+        findViewById(R.id.ivBgTue).setOnClickListener(this);
+        ivBgWed = (ImageView) findViewById(R.id.ivBgWed);
+        findViewById(R.id.ivBgWed).setOnClickListener(this);
+        ivBgThu = (ImageView) findViewById(R.id.ivBgThu);
+        findViewById(R.id.ivBgThu).setOnClickListener(this);
+        ivBgFri = (ImageView) findViewById(R.id.ivBgFri);
+        findViewById(R.id.ivBgFri).setOnClickListener(this);
+        ivBgSat = (ImageView) findViewById(R.id.ivBgSat);
+        findViewById(R.id.ivBgSat).setOnClickListener(this);
 
         tvSun = (TextView) findViewById(R.id.tvSun);
         tvMon = (TextView) findViewById(R.id.tvMon);
@@ -93,58 +102,58 @@ public class FindUsersActivity extends AppCompatActivity {
             }
         });
 
-        ivBgOffSun.setOnClickListener(new View.OnClickListener() {
+        ivBgSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgOffSun.setImageResource(R.drawable.iconbubbleweekon);
+                ivBgSun.setImageResource(R.drawable.iconbubbleweekon);
                 tvSun.setTextColor(Color.WHITE);
             }
         });
 
-        ivBgOffMon.setOnClickListener(new View.OnClickListener() {
+        ivBgMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgOffMon.setImageResource(R.drawable.iconbubbleweekon);
+                ivBgMon.setImageResource(R.drawable.iconbubbleweekon);
                 tvMon.setTextColor(Color.WHITE);
             }
         });
 
-        ivBgOffTue.setOnClickListener(new View.OnClickListener() {
+        ivBgTue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgOffTue.setImageResource(R.drawable.iconbubbleweekon);
+                ivBgTue.setImageResource(R.drawable.iconbubbleweekon);
                 tvTue.setTextColor(Color.WHITE);
             }
         });
 
-        ivBgOffWed.setOnClickListener(new View.OnClickListener() {
+        ivBgWed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgOffWed.setImageResource(R.drawable.iconbubbleweekon);
+                ivBgWed.setImageResource(R.drawable.iconbubbleweekon);
                 tvWed.setTextColor(Color.WHITE);
             }
         });
 
-        ivBgOffThu.setOnClickListener(new View.OnClickListener() {
+        ivBgThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgOffThu.setImageResource(R.drawable.iconbubbleweekon);
+                ivBgThu.setImageResource(R.drawable.iconbubbleweekon);
                 tvThu.setTextColor(Color.WHITE);
             }
         });
 
-        ivBgOffFri.setOnClickListener(new View.OnClickListener() {
+        ivBgFri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgOffFri.setImageResource(R.drawable.iconbubbleweekon);
+                ivBgFri.setImageResource(R.drawable.iconbubbleweekon);
                 tvFri.setTextColor(Color.WHITE);
             }
         });
 
-        ivBgOffSat.setOnClickListener(new View.OnClickListener() {
+        ivBgSat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgOffSat.setImageResource(R.drawable.iconbubbleweekon);
+                ivBgSat.setImageResource(R.drawable.iconbubbleweekon);
                 tvSat.setTextColor(Color.WHITE);
             }
         });
@@ -173,14 +182,42 @@ public class FindUsersActivity extends AppCompatActivity {
         lstUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
-                Users u = (Users) parent.getAdapter().getItem(i);
-                Intent intent = new Intent(FindUsersActivity.this, ProfileActivity.class);
-                intent.putExtra(Utils.ID_USER, id);
-                intent.putExtra(Utils.ID_FAVORITE_USER_APP, u.getId_user());
-                startActivity(intent);
+                final Users user = (Users) parent.getAdapter().getItem(i);
+
+                SheetMenu.with(FindUsersActivity.this)
+                        .setTitle(user.getUsername_user())
+                        .setMenu(R.menu.menu_find)
+                        .setClick(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                switch (menuItem.getItemId()) {
+                                    case R.id.nav_menu_view_profile:
+                                        Intent intent = new Intent(FindUsersActivity.this, ProfileActivity.class);
+                                        intent.putExtra(Utils.ID_USER, id);
+                                        intent.putExtra(Utils.ID_FAVORITE_USER_APP, user.getId_user());
+                                        startActivity(intent);
+                                        break;
+                                    case R.id.nav_menu_chat:
+                                        Intent intentChat = new Intent(FindUsersActivity.this, ChatActivity.class);
+                                        intentChat.putExtra(Utils.UID_SENDER, id);
+                                        intentChat.putExtra(Utils.UID_ADDRESSEE, user.getId_user());
+                                        intentChat.putExtra(Utils.USERNAME, user.getUsername_user());
+                                        startActivity(intentChat);
+                                        break;
+                                }
+                                return false;
+                            }
+                        }).show();
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+        }
     }
 
     @Override
@@ -229,7 +266,6 @@ public class FindUsersActivity extends AppCompatActivity {
 
                                 if (!Objects.equals(jsonObject.get(Utils.ID_USER).getAsString(), id) && !Objects.equals(genderSearch, " ") && !Objects.equals(ageSearchMin, " ") && !Objects.equals(ageSearchMax, " ")) {
                                     Users u = new Users();
-
                                     u.setId_user(jsonObject.get(Utils.ID_USER).getAsString());
                                     u.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
                                     u.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());

@@ -26,16 +26,18 @@ public class Utils {
     public static final String IMAGE_3 = "image3";
     public static final String SINCE = "since";
     public static final String UID = "uid";
+    public static final String ID_SENDER_APP = "id_sender_app";
+    public static final String ID_RECEIVER_APP = "id_receiver_app";
     public static final String STATUS = "statususer";
     public static final String STATUS_USER = "status_user";
     public static final String STATUS_USER_APP = "status_user_app";
     public static final String SPOTLIGHT = "spotlight";
     public static final String DONE = "done";
     public static final String FAVORITES = "favorites";
-    public static final String MESSAGE = "message";
+    public static final String MESSAGE_APP = "message_app";
     public static final String MESSAGES = "messages";
     public static final String CALENDAR = "calendar";
-    public static final String CHAT_MESSAGES = "chatmessages";
+    public static final String CHAT = "chat";
     public static final String MESSAGES_STATUS = "messages_status";
     public static final String DATE = "date_app";
     public static final String KEY = "key";
@@ -115,6 +117,9 @@ public class Utils {
     public static final String URL_ADD_NEW_REPORT = "http://yeslap-eu.umbler.net/userprofile/addnewreport.php";
     public static final String URL_GET_FAVORITES = "http://yeslap-eu.umbler.net/userprofile/getfavorites.php";
     public static final String URL_DELETE_FAVORITE = "http://yeslap-eu.umbler.net/userprofile/deletefavorite.php";
+    public static final String URL_SEND_MESSAGE = "http://yeslap-eu.umbler.net/chat/sendmessage.php";
+    public static final String URL_SAVE_UPDATE_CHAT = "http://yeslap-eu.umbler.net/chat/saveupdatechat.php";
+    public static final String URL_CHECK_IF_HAVE_MESSAGE = "http://yeslap-eu.umbler.net/chat/checkifhavemessage.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";

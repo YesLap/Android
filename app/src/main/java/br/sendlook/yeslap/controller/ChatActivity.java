@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -17,6 +18,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -25,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import br.sendlook.yeslap.R;
@@ -33,148 +38,37 @@ import br.sendlook.yeslap.model.MesageAdapter;
 import br.sendlook.yeslap.view.Message;
 import br.sendlook.yeslap.view.Utils;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private DatabaseReference datadase;
     private EditText etChat;
-    private ImageView btnSendMessage, btnGoToProfile, btnGoToSettings;
     private ListView lvChat;
     private TextView tvUsername, tvStatus, tvNoMessages;
-    private String uidAddressee;
-    private String uidSender;
-    private String usernameSender;
-    private ArrayList<Message> messages;
-    private ArrayAdapter<Message> adapter;
-    private ValueEventListener valueEventListenerMessages;
+    private String idReceiver, idSender, username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        mAuth = FirebaseAuth.getInstance();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            idSender = bundle.getString(Utils.UID_SENDER);
+            idReceiver = bundle.getString(Utils.UID_ADDRESSEE);
+            username = bundle.getString(Utils.USERNAME);
+        }
 
+        findViewById(R.id.btnSendMessage).setOnClickListener(this);
+        findViewById(R.id.btnGoToProfile).setOnClickListener(this);
+        findViewById(R.id.btnGoToSettings).setOnClickListener(this);
         etChat = (EditText) findViewById(R.id.etChat);
-        btnSendMessage = (ImageView) findViewById(R.id.btnSendMessage);
-        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
-        btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
         lvChat = (ListView) findViewById(R.id.lvChat);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
         tvNoMessages = (TextView) findViewById(R.id.tvNoMessages);
 
-        getBundleIntent();
-        getUserData();
-        setStatus();
-        checkIfHaveMessages();
+        tvUsername.setText(username);
 
-        btnGoToProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        btnGoToSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChatActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnSendMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = etChat.getText().toString().trim();
-
-                if (message.isEmpty()) {
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.enter_a_messege_to_send));
-                } else {
-                    playSoundSentMessage();
-
-                    /**Message msg = new Message();
-                     msg.setUidSender(uidSender);
-                     msg.setMessage(message);
-                     msg.setDate(getDateTimeNow());*/
-
-                    //salva para o remetente
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee).push();
-                    String push = mDatabase.getKey();
-                    Boolean returnSender = saveMessage(uidSender, uidAddressee, message, getDateTimeNow(), mDatabase);
-                    if (!returnSender) {
-                        Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
-                    } else {
-                        //salva para o destinatario
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidAddressee).child(uidSender).child(push);
-                        Boolean returnAddressee = saveMessage(uidSender, uidAddressee, message, getDateTimeNow(), mDatabase);
-                        if (!returnAddressee) {
-                            Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
-                        } else {
-                            etChat.setText("");
-                        }
-                    }
-
-                    //Salva a Conversa para o Remetente
-                    ChatMessage chatSender = new ChatMessage();
-                    chatSender.setUid(uidAddressee);
-                    chatSender.setName(tvUsername.getText().toString());
-                    chatSender.setMessage(message);
-                    setStatus();
-                    Boolean returnSaveChatSender = saveChat(uidSender, uidAddressee, chatSender);
-                    if (!returnSaveChatSender) {
-                        Utils.toastyError(getApplicationContext(), getString(R.string.error_saving_conversation));
-                    } else {
-                        //Salva a Conversa para o Remetente
-                        ChatMessage chatAddressee = new ChatMessage();
-                        chatAddressee.setUid(uidSender);
-                        chatAddressee.setName(usernameSender);
-                        chatAddressee.setMessage(message);
-                        setStatus();
-                        Boolean returnSaveChatAdressee = saveChat(uidAddressee, uidSender, chatAddressee);
-                        if (!returnSaveChatAdressee) {
-                            Utils.toastyError(getApplicationContext(), getString(R.string.error_saving_conversation));
-                        }
-                    }
-
-
-                }
-                lvChat.smoothScrollToPosition(messages.size() - 1);
-            }
-        });
-
-        messages = new ArrayList<>();
-        adapter = new MesageAdapter(ChatActivity.this, messages);
-        lvChat.setAdapter(adapter);
-
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee);
-
-        valueEventListenerMessages = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                checkIfHaveMessages();
-                messages.clear();
-
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    //Utils.toastyInfo(getApplicationContext(), dataSnapshot.getChildren().toString());
-                    Message message = data.getValue(Message.class);
-                    messages.add(message);
-                    lvChat.smoothScrollToPosition(messages.size());
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-        mDatabase.addValueEventListener(valueEventListenerMessages);
-
-        getStatus();
+        //setStatus();
 
         //String dateDB = "2018-1-5 00:00:01";
         //int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), dateDB, DateTimeUnits.MINUTES);
@@ -182,14 +76,135 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private void playSoundSentMessage() {
-        MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap);
-        whooap.start();
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnGoToProfile:
+                finish();
+                break;
+            case R.id.btnGoToSettings:
+                Intent intent = new Intent(ChatActivity.this, SettingsActivity.class);
+                intent.putExtra(Utils.ID_USER, idSender);
+                startActivity(intent);
+                break;
+            case R.id.btnSendMessage:
+                final String message = etChat.getText().toString().trim();
+
+                if (message.isEmpty()) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.enter_a_messege_to_send));
+                } else {
+                    playSoundSentMessage();
+
+                    //SAVING MESSAGE
+                    Ion.with(getApplicationContext())
+                            .load(Utils.URL_SEND_MESSAGE)
+                            .setBodyParameter(Utils.ID_SENDER_APP, idSender)
+                            .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
+                            .setBodyParameter(Utils.MESSAGE_APP, message)
+                            .setBodyParameter(Utils.DATE, getDateTimeNow())
+                            .asJsonObject()
+                            .setCallback(new FutureCallback<JsonObject>() {
+                                @Override
+                                public void onCompleted(Exception e, JsonObject result) {
+                                    try {
+                                        String returnApp = result.get(Utils.MESSAGES).getAsString();
+
+                                        switch (returnApp) {
+                                            case Utils.CODE_SUCCESS:
+                                                etChat.setText("");
+
+                                                //SAVING CHAT SENDER
+                                                Ion.with(ChatActivity.this)
+                                                        .load(Utils.URL_SAVE_UPDATE_CHAT)
+                                                        .setBodyParameter(Utils.ID_SENDER_APP, idSender)
+                                                        .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
+                                                        .setBodyParameter(Utils.MESSAGE_APP, message)
+                                                        .asJsonObject()
+                                                        .setCallback(new FutureCallback<JsonObject>() {
+                                                            @Override
+                                                            public void onCompleted(Exception e, JsonObject result) {
+                                                                String returnApp = result.get(Utils.CHAT).getAsString();
+
+                                                                switch (returnApp) {
+                                                                    case Utils.CODE_SUCCESS:
+
+                                                                        //SAVIND CHAT RECEIVER
+                                                                        Ion.with(ChatActivity.this)
+                                                                                .load(Utils.URL_SAVE_UPDATE_CHAT)
+                                                                                .setBodyParameter(Utils.ID_SENDER_APP, idReceiver)
+                                                                                .setBodyParameter(Utils.ID_RECEIVER_APP, idSender)
+                                                                                .setBodyParameter(Utils.MESSAGE_APP, message)
+                                                                                .asJsonObject()
+                                                                                .setCallback(new FutureCallback<JsonObject>() {
+                                                                                    @Override
+                                                                                    public void onCompleted(Exception e, JsonObject result) {
+                                                                                        String returnApp = result.get(Utils.CHAT).getAsString();
+
+                                                                                        switch (returnApp) {
+                                                                                            case Utils.CODE_SUCCESS:
+                                                                                                checkIfHaveMessages();
+                                                                                                break;
+                                                                                            case Utils.CODE_ERROR:
+                                                                                                checkIfHaveMessages();
+                                                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                                                                break;
+                                                                                        }
+
+                                                                                    }
+                                                                                });
+
+                                                                        break;
+                                                                    case Utils.CODE_ERROR:
+                                                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                                        break;
+                                                                }
+
+                                                            }
+                                                        });
+
+                                                break;
+                                            case Utils.CODE_ERROR:
+                                                Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
+                                                break;
+                                        }
+
+                                    } catch (Exception x) {
+                                        Utils.toastyError(getApplicationContext(), x.getMessage());
+                                    }
+                                }
+                            });
+
+
+                }
+                //lvChat.smoothScrollToPosition(messages.size() - 1);
+                break;
+        }
     }
 
-    private void playSoundSentMessageSent() {
-        MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap_sent);
-        whooap.start();
+    private void checkIfHaveMessages() {
+
+        Ion.with(ChatActivity.this)
+                .load(Utils.URL_CHECK_IF_HAVE_MESSAGE)
+                .setBodyParameter(Utils.ID_SENDER_APP, idSender)
+                .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        String returnApp = result.get(Utils.MESSAGES).getAsString();
+
+                        switch (returnApp) {
+                            case Utils.CODE_SUCCESS:
+                                tvNoMessages.setVisibility(View.GONE);
+                                break;
+                            case Utils.CODE_ERROR:
+                                tvNoMessages.setVisibility(View.VISIBLE);
+                                break;
+                        }
+
+                    }
+                });
+
     }
 
     private String getDateTimeNow() {
@@ -203,179 +218,87 @@ public class ChatActivity extends AppCompatActivity {
         return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + min + ":" + seg;
     }
 
-    private void getStatus() {
-        datadase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
-        datadase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                tvStatus.setText(dataSnapshot.child(Utils.STATUS).getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private void playSoundSentMessage() {
+        MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap);
+        whooap.start();
     }
 
-    private void checkIfHaveMessages() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidSender).child(uidAddressee);
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == 0) {
-                    DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(uidAddressee).child(uidSender);
-                    database1.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot1) {
-                            if (dataSnapshot1.getChildrenCount() == 0) {
-                                tvNoMessages.setVisibility(View.VISIBLE);
-                            } else {
-                                tvNoMessages.setVisibility(View.GONE);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-                } else {
-                    tvNoMessages.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private void playSoundSentMessageSent() {
+        MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap_sent);
+        whooap.start();
     }
 
-    private void setStatus() {
-        KeyboardVisibilityEvent.setEventListener(ChatActivity.this,
-                new KeyboardVisibilityEventListener() {
-                    @Override
-                    public void onVisibilityChanged(boolean isOpen) {
-                        DatabaseReference database;
-                        if (isOpen) {
-                            database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
-                            Map<String, Object> status = new HashMap<>();
-                            status.put(Utils.STATUS, "Typing ...");
-                            database.updateChildren(status);
-                        } else {
-                            database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
-                            database.removeValue();
-                        }
-                    }
-                });
-    }
-
-    private boolean saveMessage(String uidSender, String uidAddressee, String message, String date, DatabaseReference datadase) {
-        try {
-
-            HashMap<String, String> msg = new HashMap<>();
-            msg.put(Utils.UID_SENDER, uidSender);
-            msg.put(Utils.UID_ADDRESSEE, uidAddressee);
-            msg.put(Utils.MESSAGE, message);
-            msg.put(Utils.DATE, date);
-            msg.put(Utils.KEY, mDatabase.getKey());
-            datadase.setValue(msg);
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private boolean saveChat(String uidSender, String uidAddressee, ChatMessage chatMessage) {
-        try {
-
-            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES);
-            mDatabase.child(uidSender).child(uidAddressee).setValue(chatMessage);
-
-            return true;
-        } catch (Exception e) {
-            Utils.toastyError(getApplicationContext(), e.getMessage());
-            return false;
-        }
-    }
-
-    private void getUserData() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(uidAddressee);
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-
-                tvUsername.setText(username);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void getBundleIntent() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            uidAddressee = bundle.getString(Utils.UID);
-            uidSender = mAuth.getCurrentUser().getUid();
-
-            mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(uidSender);
-            mDatabase.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    usernameSender = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mDatabase.removeEventListener(valueEventListenerMessages);
-    }
+    /**
+     * private void getStatus() {
+     * datadase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
+     * datadase.addValueEventListener(new ValueEventListener() {
+     *
+     * @Override public void onDataChange(DataSnapshot dataSnapshot) {
+     * tvStatus.setText(dataSnapshot.child(Utils.STATUS).getValue(String.class));
+     * }
+     * @Override public void onCancelled(DatabaseError databaseError) {
+     * <p>
+     * }
+     * });
+     * }
+     * <p>
+     * private void setStatus() {
+     * KeyboardVisibilityEvent.setEventListener(ChatActivity.this,
+     * new KeyboardVisibilityEventListener() {
+     * @Override public void onVisibilityChanged(boolean isOpen) {
+     * DatabaseReference database;
+     * if (isOpen) {
+     * database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
+     * Map<String, Object> status = new HashMap<>();
+     * status.put(Utils.STATUS, "Typing ...");
+     * database.updateChildren(status);
+     * } else {
+     * database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
+     * database.removeValue();
+     * }
+     * }
+     * });
+     * }
+     * <p>
+     * }
+     */
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mAuth != null) {
-            setStatusOnline();
-        }
+        updateStatus(idSender, Utils.ONLINE);
+        checkIfHaveMessages();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuth != null) {
-            setStatusOffline();
-            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
-            database.removeValue();
-        }
+        updateStatus(idSender, Utils.OFFLINE);
     }
 
-    private void setStatusOnline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put(Utils.STATUS, "online");
-        mDatabase.updateChildren(status);
+    private void updateStatus(final String id_user, final String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
+
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failed");
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
-    private void setStatusOffline() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put(Utils.STATUS, "offline");
-        mDatabase.updateChildren(status);
-    }
 }

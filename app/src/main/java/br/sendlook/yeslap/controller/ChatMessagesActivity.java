@@ -77,7 +77,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
         lstChatMessages.setAdapter(adapter);
 
         //Get the Chat Messages from firebase
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT).child(mAuth.getCurrentUser().getUid());
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,7 +136,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
                                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                                     @Override
                                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid()).child(chat.getUid());
+                                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT).child(mAuth.getCurrentUser().getUid()).child(chat.getUid());
                                                         database.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
@@ -205,7 +205,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     }
 
     private void checkIfHaveChats() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT_MESSAGES).child(mAuth.getCurrentUser().getUid());;
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT).child(mAuth.getCurrentUser().getUid());;
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
