@@ -28,11 +28,12 @@
         android:id="@+id/ivStatus"
         android:layout_width="20sp"
         android:layout_height="20sp"
-        android:layout_alignBottom="@+id/imageView4"
         android:layout_alignEnd="@+id/imageView4"
-        android:layout_marginBottom="10dp"
+        android:layout_alignBottom="@+id/imageView4"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/on_user" />
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/on_user"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/tvMessage"

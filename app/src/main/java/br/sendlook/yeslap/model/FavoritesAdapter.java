@@ -3,6 +3,7 @@ package br.sendlook.yeslap.model;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Favorites;
 import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FavoritesAdapter extends BaseAdapter {
 

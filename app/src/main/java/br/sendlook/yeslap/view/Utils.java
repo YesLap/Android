@@ -29,7 +29,9 @@ public class Utils {
     public static final String ID_SENDER_APP = "id_sender_app";
     public static final String ID_RECEIVER_APP = "id_receiver_app";
     public static final String STATUS = "statususer";
+    public static final String STATUS_CHAT_APP = "status_chat_app";
     public static final String STATUS_USER = "status_user";
+    public static final String STATUS_CHAT = "status_chat";
     public static final String STATUS_USER_APP = "status_user_app";
     public static final String SPOTLIGHT = "spotlight";
     public static final String DONE = "done";
@@ -41,6 +43,7 @@ public class Utils {
     public static final String MESSAGES_STATUS = "messages_status";
     public static final String DATE = "date_app";
     public static final String KEY = "key";
+    public static final String ID_MESSAGES = "id_message_app";
     public static final String USER_SEARCH = "user_search";
     public static final String TURN_APP = "turn_app";
     public static final String UID_SENDER = "uidSender";
@@ -120,6 +123,10 @@ public class Utils {
     public static final String URL_SEND_MESSAGE = "http://yeslap-eu.umbler.net/chat/sendmessage.php";
     public static final String URL_SAVE_UPDATE_CHAT = "http://yeslap-eu.umbler.net/chat/saveupdatechat.php";
     public static final String URL_CHECK_IF_HAVE_MESSAGE = "http://yeslap-eu.umbler.net/chat/checkifhavemessage.php";
+    public static final String URL_UPDATE_STATUS_CHAT = "http://yeslap-eu.umbler.net/chat/updatestatuschat.php";
+    public static final String URL_LOAD_MESSAGES = "http://yeslap-eu.umbler.net/chat/loadmessages.php";
+    public static final String URL_LOAD_STATUS_USER = "http://yeslap-eu.umbler.net/chat/loadstatususer.php";
+    public static final String URL_DELETE_MESSAGE = "http://yeslap-eu.umbler.net/chat/deletemessage.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";

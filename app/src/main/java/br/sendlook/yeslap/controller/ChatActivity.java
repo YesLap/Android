@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -28,11 +29,13 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventList
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
 import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.model.MessagesAdapter;
 import br.sendlook.yeslap.view.ChatMessage;
 import br.sendlook.yeslap.model.MesageAdapter;
 import br.sendlook.yeslap.view.Message;
@@ -44,6 +47,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ListView lvChat;
     private TextView tvUsername, tvStatus, tvNoMessages;
     private String idReceiver, idSender, username;
+    private MessagesAdapter adapter;
+    private List<Message> messageList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +73,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         tvUsername.setText(username);
 
-        //setStatus();
+        setStatus();
+        loadMessages();
 
         //String dateDB = "2018-1-5 00:00:01";
         //int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), dateDB, DateTimeUnits.MINUTES);
@@ -143,9 +149,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                                                                                         switch (returnApp) {
                                                                                             case Utils.CODE_SUCCESS:
                                                                                                 checkIfHaveMessages();
+                                                                                                loadMessages();
                                                                                                 break;
                                                                                             case Utils.CODE_ERROR:
                                                                                                 checkIfHaveMessages();
+                                                                                                loadMessages();
                                                                                                 Utils.toastyError(getApplicationContext(), e.getMessage());
                                                                                                 break;
                                                                                         }
@@ -176,9 +184,47 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 }
-                //lvChat.smoothScrollToPosition(messages.size() - 1);
                 break;
         }
+    }
+
+    private void loadMessages() {
+        messageList = new ArrayList<Message>();
+        adapter = new MessagesAdapter(ChatActivity.this, messageList);
+        lvChat.setAdapter(adapter);
+
+        Ion.with(this)
+                .load(Utils.URL_LOAD_MESSAGES)
+                .setBodyParameter(Utils.ID_SENDER_APP, idSender)
+                .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
+                .asJsonArray()
+                .setCallback(new FutureCallback<JsonArray>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonArray result) {
+                        try {
+                            if (result.size() == 0) {
+                                tvNoMessages.setVisibility(View.VISIBLE);
+                            } else {
+                                for (int i = 0; i < result.size(); i++) {
+                                    JsonObject j = result.get(i).getAsJsonObject();
+                                    Message m = new Message();
+
+                                    m.setIdSender(j.get(Utils.ID_SENDER_APP).getAsString());
+                                    m.setIdReceiver(j.get(Utils.ID_RECEIVER_APP).getAsString());
+                                    m.setMessage(j.get(Utils.MESSAGE_APP).getAsString());
+                                    m.setDate_message(j.get(Utils.DATE).getAsString());
+
+                                    messageList.add(m);
+                                }
+                                adapter.notifyDataSetChanged();
+                                lvChat.smoothScrollToPosition(messageList.size() - 1);
+                            }
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+
     }
 
     private void checkIfHaveMessages() {
@@ -228,40 +274,36 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         whooap.start();
     }
 
-    /**
-     * private void getStatus() {
-     * datadase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
-     * datadase.addValueEventListener(new ValueEventListener() {
-     *
-     * @Override public void onDataChange(DataSnapshot dataSnapshot) {
-     * tvStatus.setText(dataSnapshot.child(Utils.STATUS).getValue(String.class));
-     * }
-     * @Override public void onCancelled(DatabaseError databaseError) {
-     * <p>
-     * }
-     * });
-     * }
-     * <p>
-     * private void setStatus() {
-     * KeyboardVisibilityEvent.setEventListener(ChatActivity.this,
-     * new KeyboardVisibilityEventListener() {
-     * @Override public void onVisibilityChanged(boolean isOpen) {
-     * DatabaseReference database;
-     * if (isOpen) {
-     * database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
-     * Map<String, Object> status = new HashMap<>();
-     * status.put(Utils.STATUS, "Typing ...");
-     * database.updateChildren(status);
-     * } else {
-     * database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(uidAddressee).child(uidSender);
-     * database.removeValue();
-     * }
-     * }
-     * });
-     * }
-     * <p>
-     * }
-     */
+
+    /*private void getStatus() {
+        datadase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
+        datadase.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tvStatus.setText(dataSnapshot.child(Utils.STATUS).getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }*/
+
+    private void setStatus() {
+        KeyboardVisibilityEvent.setEventListener(ChatActivity.this, new KeyboardVisibilityEventListener() {
+            @Override
+            public void onVisibilityChanged(boolean isOpen) {
+                if (isOpen) {
+                    updateStatusChat("Typing ...");
+                } else {
+                    updateStatusChat("");
+                }
+            }
+        });
+    }
+
 
     @Override
     protected void onResume() {
@@ -296,6 +338,26 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                         } catch (Exception x) {
                             Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void updateStatusChat(String status) {
+        Ion.with(ChatActivity.this)
+                .load(Utils.URL_UPDATE_STATUS_CHAT)
+                .setBodyParameter(Utils.ID_SENDER_APP, idSender)
+                .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
+                .setBodyParameter(Utils.STATUS_CHAT_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        String returnApp = result.get(Utils.STATUS_CHAT).getAsString();
+                        switch (returnApp) {
+                            case Utils.CODE_ERROR:
+                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                                break;
                         }
                     }
                 });

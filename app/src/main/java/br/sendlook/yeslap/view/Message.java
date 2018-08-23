@@ -2,21 +2,29 @@ package br.sendlook.yeslap.view;
 
 public class Message {
 
-    private String uidSender;
-    private String uidAddressee;
+    private String idSender;
+    private String idReceiver;
     private String message;
-    private String date;
-    private String key;
+    private String date_message;
+    private String idMessage;
 
     public Message() {
     }
 
-    public String getUidSender() {
-        return uidSender;
+    public String getIdSender() {
+        return idSender;
     }
 
-    public void setUidSender(String uidSender) {
-        this.uidSender = uidSender;
+    public void setIdSender(String idSender) {
+        this.idSender = idSender;
+    }
+
+    public String getIdReceiver() {
+        return idReceiver;
+    }
+
+    public void setIdReceiver(String idReceiver) {
+        this.idReceiver = idReceiver;
     }
 
     public String getMessage() {
@@ -27,27 +35,19 @@ public class Message {
         this.message = message;
     }
 
-    public String getDate() {
-        return date;
+    public String getDate_message() {
+        return date_message;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate_message(String date_message) {
+        this.date_message = date_message;
     }
 
-    public String getKey() {
-        return key;
+    public String getIdMessage() {
+        return idMessage;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getUidAddressee() {
-        return uidAddressee;
-    }
-
-    public void setUidAddressee(String uidAddressee) {
-        this.uidAddressee = uidAddressee;
+    public void setIdMessage(String idMessage) {
+        this.idMessage = idMessage;
     }
 }

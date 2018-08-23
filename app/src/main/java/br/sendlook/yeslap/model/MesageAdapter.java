@@ -45,7 +45,7 @@ public class MesageAdapter extends ArrayAdapter<Message>{
         this.message = objects;
     }
 
-    @NonNull
+    /*@NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = null;
@@ -128,7 +128,7 @@ public class MesageAdapter extends ArrayAdapter<Message>{
         }
 
         return view;
-    }
+    }*/
 
     private String getDateTimeNow() {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
