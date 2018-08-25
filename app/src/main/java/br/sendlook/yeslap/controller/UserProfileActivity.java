@@ -104,6 +104,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.btnChat:
                 Intent intentchat = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
+                intentchat.putExtra(Utils.ID_USER, idUser);
                 startActivity(intentchat);
                 break;
             case R.id.ivFavorite:

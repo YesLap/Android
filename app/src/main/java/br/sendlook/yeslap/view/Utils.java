@@ -42,7 +42,7 @@ public class Utils {
     public static final String CHAT = "chat";
     public static final String MESSAGES_STATUS = "messages_status";
     public static final String DATE = "date_app";
-    public static final String KEY = "key";
+    public static final String LAST_MESSAGE = "last_message";
     public static final String ID_MESSAGES = "id_message_app";
     public static final String USER_SEARCH = "user_search";
     public static final String TURN_APP = "turn_app";
@@ -127,6 +127,7 @@ public class Utils {
     public static final String URL_LOAD_MESSAGES = "http://yeslap-eu.umbler.net/chat/loadmessages.php";
     public static final String URL_LOAD_STATUS_USER = "http://yeslap-eu.umbler.net/chat/loadstatususer.php";
     public static final String URL_DELETE_MESSAGE = "http://yeslap-eu.umbler.net/chat/deletemessage.php";
+    public static final String URL_LOAD_CHAT_MESSAGES = "http://yeslap-eu.umbler.net/chatmessages/loadchatmessages.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";

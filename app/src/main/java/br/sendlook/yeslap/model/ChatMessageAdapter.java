@@ -1,96 +1,72 @@
 package br.sendlook.yeslap.model;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.ChatMessage;
-import br.sendlook.yeslap.view.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
+public class ChatMessageAdapter extends BaseAdapter {
 
-    private ArrayList<ChatMessage> chatMessages;
     private Context context;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    private List<ChatMessage> chatMessageList;
 
-    public ChatMessageAdapter(@NonNull Context c, @NonNull ArrayList<ChatMessage> objects) {
-        super(c, 0, objects);
-        this.chatMessages = objects;
-        this.context = c;
+    public ChatMessageAdapter(Context c, List<ChatMessage> l) {
+        context = c;
+        chatMessageList = l;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = null;
+    public int getCount() {
+        return chatMessageList.size();
+    }
 
-        mAuth = FirebaseAuth.getInstance();
+    @Override
+    public ChatMessage getItem(int i) {
+        return chatMessageList.get(i);
+    }
 
-        //if (chatMessages != null || !Objects.equals(chatMessages.get(position).getMessage(), "")) {
-        if (chatMessages != null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
 
-            view = inflater.inflate(R.layout.list_users, parent, false);
-            TextView tvUsername = view.findViewById(R.id.tvUsername);
-            final ImageView ivStatus = view.findViewById(R.id.ivStatus);
-            final CircleImageView cvUserImage = view.findViewById(R.id.cvImageUser);
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        View v = null;
 
-            ChatMessage chatMessage = chatMessages.get(position);
-            tvUsername.setText(chatMessage.getName());
-            try {
-                mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(chatMessage.getUid());
-                mDatabase.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String status = dataSnapshot.child(Utils.STATUS).getValue(String.class);
-                        String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
-
-                        if (Objects.equals(status, "online")) {
-                            ivStatus.setImageResource(R.drawable.on_user);
-                        } else {
-                            ivStatus.setImageResource(R.drawable.off_user);
-                        }
-
-                        if (Objects.equals(image, "") || image == null) {
-                           cvUserImage.setImageResource(R.drawable.img_profile);
-                        } else {
-                            Picasso.with(context).load(image).placeholder(R.drawable.img_profile).into(cvUserImage);
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            } catch (Exception e) {
-                Utils.toastyError(context, e.getMessage());
-            }
-
+        if (view == null) {
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            v = inflater.inflate(R.layout.list_users, null);
+        } else {
+            v = view;
         }
 
-        return view;
+        ChatMessage chatMessage = getItem(i);
+
+        TextView tvUsername = v.findViewById(R.id.tvUsername);
+        final ImageView ivStatus = v.findViewById(R.id.ivStatus);
+        final CircleImageView cvUserImage = v.findViewById(R.id.cvImageUser);
+
+        tvUsername.setText(chatMessage.getUsername());
+
+        if (Objects.equals(chatMessage.getStatus(), "online")) {
+            ivStatus.setImageResource(R.drawable.on_user);
+        } else {
+            ivStatus.setImageResource(R.drawable.off_user);
+        }
+
+        return v;
 
     }
 }

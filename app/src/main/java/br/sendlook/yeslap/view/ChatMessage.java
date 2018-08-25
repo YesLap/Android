@@ -2,36 +2,28 @@ package br.sendlook.yeslap.view;
 
 public class ChatMessage {
 
-    private String uid;
-    private String name;
-    private String message;
+    private String username;
     private String status;
+    private String message;
 
     public ChatMessage() {
 
     }
 
-    public ChatMessage(String uid, String name, String message, String status) {
-        this.uid = uid;
-        this.name = name;
-        this.message = message;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getMessage() {
@@ -40,13 +32,5 @@ public class ChatMessage {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String staus) {
-        this.status = staus;
     }
 }

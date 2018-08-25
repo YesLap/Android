@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,14 +26,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import br.sendlook.yeslap.R;
-import br.sendlook.yeslap.view.ChatMessage;
 import br.sendlook.yeslap.model.ChatMessageAdapter;
+import br.sendlook.yeslap.view.ChatMessage;
 import br.sendlook.yeslap.view.Utils;
 import ru.whalemare.sheetmenu.SheetMenu;
 
@@ -42,23 +48,20 @@ public class ChatMessagesActivity extends AppCompatActivity {
     private ListView lstChatMessages;
     private RelativeLayout btnChat, btnCalendar, btnSearch;
     private TextView tvHaveChat;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private DatabaseReference database;
-    private ValueEventListener valueEventListener;
-    private ArrayAdapter<ChatMessage> adapter;
-    private ArrayList<ChatMessage> arrayChatMessages;
     private ProgressDialog dialog;
+    private String id;
+    private ChatMessageAdapter adapter;
+    private List<ChatMessage> chatMessageList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_messages);
 
-        //Instatiate Firebase
-        mAuth = FirebaseAuth.getInstance();
-
-        checkIfHaveChats();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            id = bundle.getString(Utils.ID_USER);
+        }
 
         //Cast
         btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
@@ -69,37 +72,9 @@ public class ChatMessagesActivity extends AppCompatActivity {
         btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
         tvHaveChat = (TextView) findViewById(R.id.tvHaveChat);
 
-        //Array of chat messages
-        arrayChatMessages = new ArrayList<>();
-        //Custom adapter
-        adapter = new ChatMessageAdapter(getApplicationContext(), arrayChatMessages);
-        //adapter of list of chat message
-        lstChatMessages.setAdapter(adapter);
+        loadChatMessages();
 
-        //Get the Chat Messages from firebase
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT).child(mAuth.getCurrentUser().getUid());
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                arrayChatMessages.clear();
-                for (DataSnapshot chat : dataSnapshot.getChildren()) {
-                    try {
-                        ChatMessage chatMessage = chat.getValue(ChatMessage.class);
-                        arrayChatMessages.add(chatMessage);
-                    } catch (Exception e) {
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        //Click item on listView
+        /* //Click item on listView
         lstChatMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -160,13 +135,14 @@ public class ChatMessagesActivity extends AppCompatActivity {
                         }).show();
                 return false;
             }
-        });
+        });*/
 
         //btnCalendar Event Button
         btnCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ChatMessagesActivity.this, CalendarActivity.class);
+                intent.putExtra(Utils.ID_USER, id);
                 startActivity(intent);
             }
         });
@@ -175,7 +151,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkUsernameAndImage();
+                //checkUsernameAndImage();
             }
         });
 
@@ -198,87 +174,102 @@ public class ChatMessagesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ChatMessagesActivity.this, SettingsActivity.class);
+                intent.putExtra(Utils.ID_USER, id);
                 startActivity(intent);
             }
         });
 
     }
 
-    private void checkIfHaveChats() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT).child(mAuth.getCurrentUser().getUid());;
-        database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == 0) {
-                    tvHaveChat.setVisibility(View.VISIBLE);
-                } else {
-                    tvHaveChat.setVisibility(View.GONE);
-                }
-            }
+    private void loadChatMessages() {
+        dialog = new ProgressDialog(ChatMessagesActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        chatMessageList = new ArrayList<ChatMessage>();
+        adapter = new ChatMessageAdapter(ChatMessagesActivity.this, chatMessageList);
+        lstChatMessages.setAdapter(adapter);
 
-            }
-        });
+        Ion.with(this)
+                .load(Utils.URL_LOAD_CHAT_MESSAGES)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .asJsonArray()
+                .setCallback(new FutureCallback<JsonArray>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonArray result) {
+                        try {
+                            if (result.size() == 0) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                tvHaveChat.setVisibility(View.VISIBLE);
+                            } else {
+                                tvHaveChat.setVisibility(View.GONE);
+
+                                for (int i = 0; i < result.size(); i++) {
+                                    JsonObject j = result.get(i).getAsJsonObject();
+                                    ChatMessage c = new ChatMessage();
+
+                                    c.setUsername(j.get(Utils.USERNAME_USER).getAsString());
+                                    c.setStatus(j.get(Utils.STATUS_USER).getAsString());
+                                    c.setMessage(j.get(Utils.LAST_MESSAGE).getAsString());
+
+                                    chatMessageList.add(c);
+                                }
+                                adapter.notifyDataSetChanged();
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                            }
+                        } catch (Exception x) {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+
     }
+
 
     @Override
     protected void onPause() {
         super.onPause();
-        setStatusOffline();
+        updateStatus(Utils.OFFLINE, id);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setStatusOnline();
+        updateStatus(Utils.ONLINE, id);
     }
 
-    //Check if the username and image profile isn't null
-    private void checkUsernameAndImage() {
-        dialog = new ProgressDialog(this);
-        dialog.setMessage(getString(R.string.loading));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+    private void updateStatus(final String id_user, final String status) {
+        Ion.with(this)
+                .load(Utils.URL_STATUS_USER)
+                .setBodyParameter(Utils.ID_USER_APP, id_user)
+                .setBodyParameter(Utils.STATUS_USER_APP, status)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String resultApp = result.get(Utils.STATUS).getAsString();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child(Utils.USERNAME).getValue(String.class);
-                String image = dataSnapshot.child(Utils.IMAGE_1).getValue(String.class);
+                            if (Objects.equals(resultApp, Utils.CODE_SUCCESS)) {
+                                Log.d(Utils.STATUS, "User " + id_user + " updated the status to: " + status);
+                            } else if (Objects.equals(resultApp, Utils.CODE_ERROR)) {
+                                Log.d(Utils.STATUS, "updated status failed");
+                            }
 
-                if (Objects.equals(username, Utils.USERNAME) || Objects.equals(image, "")) {
-                    dialog.dismiss();
-                    Utils.toastyInfo(getApplicationContext(), getString(R.string.please_change_image_username));
-                } else {
-                    dialog.dismiss();
-                    Intent intent = new Intent(ChatMessagesActivity.this, FindUsersActivity.class);
-                    startActivity(intent);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
     }
 
-    private void setStatusOnline() {
-        database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "online");
-        database.updateChildren(status);
-    }
-
-    private void setStatusOffline() {
-        database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-        HashMap<String, Object> status = new HashMap<>();
-        status.put("status", "offline");
-        database.updateChildren(status);
-    }
 
 }
