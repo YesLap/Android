@@ -28,6 +28,8 @@ public class Utils {
     public static final String UID = "uid";
     public static final String ID_SENDER_APP = "id_sender_app";
     public static final String ID_RECEIVER_APP = "id_receiver_app";
+    public static final String ID_SENDER = "id_sender";
+    public static final String ID_RECEIVER = "id_receiver";
     public static final String STATUS = "statususer";
     public static final String STATUS_CHAT_APP = "status_chat_app";
     public static final String STATUS_USER = "status_user";
@@ -128,6 +130,7 @@ public class Utils {
     public static final String URL_LOAD_STATUS_USER = "http://yeslap-eu.umbler.net/chat/loadstatususer.php";
     public static final String URL_DELETE_MESSAGE = "http://yeslap-eu.umbler.net/chat/deletemessage.php";
     public static final String URL_LOAD_CHAT_MESSAGES = "http://yeslap-eu.umbler.net/chatmessages/loadchatmessages.php";
+    public static final String URL_DELETE_CHAT_MESSAGE = "http://yeslap-eu.umbler.net/chatmessages/deletechatmessage.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";

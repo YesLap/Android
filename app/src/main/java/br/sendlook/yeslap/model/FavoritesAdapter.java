@@ -75,7 +75,6 @@ public class FavoritesAdapter extends BaseAdapter {
 
         int diff = DateTimeUtils.getDateDiff(getDateNow(), favorites.getLast_seen(), DateTimeUnits.DAYS);
         if (diff > 7) {
-            Utils.toastySuccess(context, String.valueOf(diff));
             ivStatus.setImageResource(R.drawable.icon_ghost);
         } else {
             if (Objects.equals(favorites.getStatus_user(), "online")) {

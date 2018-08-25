@@ -103,9 +103,19 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intentcalendar);
                 break;
             case R.id.btnChat:
-                Intent intentchat = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
-                intentchat.putExtra(Utils.ID_USER, idUser);
-                startActivity(intentchat);
+                if (Objects.equals(genderUser, " ")) {
+                    completePerfil("Vá em configurações e selecione o seu gênero.");
+                } else  if (Objects.equals(ageUser, " ")) {
+                    completePerfil("Vá em configurações e selecione a sua idade.");
+                } else if (Objects.equals(genderSearch, " ")) {
+                    completePerfil("Vá em configurações e selecione o gênero que deseja procurar.");
+                } else if (Objects.equals(ageSearchMax, " ") || Objects.equals(ageSearchMin, " ")) {
+                    completePerfil("Vá em configurações e selecione o a idade da pessoa que voce deseja procurar.");
+                } else {
+                    Intent intentchat = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
+                    intentchat.putExtra(Utils.ID_USER, idUser);
+                    startActivity(intentchat);
+                }
                 break;
             case R.id.ivFavorite:
                 Intent intentfavorite = new Intent(UserProfileActivity.this, FavoritesActivity.class);

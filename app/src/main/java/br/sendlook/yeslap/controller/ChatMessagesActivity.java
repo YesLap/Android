@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -17,22 +16,12 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,13 +31,13 @@ import br.sendlook.yeslap.view.ChatMessage;
 import br.sendlook.yeslap.view.Utils;
 import ru.whalemare.sheetmenu.SheetMenu;
 
-public class ChatMessagesActivity extends AppCompatActivity {
+public class ChatMessagesActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView btnGoToProfile, btnGoToSettings;
     private ListView lstChatMessages;
     private RelativeLayout btnChat, btnCalendar, btnSearch;
     private TextView tvHaveChat;
-    private ProgressDialog dialog;
+    private ProgressDialog dialogs;
     private String id;
     private ChatMessageAdapter adapter;
     private List<ChatMessage> chatMessageList;
@@ -64,33 +53,35 @@ public class ChatMessagesActivity extends AppCompatActivity {
         }
 
         //Cast
-        btnGoToProfile = (ImageView) findViewById(R.id.btnGoToProfile);
-        btnGoToSettings = (ImageView) findViewById(R.id.btnGoToSettings);
+        findViewById(R.id.btnGoToProfile).setOnClickListener(this);
+        findViewById(R.id.btnGoToSettings).setOnClickListener(this);
         lstChatMessages = (ListView) findViewById(R.id.lstChatMessages);
-        btnChat = (RelativeLayout) findViewById(R.id.btnChat);
-        btnCalendar = (RelativeLayout) findViewById(R.id.btnCalendar);
-        btnSearch = (RelativeLayout) findViewById(R.id.btnSearch);
+        findViewById(R.id.btnChat).setOnClickListener(this);
+        findViewById(R.id.btnCalendar).setOnClickListener(this);
+        findViewById(R.id.btnSearch).setOnClickListener(this);
         tvHaveChat = (TextView) findViewById(R.id.tvHaveChat);
 
         loadChatMessages();
 
-        /* //Click item on listView
         lstChatMessages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ChatMessage chat = arrayChatMessages.get(i);
-                Intent intent = new Intent(ChatMessagesActivity.this, ChatActivity.class);
-                intent.putExtra("uid", chat.getUid());
-                startActivity(intent);
+                ChatMessage chatMessage = (ChatMessage) adapterView.getAdapter().getItem(i);
+                Intent intentChat = new Intent(ChatMessagesActivity.this, ChatActivity.class);
+                intentChat.putExtra(Utils.UID_SENDER, chatMessage.getId_sender());
+                intentChat.putExtra(Utils.UID_ADDRESSEE, chatMessage.getId_receiver());
+                intentChat.putExtra(Utils.USERNAME, chatMessage.getUsername());
+                startActivity(intentChat);
             }
         });
 
         lstChatMessages.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                final ChatMessage chat = arrayChatMessages.get(position);
+                final ChatMessage chatMessage = (ChatMessage) parent.getAdapter().getItem(position);
+
                 SheetMenu.with(ChatMessagesActivity.this)
-                        .setTitle(arrayChatMessages.get(position).getName())
+                        .setTitle(chatMessage.getUsername())
                         .setMenu(R.menu.menu_chat_messages)
                         .setClick(new MenuItem.OnMenuItemClickListener() {
                             @Override
@@ -98,7 +89,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
                                 switch (item.getItemId()) {
                                     case R.id.nav_menu_delete_chat:
                                         new MaterialDialog.Builder(ChatMessagesActivity.this)
-                                                .title(arrayChatMessages.get(position).getName())
+                                                .title(chatMessage.getUsername())
                                                 .content(R.string.delete_chat_msg)
                                                 .positiveText(R.string.delete)
                                                 .negativeText(R.string.cancels)
@@ -110,21 +101,38 @@ public class ChatMessagesActivity extends AppCompatActivity {
                                                 })
                                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                                     @Override
-                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.CHAT).child(mAuth.getCurrentUser().getUid()).child(chat.getUid());
-                                                        database.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.chat_removed));
-                                                                }
-                                                            }
-                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                                                            }
-                                                        });
+                                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        dialogs = new ProgressDialog(ChatMessagesActivity.this);
+                                                        dialogs.setMessage(getString(R.string.loading));
+                                                        dialogs.setCanceledOnTouchOutside(false);
+                                                        dialogs.show();
+
+                                                        Ion.with(ChatMessagesActivity.this)
+                                                                .load(Utils.URL_DELETE_CHAT_MESSAGE)
+                                                                .setBodyParameter(Utils.ID_SENDER_APP, chatMessage.getId_sender())
+                                                                .setBodyParameter(Utils.ID_RECEIVER_APP, chatMessage.getId_receiver())
+                                                                .asJsonObject()
+                                                                .setCallback(new FutureCallback<JsonObject>() {
+                                                                    @Override
+                                                                    public void onCompleted(Exception e, JsonObject result) {
+                                                                        String returnApp = result.get(Utils.CHAT).getAsString();
+                                                                        switch (returnApp) {
+                                                                            case Utils.CODE_SUCCESS:
+                                                                                if (dialogs.isShowing()) {
+                                                                                    dialogs.dismiss();
+                                                                                }
+                                                                                loadChatMessages();
+                                                                                Utils.toastySuccess(getApplicationContext(), getString(R.string.chat_removed));
+                                                                                break;
+                                                                            case Utils.CODE_ERROR:
+                                                                                if (dialogs.isShowing()) {
+                                                                                    dialogs.dismiss();
+                                                                                }
+                                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                                                break;
+                                                                        }
+                                                                    }
+                                                                });
                                                     }
                                                 })
                                                 .show();
@@ -135,57 +143,68 @@ public class ChatMessagesActivity extends AppCompatActivity {
                         }).show();
                 return false;
             }
-        });*/
-
-        //btnCalendar Event Button
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChatMessagesActivity.this, CalendarActivity.class);
-                intent.putExtra(Utils.ID_USER, id);
-                startActivity(intent);
-            }
-        });
-
-        //btnSearch Event button
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //checkUsernameAndImage();
-            }
-        });
-
-        //btnChat Event button
-        btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.toastyInfo(getApplicationContext(), getString(R.string.are_you_already_here));
-            }
-        });
-
-        btnGoToProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        btnGoToSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChatMessagesActivity.this, SettingsActivity.class);
-                intent.putExtra(Utils.ID_USER, id);
-                startActivity(intent);
-            }
         });
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnGoToSettings:
+                Intent intentsettings = new Intent(ChatMessagesActivity.this, SettingsActivity.class);
+                intentsettings.putExtra(Utils.ID_USER, id);
+                startActivity(intentsettings);
+                break;
+            case R.id.btnGoToProfile:
+                finish();
+                break;
+            case R.id.btnChat:
+                Utils.toastyInfo(getApplicationContext(), getString(R.string.are_you_already_here));
+                break;
+            case R.id.btnSearch:
+                Ion.with(this)
+                        .load(Utils.URL_GET_USER_DATA)
+                        .setBodyParameter(Utils.ID_USER_APP, id)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                try {
+                                    String returnApp = result.get(Utils.GET_USER_DATA).getAsString();
+
+                                    if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+
+                                        Intent intent = new Intent(ChatMessagesActivity.this, FindUsersActivity.class);
+                                        intent.putExtra(Utils.ID_USER, id);
+                                        intent.putExtra(Utils.GENDER_SEARCH, result.get(Utils.GENDER_SEARCH).getAsString());
+                                        intent.putExtra(Utils.AGE_SEARCH_MIN, result.get(Utils.AGE_SEARCH_MIN).getAsString());
+                                        intent.putExtra(Utils.AGE_SEARCH_MAX, result.get(Utils.AGE_SEARCH_MAX).getAsString());
+                                        intent.putExtra(Utils.GENDER_USER, result.get(Utils.GENDER_USER).getAsString());
+                                        intent.putExtra(Utils.AGE_USER, result.get(Utils.AGE_USER).getAsString());
+                                        startActivity(intent);
+
+                                    } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                    }
+                                } catch (Exception x) {
+                                    Utils.toastyError(getApplicationContext(), x.getMessage());
+                                }
+                            }
+                        });
+                break;
+            case R.id.btnCalendar:
+                Intent intentcalendar = new Intent(ChatMessagesActivity.this, CalendarActivity.class);
+                intentcalendar.putExtra(Utils.ID_USER, id);
+                startActivity(intentcalendar);
+                break;
+        }
+    }
+
     private void loadChatMessages() {
-        dialog = new ProgressDialog(ChatMessagesActivity.this);
-        dialog.setMessage(getString(R.string.loading));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        dialogs = new ProgressDialog(ChatMessagesActivity.this);
+        dialogs.setMessage(getString(R.string.loading));
+        dialogs.setCanceledOnTouchOutside(false);
+        dialogs.show();
 
         chatMessageList = new ArrayList<ChatMessage>();
         adapter = new ChatMessageAdapter(ChatMessagesActivity.this, chatMessageList);
@@ -200,8 +219,8 @@ public class ChatMessagesActivity extends AppCompatActivity {
                     public void onCompleted(Exception e, JsonArray result) {
                         try {
                             if (result.size() == 0) {
-                                if (dialog.isShowing()) {
-                                    dialog.dismiss();
+                                if (dialogs.isShowing()) {
+                                    dialogs.dismiss();
                                 }
                                 tvHaveChat.setVisibility(View.VISIBLE);
                             } else {
@@ -214,17 +233,19 @@ public class ChatMessagesActivity extends AppCompatActivity {
                                     c.setUsername(j.get(Utils.USERNAME_USER).getAsString());
                                     c.setStatus(j.get(Utils.STATUS_USER).getAsString());
                                     c.setMessage(j.get(Utils.LAST_MESSAGE).getAsString());
+                                    c.setId_sender(j.get(Utils.ID_SENDER).getAsString());
+                                    c.setId_receiver(j.get(Utils.ID_RECEIVER).getAsString());
 
                                     chatMessageList.add(c);
                                 }
                                 adapter.notifyDataSetChanged();
-                                if (dialog.isShowing()) {
-                                    dialog.dismiss();
+                                if (dialogs.isShowing()) {
+                                    dialogs.dismiss();
                                 }
                             }
                         } catch (Exception x) {
-                            if (dialog.isShowing()) {
-                                dialog.dismiss();
+                            if (dialogs.isShowing()) {
+                                dialogs.dismiss();
                             }
                             Utils.toastyError(getApplicationContext(), x.getMessage());
                         }
@@ -270,6 +291,5 @@ public class ChatMessagesActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
 }
