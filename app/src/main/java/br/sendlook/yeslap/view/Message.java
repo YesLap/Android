@@ -5,7 +5,6 @@ public class Message {
     private String idSender;
     private String idReceiver;
     private String message;
-    private String date_message;
     private String idMessage;
     private String status;
 
@@ -34,14 +33,6 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getDate_message() {
-        return date_message;
-    }
-
-    public void setDate_message(String date_message) {
-        this.date_message = date_message;
     }
 
     public String getIdMessage() {

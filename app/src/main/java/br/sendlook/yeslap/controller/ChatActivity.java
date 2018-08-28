@@ -65,6 +65,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnSendMessage).setOnClickListener(this);
         findViewById(R.id.btnGoToProfile).setOnClickListener(this);
         findViewById(R.id.btnGoToSettings).setOnClickListener(this);
+        findViewById(R.id.tvUsername).setOnClickListener(this);
         etChat = (EditText) findViewById(R.id.etChat);
         lvChat = (ListView) findViewById(R.id.lvChat);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
@@ -75,10 +76,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         setStatus();
         loadMessages();
-
-        //String dateDB = "2018-1-5 00:00:01";
-        //int diff = DateTimeUtils.getDateDiff(getDateTimeNow(), dateDB, DateTimeUnits.MINUTES);
-        //Utils.toastyInfo(getApplicationContext(), String.valueOf(diff));
 
     }
 
@@ -107,7 +104,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                             .setBodyParameter(Utils.ID_SENDER_APP, idSender)
                             .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
                             .setBodyParameter(Utils.MESSAGE_APP, message)
-                            .setBodyParameter(Utils.DATE, getDateTimeNow())
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
@@ -185,6 +181,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
                 break;
+            case R.id.tvUsername:
+                Intent intentprofile = new Intent(ChatActivity.this, ProfileActivity.class);
+                intentprofile.putExtra(Utils.ID_USER, idSender);
+                intentprofile.putExtra(Utils.ID_FAVORITE_USER_APP, idReceiver);
+                startActivity(intentprofile);
+                break;
         }
     }
 
@@ -212,7 +214,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                                     m.setIdSender(j.get(Utils.ID_SENDER_APP).getAsString());
                                     m.setIdReceiver(j.get(Utils.ID_RECEIVER_APP).getAsString());
                                     m.setMessage(j.get(Utils.MESSAGE_APP).getAsString());
-                                    m.setDate_message(j.get(Utils.DATE).getAsString());
                                     m.setStatus(j.get(Utils.STATUS_USER).getAsString());
 
                                     messageList.add(m);
@@ -254,17 +255,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private String getDateTimeNow() {
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        int yyyy = calendar.get(Calendar.YEAR);
-        int mm = calendar.get(Calendar.MONTH);
-        int dd = calendar.get(Calendar.DAY_OF_MONTH);
-        int hh = calendar.get(Calendar.HOUR);
-        int min = calendar.get(Calendar.MINUTE);
-        int seg = calendar.get(Calendar.SECOND);
-        return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + min + ":" + seg;
-    }
-
     private void playSoundSentMessage() {
         MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap);
         whooap.start();
@@ -274,23 +264,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         MediaPlayer whooap = MediaPlayer.create(this, R.raw.whooap_sent);
         whooap.start();
     }
-
-
-    /*private void getStatus() {
-        datadase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES_STATUS).child(mAuth.getCurrentUser().getUid()).child(uidAddressee);
-        datadase.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                tvStatus.setText(dataSnapshot.child(Utils.STATUS).getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 
     private void setStatus() {
         KeyboardVisibilityEvent.setEventListener(ChatActivity.this, new KeyboardVisibilityEventListener() {
@@ -304,7 +277,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
 
     @Override
     protected void onResume() {

@@ -79,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnGenderSearch = (Button) findViewById(R.id.btnGenderSearch);
 
         ivGoToProfile = (ImageView) findViewById(R.id.imgGoToProfile);
-        ivGoToChat = (ImageView) findViewById(R.id.imgGoToChat);
+        //ivGoToChat = (ImageView) findViewById(R.id.imgGoToChat);
         btnLocationUser = (Button) findViewById(R.id.btnLocationUser);
         findViewById(R.id.btnLocationUser).setOnClickListener(this);
         tvAgeUser = (TextView) findViewById(R.id.tvRangeAgeUser);
@@ -109,13 +109,13 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
             }
         });
 
-        ivGoToChat.setOnClickListener(new View.OnClickListener() {
+        /*ivGoToChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SettingsActivity.this, ChatMessagesActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         rbAgeUser.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
             @Override

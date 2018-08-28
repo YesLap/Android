@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/gotoprofile" />
 
-        <ImageView
+        <!-- <ImageView
             android:id="@+id/imgGoToChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/iconchatsmall" />
+            app:srcCompat="@drawable/iconchatsmall" /> -->
 
         <ImageView
             android:id="@+id/ivIconPerson"
@@ -484,9 +484,13 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
             android:src="@drawable/wavebottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnDeleteAccount" />
 
     </android.support.constraint.ConstraintLayout>
