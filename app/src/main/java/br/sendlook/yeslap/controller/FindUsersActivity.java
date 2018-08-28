@@ -269,7 +269,27 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
                                     u.setId_user(jsonObject.get(Utils.ID_USER).getAsString());
                                     u.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
                                     u.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());
-
+                                    u.setSun_m(jsonObject.get(Utils.SUNDAY_M).getAsString());
+                                    u.setSun_a(jsonObject.get(Utils.SUNDAY_A).getAsString());
+                                    u.setSun_n(jsonObject.get(Utils.SUNDAY_N).getAsString());
+                                    u.setMon_m(jsonObject.get(Utils.MONDAY_M).getAsString());
+                                    u.setMon_a(jsonObject.get(Utils.MONDAY_A).getAsString());
+                                    u.setMon_n(jsonObject.get(Utils.MONDAY_N).getAsString());
+                                    u.setTue_m(jsonObject.get(Utils.TUESDAY_M).getAsString());
+                                    u.setTue_a(jsonObject.get(Utils.TUESDAY_A).getAsString());
+                                    u.setTue_n(jsonObject.get(Utils.TUESDAY_N).getAsString());
+                                    u.setWed_m(jsonObject.get(Utils.WEDNESDAY_M).getAsString());
+                                    u.setWed_a(jsonObject.get(Utils.WEDNESDAY_A).getAsString());
+                                    u.setWed_n(jsonObject.get(Utils.WEDNESDAY_N).getAsString());
+                                    u.setThu_m(jsonObject.get(Utils.THURSDAY_M).getAsString());
+                                    u.setThu_a(jsonObject.get(Utils.THURSDAY_A).getAsString());
+                                    u.setThu_n(jsonObject.get(Utils.THURSDAY_N).getAsString());
+                                    u.setFri_m(jsonObject.get(Utils.FRIDAY_M).getAsString());
+                                    u.setFri_a(jsonObject.get(Utils.FRIDAY_A).getAsString());
+                                    u.setFri_n(jsonObject.get(Utils.FRIDAY_N).getAsString());
+                                    u.setSat_m(jsonObject.get(Utils.SATURDAY_M).getAsString());
+                                    u.setSat_a(jsonObject.get(Utils.SATURDAY_A).getAsString());
+                                    u.setSat_n(jsonObject.get(Utils.SATURDAY_N).getAsString());
                                     usersList.add(u);
                                 }
 
