@@ -213,6 +213,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                                     m.setIdReceiver(j.get(Utils.ID_RECEIVER_APP).getAsString());
                                     m.setMessage(j.get(Utils.MESSAGE_APP).getAsString());
                                     m.setDate_message(j.get(Utils.DATE).getAsString());
+                                    m.setStatus(j.get(Utils.STATUS_USER).getAsString());
 
                                     messageList.add(m);
                                 }

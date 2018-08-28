@@ -73,35 +73,19 @@ public class MessagesAdapter extends BaseAdapter {
             v = view;
         }
 
+        ImageView ivStatus = v.findViewById(R.id.ivStatus);
         TextView tvMessage = v.findViewById(R.id.tvMessage);
+        CircleImageView cvUserImage = v.findViewById(R.id.cvImageUser);
+
         tvMessage.setText(message.getMessage());
 
-        /*METHOD TO LOAD THE USER STATUS OF PHOTO SIDE
-        final ImageView ivStatus = v.findViewById(R.id.ivStatus);
-        Ion.with(context)
-                .load(Utils.URL_LOAD_STATUS_USER)
-                .setBodyParameter(Utils.ID_RECEIVER_APP, message.getIdReceiver())
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        String returnApp = result.get(Utils.STATUS_USER).getAsString();
-                        switch (returnApp) {
-                            case Utils.CODE_SUCCESS:
-                                if (Objects.equals(result.get(Utils.STATUS).getAsString(), "online")) {
-                                    ivStatus.setImageResource(R.drawable.on_user);
-                                } else  if (Objects.equals(result.get(Utils.STATUS).getAsString(), "offline")) {
-                                    ivStatus.setImageResource(R.drawable.off_user);
-                                }
-                                break;
-                            case Utils.CODE_ERROR:
-                                break;
-                        }
-                    }
-                });*/
+        if (Objects.equals(message.getStatus(), "online")) {
+            ivStatus.setImageResource(R.drawable.on_user);
+        } else  if (Objects.equals(message.getStatus(), "offline")) {
+            ivStatus.setImageResource(R.drawable.off_user);
+        }
 
         //todo: Pegar a imagem dos usuarios
-        final CircleImageView cvUserImage = v.findViewById(R.id.cvImageUser);
 
         /*METHOD TO DELETE MESSAGE
         int diff = DateTimeUtils.getDateDiff(message.getDate_message(), getDateNow(), DateTimeUnits.DAYS);

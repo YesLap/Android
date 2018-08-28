@@ -7,6 +7,7 @@ public class Message {
     private String message;
     private String date_message;
     private String idMessage;
+    private String status;
 
     public Message() {
     }
@@ -49,5 +50,13 @@ public class Message {
 
     public void setIdMessage(String idMessage) {
         this.idMessage = idMessage;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

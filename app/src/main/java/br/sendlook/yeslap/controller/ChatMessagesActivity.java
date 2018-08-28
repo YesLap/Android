@@ -235,6 +235,27 @@ public class ChatMessagesActivity extends AppCompatActivity implements View.OnCl
                                     c.setMessage(j.get(Utils.LAST_MESSAGE).getAsString());
                                     c.setId_sender(j.get(Utils.ID_SENDER).getAsString());
                                     c.setId_receiver(j.get(Utils.ID_RECEIVER).getAsString());
+                                    c.setSun_m(j.get(Utils.SUNDAY_M).getAsString());
+                                    c.setSun_a(j.get(Utils.SUNDAY_A).getAsString());
+                                    c.setSun_n(j.get(Utils.SUNDAY_N).getAsString());
+                                    c.setMon_m(j.get(Utils.MONDAY_M).getAsString());
+                                    c.setMon_a(j.get(Utils.MONDAY_A).getAsString());
+                                    c.setMon_n(j.get(Utils.MONDAY_N).getAsString());
+                                    c.setTue_m(j.get(Utils.TUESDAY_M).getAsString());
+                                    c.setTue_a(j.get(Utils.TUESDAY_A).getAsString());
+                                    c.setTue_n(j.get(Utils.TUESDAY_N).getAsString());
+                                    c.setWed_m(j.get(Utils.WEDNESDAY_M).getAsString());
+                                    c.setWed_a(j.get(Utils.WEDNESDAY_A).getAsString());
+                                    c.setWed_n(j.get(Utils.WEDNESDAY_N).getAsString());
+                                    c.setThu_m(j.get(Utils.THURSDAY_M).getAsString());
+                                    c.setThu_a(j.get(Utils.THURSDAY_A).getAsString());
+                                    c.setThu_n(j.get(Utils.THURSDAY_N).getAsString());
+                                    c.setFri_m(j.get(Utils.FRIDAY_M).getAsString());
+                                    c.setFri_a(j.get(Utils.FRIDAY_A).getAsString());
+                                    c.setFri_n(j.get(Utils.FRIDAY_N).getAsString());
+                                    c.setSat_m(j.get(Utils.SATURDAY_M).getAsString());
+                                    c.setSat_a(j.get(Utils.SATURDAY_A).getAsString());
+                                    c.setSat_n(j.get(Utils.SATURDAY_N).getAsString());
 
                                     chatMessageList.add(c);
                                 }
