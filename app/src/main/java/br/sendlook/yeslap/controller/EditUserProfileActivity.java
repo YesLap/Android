@@ -202,8 +202,8 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
                         if (task.isSuccessful()) {
                             DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
                             HashMap<String, Object> image = new HashMap<>();
-                            String taskDownload = task.getResult().getDownloadUrl().toString();
-                            image.put(user, taskDownload);
+                            ///String taskDownload = task.getResult().getDownloadUrl().toString();
+                            //image.put(user, taskDownload);
                             database.updateChildren(image).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {

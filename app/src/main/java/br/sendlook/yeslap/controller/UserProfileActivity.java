@@ -486,6 +486,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                                 if (Objects.equals(result.get(Utils.USERNAME_USER).getAsString(), " ")) {
                                     goToCompleteProfile(idUser);
                                 }
+                                if (Objects.equals(result.get(Utils.IMAGE_USER_1).getAsString(), " ") && Objects.equals(result.get(Utils.IMAGE_USER_3).getAsString(), " ") && Objects.equals(result.get(Utils.IMAGE_USER_3).getAsString(), " ")) {
+                                    goToCompleteProfile(idUser);
+                                }
                                 getUserData();
                                 showSpotlight();
                             } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {

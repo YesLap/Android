@@ -51,7 +51,6 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
     private Uri mainImageURI = null;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase, mDatabase1, mDatabase2;
     private StorageReference mStorage;
 
     private ProgressDialog dialog;
@@ -63,10 +62,12 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_username_profile);
 
+        mAuth = FirebaseAuth.getInstance();
+        mStorage = FirebaseStorage.getInstance().getReference();
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             id = bundle.getString(Utils.ID_USER_APP);
-            //Utils.toastyInfo(getApplicationContext(), id);
         }
 
         etUsername = (AppCompatEditText) findViewById(R.id.etUsername);
@@ -91,9 +92,6 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 boolean b = m.find();
                 boolean s = username.contains(" ");
 
-                //if (downloadURL == null || downloadURL.equals("")) {
-                //Utils.toastyInfo(getApplicationContext(), getString(R.string.select_image_to_your_profile));
-                //} else
                 if (username.equals("")) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_username_field));
                 } else if (b || s) {
@@ -136,10 +134,45 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 Utils.toastyInfo(getApplicationContext(), String.valueOf(mainImageURI));
                 cvImageUser.setImageURI(mainImageURI);
 
-                //TODO: METODO PARA SALVAR A IMAGEM NO MYSQL
+                final StorageReference filePath = mStorage.child("images_user").child(id).child(Utils.IMAGE_1 + ".jpg");
+                filePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            String taskDownload = task.getResult().getUploadSessionUri().toString();
 
+                            Ion.with(getApplicationContext())
+                                    .load(Utils.URL_UPDATE_IMAGE_USER)
+                                    .setBodyParameter(Utils.ID_USER_APP, id)
+                                    .setBodyParameter(Utils.IMAGE_APP, taskDownload)
+                                    .setBodyParameter(Utils.IMAGE_LOCAL, Utils.IMAGE_USER_1)
+                                    .asJsonObject()
+                                    .setCallback(new FutureCallback<JsonObject>() {
+                                        @Override
+                                        public void onCompleted(Exception e, JsonObject result) {
+                                            String returnApp = result.get(Utils.IMAGE).getAsString();
+                                            switch (returnApp) {
+                                                case Utils.CODE_SUCCESS:
+                                                    btnSave.setVisibility(View.VISIBLE);
+                                                    break;
+                                                case Utils.CODE_ERROR:
+                                                    Utils.toastyError(getApplicationContext(), "Error On send Image");
+                                                    break;
+                                            }
+                                        }
+                                    });
 
-                btnSave.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                    }
+                });
 
             }
 

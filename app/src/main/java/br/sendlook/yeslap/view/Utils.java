@@ -25,7 +25,7 @@ public class Utils {
     public static final String IMAGE_2 = "image2";
     public static final String IMAGE_3 = "image3";
     public static final String SINCE = "since";
-    public static final String UID = "uid";
+    public static final String LAST_ID = "last_id";
     public static final String ID_SENDER_APP = "id_sender_app";
     public static final String ID_RECEIVER_APP = "id_receiver_app";
     public static final String ID_SENDER = "id_sender";
@@ -98,7 +98,11 @@ public class Utils {
     public static final String LONGITUDE_USER_APP = "longitude_user_app";
     public static final String LOCATION_USER = "location_user";
     public static final String AGE_USER = "age_user";
+    public static final String IMAGE_APP = "image_app";
+    public static final String IMAGE = "image";
+    public static final String IMAGE_LOCAL = "image_local_app";
 
+    public static final String URL_UPDATE_ID_USER = "http://yeslap-eu.umbler.net/signup/updateiduser.php";
     public static final String URL_SIGN_UP = "http://yeslap-eu.umbler.net/signup/signup.php";
     public static final String URL_SIGN_IN = "http://yeslap-eu.umbler.net/signin/signin.php";
     public static final String URL_CHECK_COMPLETE_PROFILE = "http://yeslap-eu.umbler.net/userprofile/checkcompleteprofile.php";
@@ -131,6 +135,7 @@ public class Utils {
     public static final String URL_DELETE_MESSAGE = "http://yeslap-eu.umbler.net/chat/deletemessage.php";
     public static final String URL_LOAD_CHAT_MESSAGES = "http://yeslap-eu.umbler.net/chatmessages/loadchatmessages.php";
     public static final String URL_DELETE_CHAT_MESSAGE = "http://yeslap-eu.umbler.net/chatmessages/deletechatmessage.php";
+    public static final String URL_UPDATE_IMAGE_USER = "http://yeslap-eu.umbler.net/userprofile/updateimageuser1.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
@@ -149,6 +154,8 @@ public class Utils {
     public static final String USERNAME_USER = "username_user";
     public static final String UPDATE_USERNAME = "update_username";
     public static final String IMAGE_USER_1 = "image_user_1";
+    public static final String IMAGE_USER_2 = "image_user_2";
+    public static final String IMAGE_USER_3 = "image_user_3";
     public static final String EXIST_PROFILE = "existprofile";
 
     public static final String CODE_SUCCESS = "200";

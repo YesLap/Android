@@ -4,10 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -25,12 +31,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private EditText etEmail, etPassword, etRetypePassword;
     private ProgressDialog dialog;
+    private FirebaseAuth mAuth;
     private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        mAuth = FirebaseAuth.getInstance();
 
         //Cast
         etEmail = (EditText) findViewById(R.id.etEmail);
@@ -47,8 +56,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.btnSignUp:
 
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+                final String email = etEmail.getText().toString();
+                final String password = etPassword.getText().toString();
                 String retypePassword = etRetypePassword.getText().toString();
 
                 if (Objects.equals(email, "")) {
@@ -78,17 +87,51 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
-                                public void onCompleted(Exception e, JsonObject result) {
+                                public void onCompleted(Exception e, final JsonObject result) {
                                     try {
                                         String returnApp = result.get(Utils.SIGN_UP_CODE).getAsString();
 
                                         switch (returnApp) {
                                             case Utils.CODE_SUCCESS:
-                                                dialog.dismiss();
-                                                Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
-                                                id = Integer.parseInt(result.get(Utils.ID_USER).getAsString());
-                                                saveLogin(id);
-                                                goToUserProfile(String.valueOf(id));
+
+                                                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                                        Ion.with(SignUpActivity.this)
+                                                                .load(Utils.URL_UPDATE_ID_USER)
+                                                                .setBodyParameter(Utils.EMAIL_APP, email)
+                                                                .setBodyParameter(Utils.PASSWORD_APP, password)
+                                                                .setBodyParameter(Utils.ID_USER_APP, mAuth.getCurrentUser().getUid())
+                                                                .setBodyParameter(Utils.LAST_ID, result.get(Utils.LAST_ID).getAsString())
+                                                                .asJsonObject()
+                                                                .setCallback(new FutureCallback<JsonObject>() {
+                                                                    @Override
+                                                                    public void onCompleted(Exception e, JsonObject result) {
+                                                                        try {
+                                                                            String returnApp = result.get(Utils.SIGN_UP_CODE).getAsString();
+                                                                            switch (returnApp) {
+                                                                                case Utils.CODE_SUCCESS:
+                                                                                    dialog.dismiss();
+                                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
+                                                                                    saveLogin(mAuth.getCurrentUser().getUid());
+                                                                                    goToUserProfile(mAuth.getCurrentUser().getUid());
+                                                                                    break;
+                                                                                case Utils.CODE_ERROR:
+                                                                                    break;
+                                                                            }
+                                                                        } catch (Exception x) {
+                                                                            if (dialog.isShowing()) {
+                                                                                dialog.dismiss();
+                                                                            }
+                                                                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                                                                        }
+                                                                    }
+                                                                });
+
+                                                    }
+                                                });
+
                                                 break;
                                             case Utils.CODE_ERROR_EMAIL:
                                                 if (dialog.isShowing()) {
@@ -122,9 +165,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void saveLogin(int id) {
+    private void saveLogin(String id) {
         SharedPreferences.Editor editor = getSharedPreferences(Utils.PREF_NAME, MODE_PRIVATE).edit();
-        editor.putString(Utils.ID_USER, String.valueOf(id));
+        editor.putString(Utils.ID_USER, id);
         editor.apply();
     }
 

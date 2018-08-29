@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "405673897660",
-    "firebase_url": "https://sendlook-yeslap.firebaseio.com",
-    "project_id": "sendlook-yeslap",
-    "storage_bucket": "sendlook-yeslap.appspot.com"
+    "project_number": "507203712971",
+    "firebase_url": "https://yeslap-7740c.firebaseio.com",
+    "project_id": "yeslap-7740c",
+    "storage_bucket": "yeslap-7740c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:405673897660:android:209059ccda9b9c6d",
+        "mobilesdk_app_id": "1:507203712971:android:209059ccda9b9c6d",
         "android_client_info": {
           "package_name": "br.sendlook.yeslap"
         }
       },
       "oauth_client": [
         {
-          "client_id": "405673897660-vg7ikg4ijcdk78n7us3qs8m452cp49il.apps.googleusercontent.com",
+          "client_id": "507203712971-3h2mg4dc9vv59niamknlisfvna24o5jl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "br.sendlook.yeslap",
-            "certificate_hash": "73e8eaa6b907c18e944adc8363e77d59c5b86bc8"
+            "certificate_hash": "09fdfee34467f516c668d3c78e2f7dcaee8411fe"
           }
         },
         {
-          "client_id": "405673897660-g5trop3as5joomf748vuqa9pr2c3fsh0.apps.googleusercontent.com",
+          "client_id": "507203712971-0v8ph9plllbrpmu55g495h07d2hk40od.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBXCfUfW19EiMJ-o0384-2vVnqcQRDWELM"
+          "current_key": "AIzaSyDUHTlDelhlIipClfhSc6eikVtp1S7T6E0"
         }
       ],
       "services": {
@@ -40,15 +40,8 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "405673897660-g5trop3as5joomf748vuqa9pr2c3fsh0.apps.googleusercontent.com",
+              "client_id": "507203712971-0v8ph9plllbrpmu55g495h07d2hk40od.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "405673897660-8aooql2vefffo6lss5kqkiduotctjm2p.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.yeslap"
-              }
             }
           ]
         },
