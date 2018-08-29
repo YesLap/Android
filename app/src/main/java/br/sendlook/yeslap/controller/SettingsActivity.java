@@ -257,7 +257,6 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 callActivity(UserProfileActivity.class);
                 break;
             case R.id.btnGenderUser:
-                Utils.toastySuccess(getApplicationContext(), genderUser);
                 if (Objects.equals(genderUser, "male")) {
                     btnGenderUser.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
                     genderUser = "female";
@@ -279,7 +278,6 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 }
                 break;
             case R.id.btnGenderSearch:
-                Utils.toastySuccess(getApplicationContext(), genderSearch);
                 if (Objects.equals(genderSearch, "male")) {
                     btnGenderSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.settings_icon_female, 0, 0, 0);
                     genderSearch = "female";
@@ -395,9 +393,9 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
     private void getCurrentLocation() {
         if (!checkIfGpsIsOn()) {
             new MaterialDialog.Builder(SettingsActivity.this)
-                    .title("GPS OFF")
-                    .content("You need to call your location so we can find you.")
-                    .positiveText("Turn On")
+                    .title(R.string.gps_off)
+                    .content(getString(R.string.gps_off_msg))
+                    .positiveText(R.string.turn_on)
                     .negativeText(getString(R.string.cancels))
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override

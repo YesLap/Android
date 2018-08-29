@@ -69,13 +69,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.btnSearch:
                 if (Objects.equals(genderUser, " ")) {
-                    completePerfil("Vá em configurações e selecione o seu gênero.");
+                    completePerfil(getString(R.string.select_genre));
                 } else  if (Objects.equals(ageUser, " ")) {
-                    completePerfil("Vá em configurações e selecione a sua idade.");
+                    completePerfil(getString(R.string.select_yout_age));
                 } else if (Objects.equals(genderSearch, " ")) {
-                    completePerfil("Vá em configurações e selecione o gênero que deseja procurar.");
+                    completePerfil(getString(R.string.select_genre_search));
                 } else if (Objects.equals(ageSearchMax, " ") || Objects.equals(ageSearchMin, " ")) {
-                    completePerfil("Vá em configurações e selecione o a idade da pessoa que voce deseja procurar.");
+                    completePerfil(getString(R.string.select_age_search));
                 } else {
                     Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
                     intent.putExtra(Utils.ID_USER, idUser);
@@ -104,13 +104,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.btnChat:
                 if (Objects.equals(genderUser, " ")) {
-                    completePerfil("Vá em configurações e selecione o seu gênero.");
+                    completePerfil(getString(R.string.select_genre));
                 } else  if (Objects.equals(ageUser, " ")) {
-                    completePerfil("Vá em configurações e selecione a sua idade.");
+                    completePerfil(getString(R.string.select_yout_age));
                 } else if (Objects.equals(genderSearch, " ")) {
-                    completePerfil("Vá em configurações e selecione o gênero que deseja procurar.");
+                    completePerfil(getString(R.string.select_genre_search));
                 } else if (Objects.equals(ageSearchMax, " ") || Objects.equals(ageSearchMin, " ")) {
-                    completePerfil("Vá em configurações e selecione o a idade da pessoa que voce deseja procurar.");
+                    completePerfil(getString(R.string.select_age_search));
                 } else {
                     Intent intentchat = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
                     intentchat.putExtra(Utils.ID_USER, idUser);

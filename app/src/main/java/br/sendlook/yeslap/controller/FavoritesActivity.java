@@ -184,7 +184,7 @@ public class FavoritesActivity extends AppCompatActivity {
         adapter = new FavoritesAdapter(FavoritesActivity.this, favoritesList);
         gvFavorite.setAdapter(adapter);
 
-        Ion.with(getApplicationContext())
+        Ion.with(this)
                 .load(Utils.URL_GET_FAVORITES)
                 .setBodyParameter(Utils.ID_USER_APP, id)
                 .asJsonArray()
@@ -193,6 +193,9 @@ public class FavoritesActivity extends AppCompatActivity {
                     public void onCompleted(Exception e, JsonArray result) {
                         try {
                             if (result.size() == 0) {
+                                if (dialogs.isShowing()) {
+                                    dialogs.dismiss();
+                                }
                                 gvFavorite.setVisibility(View.INVISIBLE);
                                 tvFavorite.setVisibility(View.VISIBLE);
                             } else {

@@ -1,6 +1,6 @@
 <resources>
-    <string name="version_app">Versão 2.0.21</string>
-    <string name="app_name">YesLap</string>
+    <string name="version_app">Versão 2.0.22</string>
+    <string name="app_name">YesLap!</string>
     <string name="email">E-mail</string>
     <string name="password">Senha</string>
     <string name="create_account">Você ainda não tem uma conta? Crie uma conta</string>
@@ -122,4 +122,25 @@
     <string name="email_changed">Seu E-mail foi alterado!</string>
     <string name="change_email">Alterar E-mail</string>
     <string name="email_equal_new">Novo e-mail igual ao seu atual</string>
+    <string name="valid_email">Digite um endereço de e-mail válido</string>
+    <string name="password_size_msg">Digite uma senha com mais de 6 caracteres</string>
+    <string name="error_signup">Com licença! Ocorreu um erro inesperado!</string>
+    <string name="email_or_password_incorrect">email ou senha estão incorretos</string>
+    <string name="change_password">Mudar senha</string>
+    <string name="new_password">Nova senha</string>
+    <string name="fill_new_password">Digite seu novo e-mail</string>
+    <string name="changed_password">Seu e-mail foi alterado!</string>
+    <string name="already_exist_favorite">Este usuário já está na sua lista de usuários favoritos</string>
+    <string name="msg_report">Digite algum comentário para relatar este usuário</string>
+    <string name="choose_partner_gender">Escolha o sexo do parceiro</string>
+    <string name="choose_your_gender">Escolha seu gênero</string>
+    <string name="no_partner_available">Nenhum parceiro disponível para você agora, por favor, tente novamente mais tarde!</string>
+    <string name="no_have_favorites">Você não tem nenhum favorito ainda!</string>
+    <string name="gps_off">GPS Desligado</string>
+    <string name="gps_off_msg">Você precisa ligar para sua localização para que possamos encontrá-lo.</string>
+    <string name="turn_on">Ligar</string>
+    <string name="select_genre">Vá em configurações e selecione o seu gênero.</string>
+    <string name="select_yout_age">Vá em configurações e selecione a sua idade.</string>
+    <string name="select_genre_search">Vá em configurações e selecione o gênero que deseja procurar.</string>
+    <string name="select_age_search">Vá em configurações e selecione o a idade da pessoa que voce deseja procurar.</string>
 </resources>
