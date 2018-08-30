@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -30,8 +31,6 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.net.IDN;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -131,46 +130,36 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                 Utils.toastyInfo(getApplicationContext(), getString(R.string.sending_image));
 
                 mainImageURI = result.getUri();
-                Utils.toastyInfo(getApplicationContext(), String.valueOf(mainImageURI));
                 cvImageUser.setImageURI(mainImageURI);
 
                 final StorageReference filePath = mStorage.child("images_user").child(id).child(Utils.IMAGE_1 + ".jpg");
-                filePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                filePath.putFile(mainImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            String taskDownload = task.getResult().getUploadSessionUri().toString();
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful());
+                        Uri download = urlTask.getResult();
 
-                            Ion.with(getApplicationContext())
-                                    .load(Utils.URL_UPDATE_IMAGE_USER)
-                                    .setBodyParameter(Utils.ID_USER_APP, id)
-                                    .setBodyParameter(Utils.IMAGE_APP, taskDownload)
-                                    .setBodyParameter(Utils.IMAGE_LOCAL, Utils.IMAGE_USER_1)
-                                    .asJsonObject()
-                                    .setCallback(new FutureCallback<JsonObject>() {
-                                        @Override
-                                        public void onCompleted(Exception e, JsonObject result) {
-                                            String returnApp = result.get(Utils.IMAGE).getAsString();
-                                            switch (returnApp) {
-                                                case Utils.CODE_SUCCESS:
-                                                    btnSave.setVisibility(View.VISIBLE);
-                                                    break;
-                                                case Utils.CODE_ERROR:
-                                                    Utils.toastyError(getApplicationContext(), "Error On send Image");
-                                                    break;
-                                            }
+                        Ion.with(getApplicationContext())
+                                .load(Utils.URL_UPDATE_IMAGE_USER_1)
+                                .setBodyParameter(Utils.ID_USER_APP, id)
+                                .setBodyParameter(Utils.IMAGE_APP, download.toString())
+                                .asJsonObject()
+                                .setCallback(new FutureCallback<JsonObject>() {
+                                    @Override
+                                    public void onCompleted(Exception e, JsonObject result) {
+                                        String returnApp = result.get(Utils.IMAGE).getAsString();
+                                        switch (returnApp) {
+                                            case Utils.CODE_SUCCESS:
+                                                btnSave.setVisibility(View.VISIBLE);
+                                                Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
+                                                break;
+                                            case Utils.CODE_ERROR:
+                                                Utils.toastyError(getApplicationContext(), getString(R.string.error_upload));
+                                                break;
                                         }
-                                    });
-
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (dialog.isShowing()) {
-                            dialog.dismiss();
-                        }
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                    }
+                                });
                     }
                 });
 

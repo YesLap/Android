@@ -19,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -50,23 +51,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class EditUserProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Variables
-    private ImageView btnGoToProfile, btnGotToSettings;
     private CircleImageView cvImageUser;
     private TextView tvUsername;
     private RoundedImageView ivImage1, ivImage2, ivImage3;
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
     private StorageReference mStorage;
     private ProgressDialog dialog;
-    private static final int GALLERY_PICK_IMAGE_1 = 1;
-    private static final int GALLERY_PICK_IMAGE_2 = 2;
-    private static final int GALLERY_PICK_IMAGE_3 = 3;
-    private String downloadURL = "";
+    private String image_user_1, image_user_2, image_user_3;
     private Integer ImageStatus = 0;
-    private Integer Image = 0;
-    private PickImageDialog pickImage;
-    private Boolean isExistUsername = false;
-    private String oldUsername;
     private Uri mainImageURI = null;
     private String id;
 
@@ -75,6 +67,9 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_profile);
+
+        mAuth = FirebaseAuth.getInstance();
+        mStorage = FirebaseStorage.getInstance().getReference();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -131,36 +126,15 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
                 startActivity(intentsearch);
                 break;
             case R.id.btnChamgeImage1:
-                dialog = new ProgressDialog(EditUserProfileActivity.this);
-                dialog.setTitle(getString(R.string.uploading_image));
-                dialog.setMessage(getString(R.string.uploading_image_msg));
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
-
                 ImageStatus = 1;
-
                 imagePicker();
                 break;
             case R.id.btnChangeImage2:
-                dialog = new ProgressDialog(EditUserProfileActivity.this);
-                dialog.setTitle(getString(R.string.uploading_image));
-                dialog.setMessage(getString(R.string.uploading_image_msg));
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
-
                 ImageStatus = 2;
-
                 imagePicker();
                 break;
             case R.id.btnChangeImage3:
-                dialog = new ProgressDialog(EditUserProfileActivity.this);
-                dialog.setTitle(getString(R.string.uploading_image));
-                dialog.setMessage(getString(R.string.uploading_image_msg));
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
-
                 ImageStatus = 3;
-
                 imagePicker();
                 break;
         }
@@ -181,59 +155,19 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
 
             if (resultCode == RESULT_OK) {
 
-                Utils.toastyInfo(getApplicationContext(), getString(R.string.sending_image));
-
                 mainImageURI = result.getUri();
 
                 if (ImageStatus == 1) {
                     ivImage1.setImageURI(mainImageURI);
+                    uploadImage(Utils.URL_UPDATE_IMAGE_USER_1, Utils.IMAGE_1, mainImageURI, ivImage1, cvImageUser);
                 } else if (ImageStatus == 2) {
                     ivImage2.setImageURI(mainImageURI);
+                    uploadImage(Utils.URL_UPDATE_IMAGE_USER_2, Utils.IMAGE_2, mainImageURI, ivImage2, null);
                 } else if (ImageStatus == 3) {
                     ivImage3.setImageURI(mainImageURI);
+                    uploadImage(Utils.URL_UPDATE_IMAGE_USER_3, Utils.IMAGE_3, mainImageURI, ivImage3, null);
                 }
 
-                final String user = String.format("image%s", ImageStatus);
-
-                StorageReference filePath = mStorage.child(user + ".jpg");
-                filePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.USERS).child(mAuth.getCurrentUser().getUid());
-                            HashMap<String, Object> image = new HashMap<>();
-                            ///String taskDownload = task.getResult().getDownloadUrl().toString();
-                            //image.put(user, taskDownload);
-                            database.updateChildren(image).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Utils.toastySuccess(getApplicationContext(), "Profile Image Up-To-Date");
-                                        if (dialog.isShowing()) {
-                                            dialog.dismiss();
-                                        }
-                                    }
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    if (dialog.isShowing()) {
-                                        dialog.dismiss();
-                                    }
-                                    Utils.toastyError(getApplicationContext(), e.getMessage());
-                                }
-                            });
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (dialog.isShowing()) {
-                            dialog.dismiss();
-                        }
-                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                    }
-                });
 
             }
 
@@ -241,6 +175,62 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private void uploadImage(final String URL, String PATH, Uri IMAGE, final ImageView ivImage, final CircleImageView cvImage) {
+        dialog = new ProgressDialog(EditUserProfileActivity.this);
+        dialog.setTitle(getString(R.string.uploading_image));
+        dialog.setMessage(getString(R.string.sending_image));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        final StorageReference filePath = mStorage.child("images_user").child(id).child(PATH + ".jpg");
+        filePath.putFile(IMAGE).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!urlTask.isSuccessful());
+                final Uri downloadUrl = urlTask.getResult();
+
+                Ion.with(getApplicationContext())
+                        .load(URL)
+                        .setBodyParameter(Utils.ID_USER_APP, id)
+                        .setBodyParameter(Utils.IMAGE_APP, downloadUrl.toString())
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                String returnApp = result.get(Utils.IMAGE).getAsString();
+                                switch (returnApp) {
+                                    case Utils.CODE_SUCCESS:
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                        if (cvImage != null)  {
+                                            Picasso.with(EditUserProfileActivity.this).load(downloadUrl.toString()).placeholder(R.drawable.img_profile).into(ivImage);
+                                            Picasso.with(EditUserProfileActivity.this).load(downloadUrl.toString()).placeholder(R.drawable.img_profile).into(cvImage);
+                                        } else {
+                                            Picasso.with(EditUserProfileActivity.this).load(downloadUrl.toString()).placeholder(R.drawable.img_profile).into(ivImage);
+                                        }
+                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.image_uploaded));
+                                        break;
+                                    case Utils.CODE_ERROR:
+                                        Utils.toastyError(getApplicationContext(), getString(R.string.error_upload));
+                                        break;
+                                }
+                            }
+                        });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+                Utils.toastyError(getApplicationContext(), e.getMessage());
+            }
+        });
+    }
+
 
     @Override
     protected void onResume() {
@@ -359,10 +349,22 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
                                 }
 
                                 String username = result.get(Utils.USERNAME_USER).getAsString();
-                                //String image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
+                                image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
+                                image_user_2 = result.get(Utils.IMAGE_USER_2).getAsString();
+                                image_user_3 = result.get(Utils.IMAGE_USER_3).getAsString();
 
                                 tvUsername.setText(username);
-                                //TODO: CRIAR METODO PARA CARREGAR O LINK DA IMAGEM DO FIREBASE
+
+                                if (image_user_1 != null && !Objects.equals(image_user_1, " ")) {
+                                    Picasso.with(EditUserProfileActivity.this).load(image_user_1).placeholder(R.drawable.img_profile).into(ivImage1);
+                                    Picasso.with(EditUserProfileActivity.this).load(image_user_1).placeholder(R.drawable.img_profile).into(cvImageUser);
+                                }
+                                if (image_user_2 != null && !Objects.equals(image_user_2, " ")) {
+                                    Picasso.with(EditUserProfileActivity.this).load(image_user_2).placeholder(R.drawable.img_profile).into(ivImage2);
+                                }
+                                if (image_user_3 != null && !Objects.equals(image_user_3, " ")) {
+                                    Picasso.with(EditUserProfileActivity.this).load(image_user_3).placeholder(R.drawable.img_profile).into(ivImage3);
+                                }
 
                             } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
                                 if (dialog.isShowing()) {

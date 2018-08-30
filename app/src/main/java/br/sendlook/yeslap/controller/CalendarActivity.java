@@ -530,9 +530,6 @@ public class CalendarActivity extends AppCompatActivity {
 
                             switch (returnApp) {
                                 case Utils.CODE_SUCCESS:
-                                    if (dialog.isShowing()) {
-                                        dialog.dismiss();
-                                    }
                                     if (Objects.equals(turn, Utils.SUNDAY_M)) {
                                         MorningSun = false;
                                         imageView.setImageDrawable(getDrawable(R.drawable.iconmorningoff));
@@ -596,6 +593,9 @@ public class CalendarActivity extends AppCompatActivity {
                                     } else if (Objects.equals(turn, Utils.SATURDAY_N)) {
                                         NightSat = false;
                                         imageView.setImageDrawable(getDrawable(R.drawable.iconnightoff));
+                                    }
+                                    if (dialog.isShowing()) {
+                                        dialog.dismiss();
                                     }
                                     break;
                                 case Utils.CODE_ERROR:

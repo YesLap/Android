@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -42,12 +43,16 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView btnFavorite, btnReport, btnChatMessage, ivImage1, ivImage2, ivImage3, btnGoToProfile, btnGoToSettings;
     private RelativeLayout btnChat, btnCalendar, btnFind;
     private TextView tvUsername;
-    private String id, idSearch, username;
+    private String id, idSearch, username, image_user_1, image_user_2, image_user_3;
+    private FirebaseAuth mAuth;
+    private FirebaseStorage mStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        mAuth = FirebaseAuth.getInstance();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -252,8 +257,22 @@ public class ProfileActivity extends AppCompatActivity {
                                         dialog.dismiss();
                                     }
                                     username = result.get(Utils.USERNAME_USER).getAsString();
+                                    image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
+                                    image_user_2 = result.get(Utils.IMAGE_USER_2).getAsString();
+                                    image_user_3 = result.get(Utils.IMAGE_USER_3).getAsString();
+
                                     tvUsername.setText(username);
-                                    //TODO: CARREGAR AS IMAGENS
+
+                                    if (image_user_1 != null && !Objects.equals(image_user_1, " ")) {
+                                        Picasso.with(ProfileActivity.this).load(image_user_1).placeholder(R.drawable.img_profile).into(ivImage1);
+                                    }
+                                    if (image_user_2 != null && !Objects.equals(image_user_2, " ")) {
+                                        Picasso.with(ProfileActivity.this).load(image_user_2).placeholder(R.drawable.img_profile).into(ivImage2);
+                                    }
+                                    if (image_user_3 != null && !Objects.equals(image_user_3, " ")) {
+                                        Picasso.with(ProfileActivity.this).load(image_user_3).placeholder(R.drawable.img_profile).into(ivImage3);
+                                    }
+
                                     break;
                                 case Utils.CODE_ERROR:
                                     if (dialog.isShowing()) {

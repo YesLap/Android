@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -36,13 +37,15 @@ import java.util.TimeZone;
 import br.sendlook.yeslap.BuildConfig;
 import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Utils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tvUsername;
+    private CircleImageView cvImageUser;
     private ProgressDialog dialog;
 
-    private String idUser, genderSearch, ageSearchMin, ageSearchMax, ageUser, genderUser;
+    private String idUser, genderSearch, ageSearchMin, ageSearchMax, ageUser, genderUser, image_user_1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +54,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         //Cast
         tvUsername = (TextView) findViewById(R.id.tvUsername);
+        cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
         findViewById(R.id.btnEditUserProfile).setOnClickListener(this);
-        //findViewById(R.id.btnGoToProfile).setOnClickListener(this);
         findViewById(R.id.btnGoToSettings).setOnClickListener(this);
         findViewById(R.id.cvImageUser).setOnClickListener(this);
         findViewById(R.id.btnChat).setOnClickListener(this);
@@ -70,7 +73,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             case R.id.btnSearch:
                 if (Objects.equals(genderUser, " ")) {
                     completePerfil(getString(R.string.select_genre));
-                } else  if (Objects.equals(ageUser, " ")) {
+                } else if (Objects.equals(ageUser, " ")) {
                     completePerfil(getString(R.string.select_yout_age));
                 } else if (Objects.equals(genderSearch, " ")) {
                     completePerfil(getString(R.string.select_genre_search));
@@ -105,7 +108,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             case R.id.btnChat:
                 if (Objects.equals(genderUser, " ")) {
                     completePerfil(getString(R.string.select_genre));
-                } else  if (Objects.equals(ageUser, " ")) {
+                } else if (Objects.equals(ageUser, " ")) {
                     completePerfil(getString(R.string.select_yout_age));
                 } else if (Objects.equals(genderSearch, " ")) {
                     completePerfil(getString(R.string.select_genre_search));
@@ -251,9 +254,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                             String returnApp = result.get(Utils.GET_USER_DATA).getAsString();
 
                             if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
-                                if (dialog.isShowing()) {
-                                    dialog.dismiss();
-                                }
 
                                 String username = result.get(Utils.USERNAME_USER).getAsString();
                                 genderSearch = result.get(Utils.GENDER_SEARCH).getAsString();
@@ -261,10 +261,15 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                                 ageSearchMax = result.get(Utils.AGE_SEARCH_MAX).getAsString();
                                 ageUser = result.get(Utils.AGE_USER).getAsString();
                                 genderUser = result.get(Utils.GENDER_USER).getAsString();
-                                //String image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
+                                image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
 
                                 tvUsername.setText(username);
-                                //TODO: CRIAR METODO PARA CARREGAR O LINK DA IMAGEM DO FIREBASE
+                                if (image_user_1 != null && !Objects.equals(image_user_1, " ")) {
+                                    Picasso.with(UserProfileActivity.this).load(image_user_1).placeholder(R.drawable.img_profile).into(cvImageUser);
+                                }
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
 
                             } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
                                 if (dialog.isShowing()) {
