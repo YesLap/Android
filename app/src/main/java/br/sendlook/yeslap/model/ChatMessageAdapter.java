@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -57,7 +59,7 @@ public class ChatMessageAdapter extends BaseAdapter {
 
         TextView tvUsername = v.findViewById(R.id.tvUsername);
         ImageView ivStatus = v.findViewById(R.id.ivStatus);
-        CircleImageView cvUserImage = v.findViewById(R.id.cvImageUser);
+        CircleImageView cvImageUser = v.findViewById(R.id.cvImageUser);
         ImageView ivMorningSun = v.findViewById(R.id.ivMorningSun);
         ImageView ivAfternoonSun = v.findViewById(R.id.ivAfternoonSun);
         ImageView ivNightSun = v.findViewById(R.id.ivNightSun);
@@ -86,6 +88,10 @@ public class ChatMessageAdapter extends BaseAdapter {
             ivStatus.setImageResource(R.drawable.on_user);
         } else {
             ivStatus.setImageResource(R.drawable.off_user);
+        }
+
+        if (chatMessage.getImage_user() != null && !Objects.equals(chatMessage.getImage_user(), " ")) {
+            Picasso.with(context).load(chatMessage.getImage_user()).placeholder(R.drawable.img_profile).into(cvImageUser);
         }
 
         //SUNDAY

@@ -207,6 +207,7 @@ public class FavoritesActivity extends AppCompatActivity {
                                     f.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
                                     f.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());
                                     f.setLast_seen(jsonObject.get(Utils.LAST_SEEN_USER).getAsString());
+                                    f.setImage(jsonObject.get(Utils.IMAGE_USER_1).getAsString());
 
                                     favoritesList.add(f);
 

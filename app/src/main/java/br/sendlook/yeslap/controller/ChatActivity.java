@@ -215,6 +215,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                                     m.setIdReceiver(j.get(Utils.ID_RECEIVER_APP).getAsString());
                                     m.setMessage(j.get(Utils.MESSAGE_APP).getAsString());
                                     m.setStatus(j.get(Utils.STATUS_USER).getAsString());
+                                    m.setImage(j.get(Utils.IMAGE_USER_1).getAsString());
 
                                     messageList.add(m);
                                 }

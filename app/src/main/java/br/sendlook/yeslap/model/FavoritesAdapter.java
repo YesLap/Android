@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.github.thunder413.datetimeutils.DateTimeUnits;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.List;
@@ -64,14 +65,15 @@ public class FavoritesAdapter extends BaseAdapter {
 
         Favorites favorites = getItem(i);
 
-        final CircleImageView cvImageUser = (CircleImageView) v.findViewById(R.id.cvUserImageFav);
-        final ImageView ivStatus = (ImageView) v.findViewById(R.id.ivStatus);
-        //final ImageView ivGhost = (ImageView) v.findViewById(R.id.ivGhost);
-        final TextView tvUsername = (TextView) v.findViewById(R.id.tvUsername);
-
-        //TODO: FALTA FAZER A PARTE DAS IMAGENS DOS PERFIS
+        CircleImageView cvImageUser = (CircleImageView) v.findViewById(R.id.cvUserImageFav);
+        ImageView ivStatus = (ImageView) v.findViewById(R.id.ivStatus);
+        TextView tvUsername = (TextView) v.findViewById(R.id.tvUsername);
 
         tvUsername.setText(favorites.getUsername_user());
+
+        if (favorites.getImage() != null && !Objects.equals(favorites.getImage(), " ")) {
+            Picasso.with(context).load(favorites.getImage()).placeholder(R.drawable.img_profile).into(cvImageUser);
+        }
 
         int diff = DateTimeUtils.getDateDiff(getDateNow(), favorites.getLast_seen(), DateTimeUnits.DAYS);
         if (diff > 7) {
@@ -83,7 +85,6 @@ public class FavoritesAdapter extends BaseAdapter {
                 ivStatus.setImageResource(R.drawable.off_user);
             }
         }
-
 
 
         return v;

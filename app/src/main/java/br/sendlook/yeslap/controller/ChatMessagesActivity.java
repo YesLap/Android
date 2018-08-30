@@ -115,22 +115,31 @@ public class ChatMessagesActivity extends AppCompatActivity implements View.OnCl
                                                                 .setCallback(new FutureCallback<JsonObject>() {
                                                                     @Override
                                                                     public void onCompleted(Exception e, JsonObject result) {
-                                                                        String returnApp = result.get(Utils.CHAT).getAsString();
-                                                                        switch (returnApp) {
-                                                                            case Utils.CODE_SUCCESS:
-                                                                                if (dialogs.isShowing()) {
-                                                                                    dialogs.dismiss();
-                                                                                }
-                                                                                loadChatMessages();
-                                                                                Utils.toastySuccess(getApplicationContext(), getString(R.string.chat_removed));
-                                                                                break;
-                                                                            case Utils.CODE_ERROR:
-                                                                                if (dialogs.isShowing()) {
-                                                                                    dialogs.dismiss();
-                                                                                }
-                                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                                                                                break;
+                                                                        if (result == null) {
+                                                                            if (dialogs.isShowing()) {
+                                                                                dialogs.dismiss();
+                                                                            }
+                                                                            tvHaveChat.setVisibility(View.VISIBLE);
+                                                                        } else {
+                                                                            tvHaveChat.setVisibility(View.GONE);
+                                                                            String returnApp = result.get(Utils.CHAT).getAsString();
+                                                                            switch (returnApp) {
+                                                                                case Utils.CODE_SUCCESS:
+                                                                                    if (dialogs.isShowing()) {
+                                                                                        dialogs.dismiss();
+                                                                                    }
+                                                                                    loadChatMessages();
+                                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.chat_removed));
+                                                                                    break;
+                                                                                case Utils.CODE_ERROR:
+                                                                                    if (dialogs.isShowing()) {
+                                                                                        dialogs.dismiss();
+                                                                                    }
+                                                                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                                                    break;
+                                                                            }
                                                                         }
+
                                                                     }
                                                                 });
                                                     }
@@ -235,6 +244,7 @@ public class ChatMessagesActivity extends AppCompatActivity implements View.OnCl
                                     c.setMessage(j.get(Utils.LAST_MESSAGE).getAsString());
                                     c.setId_sender(j.get(Utils.ID_SENDER).getAsString());
                                     c.setId_receiver(j.get(Utils.ID_RECEIVER).getAsString());
+                                    c.setImage_user(j.get(Utils.IMAGE_USER_1).getAsString());
                                     c.setSun_m(j.get(Utils.SUNDAY_M).getAsString());
                                     c.setSun_a(j.get(Utils.SUNDAY_A).getAsString());
                                     c.setSun_n(j.get(Utils.SUNDAY_N).getAsString());

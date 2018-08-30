@@ -264,6 +264,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     tvUsername.setText(username);
 
                                     if (image_user_1 != null && !Objects.equals(image_user_1, " ")) {
+                                        Picasso.with(ProfileActivity.this).load(image_user_1).placeholder(R.drawable.img_profile).into(cvImageUser);
                                         Picasso.with(ProfileActivity.this).load(image_user_1).placeholder(R.drawable.img_profile).into(ivImage1);
                                     }
                                     if (image_user_2 != null && !Objects.equals(image_user_2, " ")) {

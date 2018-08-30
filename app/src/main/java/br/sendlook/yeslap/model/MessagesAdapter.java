@@ -15,6 +15,7 @@ import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.List;
@@ -75,7 +76,7 @@ public class MessagesAdapter extends BaseAdapter {
 
         ImageView ivStatus = v.findViewById(R.id.ivStatus);
         TextView tvMessage = v.findViewById(R.id.tvMessage);
-        CircleImageView cvUserImage = v.findViewById(R.id.cvImageUser);
+        CircleImageView cvImageUser = v.findViewById(R.id.cvImageUser);
 
         tvMessage.setText(message.getMessage());
 
@@ -85,7 +86,9 @@ public class MessagesAdapter extends BaseAdapter {
             ivStatus.setImageResource(R.drawable.off_user);
         }
 
-        //todo: Pegar a imagem dos usuarios
+        if (message.getImage() != null && !Objects.equals(message.getImage(), " ")) {
+            Picasso.with(context).load(message.getImage()).placeholder(R.drawable.img_profile).into(cvImageUser);
+        }
 
         /*METHOD TO DELETE MESSAGE
         int diff = DateTimeUtils.getDateDiff(message.getDate_message(), getDateNow(), DateTimeUnits.DAYS);

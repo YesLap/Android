@@ -7,6 +7,7 @@ public class Message {
     private String message;
     private String idMessage;
     private String status;
+    private String image;
 
     public Message() {
     }
@@ -50,4 +51,13 @@ public class Message {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

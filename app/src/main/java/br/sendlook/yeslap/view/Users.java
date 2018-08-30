@@ -5,6 +5,7 @@ public class Users {
     private String id_user;
     private String username_user;
     private String status_user;
+    private String image_user;
     private String sun_m;
     private String sun_a;
     private String sun_n;
@@ -45,6 +46,14 @@ public class Users {
 
     public void setUsername_user(String username_user) {
         this.username_user = username_user;
+    }
+
+    public String getImage_user() {
+        return image_user;
+    }
+
+    public void setImage_user(String image_user) {
+        this.image_user = image_user;
     }
 
     public String getStatus_user() {

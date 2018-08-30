@@ -6,16 +6,10 @@ public class Favorites {
     private String status_user;
     private String username_user;
     private String last_seen;
+    private String image;
 
     public Favorites() {
 
-    }
-
-    public Favorites(String id_user, String status_user, String username_user, String last_seen) {
-        this.id_user = id_user;
-        this.status_user = status_user;
-        this.username_user = username_user;
-        this.last_seen = last_seen;
     }
 
     public String getId_user() {
@@ -48,5 +42,13 @@ public class Favorites {
 
     public void setLast_seen(String last_seen) {
         this.last_seen = last_seen;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

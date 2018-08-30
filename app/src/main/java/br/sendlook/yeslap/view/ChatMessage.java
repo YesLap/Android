@@ -7,6 +7,7 @@ public class ChatMessage {
     private String message;
     private String id_sender;
     private String id_receiver;
+    private String image_user;
     private String sun_m;
     private String sun_a;
     private String sun_n;
@@ -71,6 +72,14 @@ public class ChatMessage {
 
     public void setId_receiver(String id_receiver) {
         this.id_receiver = id_receiver;
+    }
+
+    public String getImage_user() {
+        return image_user;
+    }
+
+    public void setImage_user(String image_user) {
+        this.image_user = image_user;
     }
 
     public String getSun_m() {

@@ -10,12 +10,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 import java.util.Objects;
 
 import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.controller.UserProfileActivity;
 import br.sendlook.yeslap.view.Users;
 import br.sendlook.yeslap.view.Utils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersAdapter extends BaseAdapter {
 
@@ -57,6 +61,7 @@ public class UsersAdapter extends BaseAdapter {
 
         ImageView ivStatus = v.findViewById(R.id.ivStatus);
         TextView tvUsername = v.findViewById(R.id.tvUsername);
+        CircleImageView cvImageUser = v.findViewById(R.id.cvImageUser);
         ImageView ivMorningSun = v.findViewById(R.id.ivMorningSun);
         ImageView ivAfternoonSun = v.findViewById(R.id.ivAfternoonSun);
         ImageView ivNightSun = v.findViewById(R.id.ivNightSun);
@@ -85,6 +90,10 @@ public class UsersAdapter extends BaseAdapter {
             ivStatus.setImageResource(R.drawable.on_user);
         } else {
             ivStatus.setImageResource(R.drawable.off_user);
+        }
+
+        if (users.getImage_user() != null && !Objects.equals(users.getImage_user(), " ")) {
+            Picasso.with(context).load(users.getImage_user()).placeholder(R.drawable.img_profile).into(cvImageUser);
         }
 
         //SUNDAY
