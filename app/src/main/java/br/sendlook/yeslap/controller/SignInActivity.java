@@ -12,6 +12,10 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.JsonObject;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -31,15 +35,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private EditText etEmail, etPassword;
     private ProgressDialog dialog;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        mAuth = FirebaseAuth.getInstance();
+
         showMessage();
         grantPermissions();
-
 
         //Cast
         etEmail = (EditText) findViewById(R.id.etEmail);
@@ -57,8 +63,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btnSignIn:
 
                 //Get the fields data
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+                final String email = etEmail.getText().toString();
+                final String password = etPassword.getText().toString();
 
                 //Make sure the fields are empty
                 if (Objects.equals(email, "")) {
@@ -80,19 +86,34 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
-                                public void onCompleted(Exception e, JsonObject result) {
+                                public void onCompleted(Exception e, final JsonObject result) {
                                     try {
 
                                         String returnApp = result.get(Utils.SIGN_IN_CODE).getAsString();
 
                                         if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
-                                            if (dialog.isShowing()) {
-                                                dialog.dismiss();
-                                            }
-                                            saveLogin(Integer.parseInt(result.get(Utils.ID_USER).getAsString()));
-                                            Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(intent);
+
+                                            mAuth.signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                                @Override
+                                                public void onSuccess(AuthResult authResult) {
+                                                    if (dialog.isShowing()) {
+                                                        dialog.dismiss();
+                                                    }
+                                                    saveLogin(result.get(Utils.ID_USER).getAsString());
+                                                    Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    if (dialog.isShowing()) {
+                                                        dialog.dismiss();
+                                                    }
+                                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                }
+                                            });
+
                                         } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
                                             if (dialog.isShowing()) {
                                                 dialog.dismiss();
@@ -121,7 +142,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void saveLogin(int id) {
+    private void saveLogin(String id) {
         SharedPreferences.Editor editor = getSharedPreferences(Utils.PREF_NAME, MODE_PRIVATE).edit();
         editor.putString(Utils.ID_USER, String.valueOf(id));
         editor.apply();
@@ -168,6 +189,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             Utils.toastySuccess(getApplicationContext(), getString(R.string.permission_need_be_granted));
+                            grantPermissions();
                         }
                     }
 

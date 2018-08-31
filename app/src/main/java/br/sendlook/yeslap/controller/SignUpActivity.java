@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -93,8 +95,27 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                                         switch (returnApp) {
                                             case Utils.CODE_SUCCESS:
+                                                mAuth.signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                                    @Override
+                                                    public void onSuccess(AuthResult authResult) {
+                                                        if (dialog.isShowing()) {
+                                                            dialog.dismiss();
+                                                        }
+                                                        Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
+                                                        saveLogin(result.get(Utils.ID_USER).getAsString());
+                                                        goToUserProfile(result.get(Utils.ID_USER).getAsString());
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        if (dialog.isShowing()) {
+                                                            dialog.dismiss();
+                                                        }
+                                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                    }
+                                                });
 
-                                                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                /*mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -112,7 +133,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                                                             String returnApp = result.get(Utils.SIGN_UP_CODE).getAsString();
                                                                             switch (returnApp) {
                                                                                 case Utils.CODE_SUCCESS:
-                                                                                    dialog.dismiss();
+                                                                                    if (dialog.isShowing()) {
+                                                                                        dialog.dismiss();
+                                                                                    }
                                                                                     Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
                                                                                     saveLogin(mAuth.getCurrentUser().getUid());
                                                                                     goToUserProfile(mAuth.getCurrentUser().getUid());
@@ -130,7 +153,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                                                 });
 
                                                     }
-                                                });
+                                                });*/
 
                                                 break;
                                             case Utils.CODE_ERROR_EMAIL:
