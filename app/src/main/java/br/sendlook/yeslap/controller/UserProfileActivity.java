@@ -45,7 +45,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private CircleImageView cvImageUser;
     private ProgressDialog dialog;
 
-    private String idUser, genderSearch, ageSearchMin, ageSearchMax, ageUser, genderUser, image_user_1;
+    private String idUser, genderSearch, ageSearchMin, ageSearchMax, ageUser, genderUser, image_user_1, distance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     completePerfil(getString(R.string.select_genre_search));
                 } else if (Objects.equals(ageSearchMax, " ") || Objects.equals(ageSearchMin, " ")) {
                     completePerfil(getString(R.string.select_age_search));
+                }else if (Objects.equals(distance, " ")) {
+                    completePerfil(getString(R.string.select_distance));
                 } else {
                     Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
                     intent.putExtra(Utils.ID_USER, idUser);
@@ -114,6 +116,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     completePerfil(getString(R.string.select_genre_search));
                 } else if (Objects.equals(ageSearchMax, " ") || Objects.equals(ageSearchMin, " ")) {
                     completePerfil(getString(R.string.select_age_search));
+                }else if (Objects.equals(distance, " ")) {
+                    completePerfil(getString(R.string.select_distance));
                 } else {
                     Intent intentchat = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
                     intentchat.putExtra(Utils.ID_USER, idUser);
@@ -262,6 +266,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                                 ageUser = result.get(Utils.AGE_USER).getAsString();
                                 genderUser = result.get(Utils.GENDER_USER).getAsString();
                                 image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
+                                distance = result.get(Utils.DISTANCE).getAsString();
 
                                 tvUsername.setText(username);
                                 if (image_user_1 != null && !Objects.equals(image_user_1, " ")) {

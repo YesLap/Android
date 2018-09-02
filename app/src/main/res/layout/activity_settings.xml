@@ -49,13 +49,13 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:drawableEnd="@drawable/settings_right_arrow"
+            android:layout_marginEnd="8dp"
             android:drawableStart="@drawable/settings_icon_location"
-            android:paddingEnd="30dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="30dp"
+            android:paddingEnd="30dp"
             android:text="@string/user_location"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,8 +65,8 @@
         <View
             android:id="@+id/view"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnLocationUser" />
@@ -91,8 +91,8 @@
         <View
             android:id="@+id/view2"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnGenderUser" />
@@ -118,24 +118,13 @@
             app:layout_constraintStart_toEndOf="@+id/ivAgeIcon"
             app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-        <TextView
-            android:id="@+id/tvRangeAgeSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:text="18 - 20"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/ivAgeIcons"
-            app:layout_constraintTop_toBottomOf="@+id/view6" />
-
         <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
             android:id="@+id/rangeAgeUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="32dp"
             app:bar_color="@color/colorTextViewOrange"
             app:bar_highlight_color="@color/colorLightBlue"
             app:corner_radius="10"
@@ -151,9 +140,9 @@
         <View
             android:id="@+id/view3"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivAgeIcon" />
@@ -163,12 +152,12 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:drawableEnd="@drawable/settings_right_arrow"
+            android:layout_marginEnd="8dp"
             android:drawableStart="@drawable/ic_mail_black_36dp"
-            android:paddingEnd="30dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="30dp"
+            android:paddingEnd="30dp"
             android:text="@string/email"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -178,9 +167,9 @@
         <View
             android:id="@+id/view4"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnEmailUser" />
@@ -190,12 +179,12 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:drawableEnd="@drawable/settings_right_arrow"
+            android:layout_marginEnd="8dp"
             android:drawableStart="@drawable/ic_https_black_36dp"
-            android:paddingEnd="30dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="30dp"
+            android:paddingEnd="30dp"
             android:text="@string/pass"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -220,53 +209,74 @@
             android:id="@+id/imageView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView6"
             app:srcCompat="@drawable/settings_icon_bluefind" />
 
-        <Button
-            android:id="@+id/btnLocationSearch"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="0dp"
+        <ImageView
+            android:id="@+id/ivDistanceSearch"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:drawableEnd="@drawable/settings_right_arrow"
-            android:drawableStart="@drawable/settings_icon_location"
-            android:paddingEnd="30dp"
-            android:paddingStart="30dp"
-            android:text="@string/soon"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginStart="15dp"
+            android:padding="20dp"
+            android:src="@drawable/settings_icon_location"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+        <TextView
+            android:id="@+id/tvDistanceSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text=" - KM"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/ivDistanceSearch"
+            app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+        <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+            android:id="@+id/rangeDistance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="32dp"
+            app:bar_color="@color/colorTextViewOrange"
+            app:bar_highlight_color="@color/colorLightBlue"
+            app:corner_radius="10"
+            app:data_type="_integer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvDistanceSearch"
+            app:layout_constraintTop_toBottomOf="@+id/imageView8"
+            app:left_thumb_color="@color/colorDarkBlue"
+            app:left_thumb_color_pressed="@color/colorDarkGrey"
+            app:max_value="150"
+            app:min_value="10" />
+
 
         <View
             android:id="@+id/view5"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLocationSearch" />
+            app:layout_constraintTop_toBottomOf="@+id/ivDistanceSearch" />
 
         <Button
             android:id="@+id/btnGenderSearch"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:drawableEnd="@drawable/settings_right_arrow"
+            android:layout_marginEnd="8dp"
             android:drawableStart="@drawable/settings_icon_gay"
-            android:paddingEnd="30dp"
+            android:drawableEnd="@drawable/settings_right_arrow"
             android:paddingStart="30dp"
+            android:paddingEnd="30dp"
             android:text="@string/choose_partner_gender"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -277,8 +287,8 @@
         <View
             android:id="@+id/view6"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnGenderSearch" />
@@ -293,14 +303,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view6" />
 
+        <TextView
+            android:id="@+id/tvRangeAgeSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:text="18 - 20"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/ivAgeIcons"
+            app:layout_constraintTop_toBottomOf="@+id/view6" />
+
         <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
             android:id="@+id/rangeAgeSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="32dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="32dp"
             app:bar_color="@color/colorTextViewOrange"
             app:bar_highlight_color="@color/colorDarkBlue"
             app:corner_radius="10"
@@ -340,12 +361,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
+
         <View
             android:id="@+id/view7"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLegal" />
@@ -355,11 +377,11 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:drawableEnd="@drawable/settings_right_arrow"
-            android:paddingEnd="30dp"
             android:paddingStart="24dp"
+            android:paddingEnd="30dp"
             android:text="@string/privacy_policy"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
@@ -370,8 +392,8 @@
         <View
             android:id="@+id/view8"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnPrivacyPolicy" />
@@ -381,11 +403,11 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:drawableEnd="@drawable/settings_right_arrow"
-            android:paddingEnd="30dp"
             android:paddingStart="24dp"
+            android:paddingEnd="30dp"
             android:text="@string/terms_of_services"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
@@ -396,8 +418,8 @@
         <View
             android:id="@+id/view9"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnTermsService" />
@@ -407,11 +429,11 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:drawableEnd="@drawable/settings_right_arrow"
-            android:paddingEnd="30dp"
             android:paddingStart="24dp"
+            android:paddingEnd="30dp"
             android:text="@string/licenses"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
@@ -422,8 +444,8 @@
         <View
             android:id="@+id/view10"
             style="@style/Divider"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnLicenses" />
@@ -432,9 +454,9 @@
             android:id="@+id/btnLogOut"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/settings_btn_log_out"
             android:text="@string/logout"
             android:textColor="@android:color/white"
@@ -447,9 +469,9 @@
             android:id="@+id/imageView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnLogOut"
@@ -470,9 +492,9 @@
             android:id="@+id/btnDeleteAccount"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/settings_btn_delete_account"
             android:text="@string/delete_account"
             android:textColor="@android:color/white"
@@ -492,6 +514,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnDeleteAccount" />
+        -->
 
     </android.support.constraint.ConstraintLayout>
 

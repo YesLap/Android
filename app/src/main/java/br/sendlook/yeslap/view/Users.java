@@ -6,6 +6,8 @@ public class Users {
     private String username_user;
     private String status_user;
     private String image_user;
+    private String distance;
+    private String diff_distance;
     private String sun_m;
     private String sun_a;
     private String sun_n;
@@ -54,6 +56,22 @@ public class Users {
 
     public void setImage_user(String image_user) {
         this.image_user = image_user;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getDiff_distance() {
+        return diff_distance;
+    }
+
+    public void setDiff_distance(String diff_distance) {
+        this.diff_distance = diff_distance;
     }
 
     public String getStatus_user() {

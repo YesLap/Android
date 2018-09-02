@@ -24,6 +24,9 @@ public class Utils {
     public static final String IMAGE_1 = "image1";
     public static final String IMAGE_2 = "image2";
     public static final String IMAGE_3 = "image3";
+    public static final String DISTANCE_APP = "distance_app";
+    public static final String DISTANCE = "distance";
+    public static final String DIFF_DISTANCE = "diff_distance";
     public static final String SINCE = "since";
     public static final String LAST_ID = "last_id";
     public static final String ID_SENDER_APP = "id_sender_app";
@@ -126,6 +129,7 @@ public class Utils {
     public static final String URL_ADD_NEW_REPORT = "http://yeslap-eu.umbler.net/userprofile/addnewreport.php";
     public static final String URL_GET_FAVORITES = "http://yeslap-eu.umbler.net/userprofile/getfavorites.php";
     public static final String URL_DELETE_FAVORITE = "http://yeslap-eu.umbler.net/userprofile/deletefavorite.php";
+    public static final String URL_UPDATE_DISTANCE_USER = "http://yeslap-eu.umbler.net/userprofile/updatedistancesearch.php";
     public static final String URL_SEND_MESSAGE = "http://yeslap-eu.umbler.net/chat/sendmessage.php";
     public static final String URL_SAVE_UPDATE_CHAT = "http://yeslap-eu.umbler.net/chat/saveupdatechat.php";
     public static final String URL_CHECK_IF_HAVE_MESSAGE = "http://yeslap-eu.umbler.net/chat/checkifhavemessage.php";

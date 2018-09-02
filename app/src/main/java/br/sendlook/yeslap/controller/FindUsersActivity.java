@@ -274,6 +274,8 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
                                         u.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
                                         u.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());
                                         u.setImage_user(jsonObject.get(Utils.IMAGE_USER_1).getAsString());
+                                        u.setDistance(jsonObject.get(Utils.DISTANCE).getAsString());
+                                        u.setDiff_distance(jsonObject.get(Utils.DIFF_DISTANCE).getAsString());
                                         u.setSun_m(jsonObject.get(Utils.SUNDAY_M).getAsString());
                                         u.setSun_a(jsonObject.get(Utils.SUNDAY_A).getAsString());
                                         u.setSun_n(jsonObject.get(Utils.SUNDAY_N).getAsString());

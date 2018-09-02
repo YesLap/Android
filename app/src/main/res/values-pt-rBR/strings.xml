@@ -1,5 +1,5 @@
 <resources>
-    <string name="version_app">Versão 2.0.27</string>
+    <string name="version_app">Versão 2.0.28</string>
     <string name="app_name">YesLap!</string>
     <string name="email">E-mail</string>
     <string name="password">Senha</string>
@@ -143,4 +143,5 @@
     <string name="select_yout_age">Vá em configurações e selecione a sua idade.</string>
     <string name="select_genre_search">Vá em configurações e selecione o gênero que deseja procurar.</string>
     <string name="select_age_search">Vá em configurações e selecione o a idade da pessoa que voce deseja procurar.</string>
+    <string name="select_distance">Vá em configurações e escolha a distancia que você deseja encontrar alguem</string>
 </resources>

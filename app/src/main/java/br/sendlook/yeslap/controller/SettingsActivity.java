@@ -48,8 +48,8 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
     private Button btnLocationUser;
     private Button btnGenderUser;
     private String genderUser = "";
-    private TextView tvAgeUser, tvAgeSearch;
-    private CrystalSeekbar rbAgeUser;
+    private TextView tvAgeUser, tvAgeSearch, tvDistance;
+    private CrystalSeekbar rbAgeUser, rbDistance;
 
     private Button btnLocationSearch;
     private Button btnGenderSearch;
@@ -87,8 +87,9 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
         btnEmailUser = (Button) findViewById(R.id.btnEmailUser);
         findViewById(R.id.btnEmailUser).setOnClickListener(this);
 
-        btnLocationSearch = (Button) findViewById(R.id.btnLocationSearch);
         tvAgeSearch = (TextView) findViewById(R.id.tvRangeAgeSearch);
+        rbDistance = (CrystalSeekbar) findViewById(R.id.rangeDistance);
+        tvDistance = (TextView) findViewById(R.id.tvDistanceSearch);
         rbAgeSearch = (CrystalRangeSeekbar) findViewById(R.id.rangeAgeSearch);
         tvRangeAgeSearch = (TextView) findViewById(R.id.tvRangeAgeSearch);
 
@@ -116,6 +117,49 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 startActivity(intent);
             }
         });*/
+
+        rbDistance.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number value) {
+                tvDistance.setText(String.valueOf(value) + " KM");
+            }
+        });
+
+        rbDistance.setOnSeekbarFinalValueListener(new OnSeekbarFinalValueListener() {
+            @Override
+            public void finalValue(Number value) {
+                dialog = new ProgressDialog(SettingsActivity.this);
+                dialog.setMessage(getString(R.string.loading));
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+
+                Ion.with(getApplicationContext())
+                        .load(Utils.URL_UPDATE_DISTANCE_USER)
+                        .setBodyParameter(Utils.ID_USER_APP, id)
+                        .setBodyParameter(Utils.DISTANCE_APP, String.valueOf(value))
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                String returnApp = result.get(Utils.DISTANCE).getAsString();
+                                switch (returnApp) {
+                                    case Utils.CODE_SUCCESS:
+                                        if (dialog.isShowing()){
+                                            dialog.dismiss();
+                                        }
+                                        break;
+                                    case Utils.CODE_ERROR:
+                                        if (dialog.isShowing()){
+                                            dialog.dismiss();
+                                        }
+                                        Utils.toastyError(getApplicationContext(), e.getMessage());
+                                        break;
+                                }
+                            }
+                        });
+
+            }
+        });
 
         rbAgeUser.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
             @Override
@@ -220,10 +264,6 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnLocationSearch:
-                //TODO: IMPLEMENTAR METODO PARA LOCALIZAÇÃO DE PROCURA DO USUÁRIO
-                Utils.toastyInfo(getApplicationContext(), "Buinding");
-                break;
             case R.id.btnEmailUser:
                 DialogNewEmail newEmail = new DialogNewEmail();
                 newEmail.show(getSupportFragmentManager(), "newEmail");
@@ -580,6 +620,14 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                                     rbAgeSearch.setMinStartValue(Float.valueOf(ageSearchMin)).apply();
                                     rbAgeSearch.setMaxStartValue(Float.valueOf(ageSearchMax)).apply();
                                     tvRangeAgeSearch.setText(String.format("%s - %s", String.valueOf(ageSearchMin), String.valueOf(ageSearchMax)));
+                                }
+
+                                //DISTANCE
+                                if (!Objects.equals(result.get(Utils.DISTANCE).getAsString(), " ")) {
+                                    rbDistance.setMinStartValue(Float.valueOf(result.get(Utils.DISTANCE).getAsString())).apply();
+                                    tvDistance.setText(String.format("%s KM", result.get(Utils.DISTANCE).getAsString()));
+                                } else {
+                                    tvDistance.setText(" - KM");
                                 }
 
                             } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
