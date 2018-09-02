@@ -91,8 +91,6 @@ public class UsersAdapter extends BaseAdapter {
         } else {
             ivStatus.setImageResource(R.drawable.off_user);
         }
-        //FIXME: NAO ESTA APARECENDO OS USUARIOS
-        Utils.toastySuccess(context, "DIFF: " + users.getDiff_distance() + " | " + "DISTANCE: " + users.getDistance());
 
         if (users.getImage_user() != null && !Objects.equals(users.getImage_user(), " ")) {
             Picasso.with(context).load(users.getImage_user()).placeholder(R.drawable.img_profile).into(cvImageUser);
