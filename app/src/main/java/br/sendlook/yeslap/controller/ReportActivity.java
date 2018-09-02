@@ -182,7 +182,9 @@ public class ReportActivity extends AppCompatActivity {
                                         dialog.dismiss();
                                     }
                                     tvUsername.setText(result.get(Utils.USERNAME_USER).getAsString());
-                                    //TODO: CARREGAR AS IMAGENS
+                                    if (result.get(Utils.IMAGE_USER_1).getAsString() != null || !Objects.equals(result.get(Utils.IMAGE_USER_1).getAsString(), " ")) {
+                                        Picasso.with(ReportActivity.this).load(result.get(Utils.IMAGE_USER_1).getAsString()).placeholder(R.drawable.img_profile).into(cvImageUser);
+                                    }
                                     break;
                                 case Utils.CODE_ERROR:
                                     if (dialog.isShowing()) {

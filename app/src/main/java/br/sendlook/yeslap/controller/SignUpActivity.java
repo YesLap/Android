@@ -115,46 +115,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                                     }
                                                 });
 
-                                                /*mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                                        Ion.with(SignUpActivity.this)
-                                                                .load(Utils.URL_UPDATE_ID_USER)
-                                                                .setBodyParameter(Utils.EMAIL_APP, email)
-                                                                .setBodyParameter(Utils.PASSWORD_APP, password)
-                                                                .setBodyParameter(Utils.ID_USER_APP, mAuth.getCurrentUser().getUid())
-                                                                .setBodyParameter(Utils.LAST_ID, result.get(Utils.LAST_ID).getAsString())
-                                                                .asJsonObject()
-                                                                .setCallback(new FutureCallback<JsonObject>() {
-                                                                    @Override
-                                                                    public void onCompleted(Exception e, JsonObject result) {
-                                                                        try {
-                                                                            String returnApp = result.get(Utils.SIGN_UP_CODE).getAsString();
-                                                                            switch (returnApp) {
-                                                                                case Utils.CODE_SUCCESS:
-                                                                                    if (dialog.isShowing()) {
-                                                                                        dialog.dismiss();
-                                                                                    }
-                                                                                    Utils.toastySuccess(getApplicationContext(), getString(R.string.account_created));
-                                                                                    saveLogin(mAuth.getCurrentUser().getUid());
-                                                                                    goToUserProfile(mAuth.getCurrentUser().getUid());
-                                                                                    break;
-                                                                                case Utils.CODE_ERROR:
-                                                                                    break;
-                                                                            }
-                                                                        } catch (Exception x) {
-                                                                            if (dialog.isShowing()) {
-                                                                                dialog.dismiss();
-                                                                            }
-                                                                            Utils.toastyError(getApplicationContext(), x.getMessage());
-                                                                        }
-                                                                    }
-                                                                });
-
-                                                    }
-                                                });*/
-
                                                 break;
                                             case Utils.CODE_ERROR_EMAIL:
                                                 if (dialog.isShowing()) {

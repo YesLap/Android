@@ -268,7 +268,6 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
                                 for (int i = 0; i < result.size(); i++) {
                                     JsonObject jsonObject = result.get(i).getAsJsonObject();
 
-                                    if (!Objects.equals(jsonObject.get(Utils.ID_USER).getAsString(), id) && !Objects.equals(genderSearch, " ") && !Objects.equals(ageSearchMin, " ") && !Objects.equals(ageSearchMax, " ")) {
                                         tvNoUsers.setVisibility(View.GONE);
                                         Users u = new Users();
                                         u.setId_user(jsonObject.get(Utils.ID_USER).getAsString());
@@ -297,7 +296,6 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
                                         u.setSat_a(jsonObject.get(Utils.SATURDAY_A).getAsString());
                                         u.setSat_n(jsonObject.get(Utils.SATURDAY_N).getAsString());
                                         usersList.add(u);
-                                    }
 
                                 }
                             }

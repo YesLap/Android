@@ -208,6 +208,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                                 tvNoMessages.setVisibility(View.VISIBLE);
                             } else {
                                 for (int i = 0; i < result.size(); i++) {
+                                    tvNoMessages.setVisibility(View.INVISIBLE);
+
                                     JsonObject j = result.get(i).getAsJsonObject();
                                     Message m = new Message();
 

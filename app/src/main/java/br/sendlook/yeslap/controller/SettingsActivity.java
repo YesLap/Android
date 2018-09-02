@@ -221,7 +221,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLocationSearch:
-                //TODO:Implementar Localização de procura do usuário
+                //TODO: IMPLEMENTAR METODO PARA LOCALIZAÇÃO DE PROCURA DO USUÁRIO
                 Utils.toastyInfo(getApplicationContext(), "Buinding");
                 break;
             case R.id.btnEmailUser:
@@ -252,7 +252,7 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 callActivity(UserProfileActivity.class);
                 break;
             case R.id.btnDeleteAccount:
-                //TODO
+                //TODO: CRIAR METODO PARA DELETAR A CONTA DO USUARIO
                 Utils.toastyInfo(getApplicationContext(), "Delete Account");
                 callActivity(UserProfileActivity.class);
                 break;

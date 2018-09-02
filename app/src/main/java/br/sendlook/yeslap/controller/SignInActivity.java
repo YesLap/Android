@@ -31,6 +31,8 @@ import java.util.Objects;
 import br.sendlook.yeslap.R;
 import br.sendlook.yeslap.view.Utils;
 
+
+
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText etEmail, etPassword;
@@ -136,8 +138,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(intentnewacc);
                 break;
             case R.id.tvForgotPassword:
-                Intent intentforgot = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
-                startActivity(intentforgot);
+                Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
+                //Intent intentforgot = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
+                //startActivity(intentforgot);
                 break;
         }
     }
