@@ -10,7 +10,7 @@ android {
         targetSdkVersion 27
         //Dont forget to change the version in the Firebase and in Settings Screen
         versionCode 31
-        versionName "2.0.29"
+        versionName "2.0.30"
         //Dont forget to change the version in the Firebase
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -63,6 +63,7 @@ dependencies {
     implementation 'com.tomergoldst.android:tooltips:1.0.10'
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
     implementation 'com.github.chathuralakmal:AndroidImagePopup:1.2.1'
+    implementation 'saschpe.android:customtabs:1.1.2'
 
     implementation 'com.google.firebase:firebase-auth:16.0.3'
     implementation 'com.google.firebase:firebase-database:16.0.1'

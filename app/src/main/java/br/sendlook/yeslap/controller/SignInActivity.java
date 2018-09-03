@@ -138,9 +138,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(intentnewacc);
                 break;
             case R.id.tvForgotPassword:
-                Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
-                //Intent intentforgot = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
-                //startActivity(intentforgot);
+                //Utils.toastyInfo(getApplicationContext(), getString(R.string.soon));
+                Intent intentforgot = new Intent(SignInActivity.this, WebActivity.class);
+                intentforgot.putExtra(Utils.URL,"http://www.yeslap.com");
+                startActivity(intentforgot);
                 break;
         }
     }

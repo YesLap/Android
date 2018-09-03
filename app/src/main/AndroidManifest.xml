@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,8 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:icon">
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.com.vansuita.pickimage.provider"
@@ -82,7 +82,11 @@
         <activity
             android:name=".controller.PinLockActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".controller.ImageUsernameProfileActivity" />
+        <activity android:name=".controller.ImageUsernameProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".controller.WebActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

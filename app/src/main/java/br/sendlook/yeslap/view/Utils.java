@@ -17,6 +17,7 @@ public class Utils {
     public static final String CURRENT_VERSION = "current_version";
     public static final String PREF_NAME = "preferencesYeslap";
 
+    public static final String URL = "url";
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
     public static final String EMAIL_USER = "email_user";

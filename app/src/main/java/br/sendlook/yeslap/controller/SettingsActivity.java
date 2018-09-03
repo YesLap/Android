@@ -273,13 +273,19 @@ public class SettingsActivity extends AppCompatActivity implements DialogNewEmai
                 newPassword.show(getSupportFragmentManager(), "newPassowrd");
                 break;
             case R.id.btnPrivacyPolicy:
-                Utils.toastyInfo(getApplicationContext(), "Privacy Policy");
+                Intent intentPrivacy = new Intent(getApplicationContext(), WebActivity.class);
+                intentPrivacy.putExtra(Utils.URL, "http://www.yeslap.com");
+                startActivity(intentPrivacy);
                 break;
             case R.id.btnTermsService:
-                Utils.toastyInfo(getApplicationContext(), "Terms of Service");
+                Intent intentTerms = new Intent(getApplicationContext(), WebActivity.class);
+                intentTerms.putExtra(Utils.URL, "http://www.yeslap.com");
+                startActivity(intentTerms);
                 break;
             case R.id.btnLicenses:
-                Utils.toastyInfo(getApplicationContext(), "Licenses");
+                Intent intentLicenses = new Intent(getApplicationContext(), WebActivity.class);
+                intentLicenses.putExtra(Utils.URL, "http://www.yeslap.com");
+                startActivity(intentLicenses);
                 break;
             case R.id.btnLogOut:
                 SharedPreferences.Editor editor = getSharedPreferences(Utils.PREF_NAME, MODE_PRIVATE).edit();
