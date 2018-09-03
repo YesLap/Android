@@ -226,7 +226,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/iconmorningoff" />
+            android:src="@drawable/iconmorningoff" />
 
         <ImageView
             android:layout_marginStart="10dp"
@@ -235,14 +235,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/iconafternoonoff" />
+            android:src="@drawable/iconafternoonoff" />
 
         <ImageView
             android:id="@+id/ivNight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/iconnightoff" />
+            android:src="@drawable/iconnightoff" />
 
     </LinearLayout>
 

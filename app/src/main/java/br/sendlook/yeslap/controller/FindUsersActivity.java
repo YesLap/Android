@@ -39,6 +39,7 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
     private ImageView btnGoToProfile, btnGoToSettings;
     private ProgressDialog dialog;
     private String id, genderSearch, ageSearchMin, ageSearchMax;
+    private Boolean sun = false, mon = false, tue = false, wed = false, thu = false, fri = false, sat = false, m = false, a = false, n = false;
 
     private UsersAdapter adapter;
     private List<Users> usersList;
@@ -109,77 +110,151 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
         ivBgSun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgSun.setImageResource(R.drawable.iconbubbleweekon);
-                tvSun.setTextColor(Color.WHITE);
+                if (!sun) {
+                    ivBgSun.setImageResource(R.drawable.iconbubbleweekon);
+                    tvSun.setTextColor(Color.WHITE);
+                    sun = true;
+                } else {
+                    ivBgSun.setImageResource(R.drawable.iconbubbleweekoff);
+                    tvSun.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                    sun = false;
+                }
             }
         });
 
         ivBgMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgMon.setImageResource(R.drawable.iconbubbleweekon);
-                tvMon.setTextColor(Color.WHITE);
+                if (!mon) {
+                    ivBgMon.setImageResource(R.drawable.iconbubbleweekon);
+                    tvMon.setTextColor(Color.WHITE);
+                    mon = true;
+                } else {
+                    ivBgMon.setImageResource(R.drawable.iconbubbleweekoff);
+                    tvMon.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                    mon = false;
+                }
+
             }
         });
 
         ivBgTue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgTue.setImageResource(R.drawable.iconbubbleweekon);
-                tvTue.setTextColor(Color.WHITE);
+                if (!tue) {
+                    ivBgTue.setImageResource(R.drawable.iconbubbleweekon);
+                    tvTue.setTextColor(Color.WHITE);
+                    tue = true;
+                } else {
+                    ivBgTue.setImageResource(R.drawable.iconbubbleweekoff);
+                    tvTue.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                    tue = false;
+                }
+
             }
         });
 
         ivBgWed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgWed.setImageResource(R.drawable.iconbubbleweekon);
-                tvWed.setTextColor(Color.WHITE);
+                if (!wed) {
+                    ivBgWed.setImageResource(R.drawable.iconbubbleweekon);
+                    tvWed.setTextColor(Color.WHITE);
+                    wed = true;
+                } else {
+                    ivBgWed.setImageResource(R.drawable.iconbubbleweekoff);
+                    tvWed.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                    wed = false;
+                }
             }
         });
 
         ivBgThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgThu.setImageResource(R.drawable.iconbubbleweekon);
-                tvThu.setTextColor(Color.WHITE);
+                if (!thu) {
+                    ivBgThu.setImageResource(R.drawable.iconbubbleweekon);
+                    tvThu.setTextColor(Color.WHITE);
+                    thu = true;
+                } else {
+                    ivBgThu.setImageResource(R.drawable.iconbubbleweekoff);
+                    tvThu.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                    thu = false;
+                }
+
             }
         });
 
         ivBgFri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgFri.setImageResource(R.drawable.iconbubbleweekon);
-                tvFri.setTextColor(Color.WHITE);
+                if (!fri) {
+                    ivBgFri.setImageResource(R.drawable.iconbubbleweekon);
+                    tvFri.setTextColor(Color.WHITE);
+                    fri = true;
+                } else {
+                    ivBgFri.setImageResource(R.drawable.iconbubbleweekoff);
+                    tvFri.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                    fri = false;
+                }
+
             }
         });
 
         ivBgSat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivBgSat.setImageResource(R.drawable.iconbubbleweekon);
-                tvSat.setTextColor(Color.WHITE);
+                if (!sat) {
+                    ivBgSat.setImageResource(R.drawable.iconbubbleweekon);
+                    tvSat.setTextColor(Color.WHITE);
+                    sat = true;
+                } else {
+                    ivBgSat.setImageResource(R.drawable.iconbubbleweekoff);
+                    tvSat.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                    sat = false;
+                }
+
             }
         });
 
         ivMorning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivMorning.setImageResource(R.drawable.iconmorningon);
+                if (!m) {
+                    ivMorning.setImageResource(R.drawable.iconmorningon);
+                    m = true;
+                } else {
+                    ivMorning.setImageResource(R.drawable.iconmorningoff);
+                    m = false;
+                }
+
             }
         });
 
         ivAfternoon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivAfternoon.setImageResource(R.drawable.iconafternoonon);
+                if (!a) {
+                    ivAfternoon.setImageResource(R.drawable.iconafternoonon);
+                    a = true;
+                } else {
+                    ivAfternoon.setImageResource(R.drawable.iconafternoonoff);
+                    a = false;
+                }
             }
         });
 
         ivNight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivNight.setImageResource(R.drawable.iconnighton);
+                if (!n) {
+                    ivNight.setImageResource(R.drawable.iconnighton);
+                    n = true;
+                } else {
+                    ivNight.setImageResource(R.drawable.iconnightoff);
+                    n = false;
+                }
+
             }
         });
 
