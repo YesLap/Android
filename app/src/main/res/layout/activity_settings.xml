@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="18dp"
-            android:text="18"
+            android:text="-"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/ivAgeIcon"
             app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -309,7 +309,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
-            android:text="18 - 20"
+            android:text="- - -"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/ivAgeIcons"
             app:layout_constraintTop_toBottomOf="@+id/view6" />

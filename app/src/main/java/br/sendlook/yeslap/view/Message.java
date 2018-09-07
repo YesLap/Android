@@ -2,30 +2,21 @@ package br.sendlook.yeslap.view;
 
 public class Message {
 
-    private String idSender;
-    private String idReceiver;
+    private String id_sender;
+    private String id_receiver;
     private String message;
-    private String idMessage;
-    private String status;
-    private String image;
+    private String date_app;
+    private String key;
 
     public Message() {
     }
 
-    public String getIdSender() {
-        return idSender;
+    public String getId_sender() {
+        return id_sender;
     }
 
-    public void setIdSender(String idSender) {
-        this.idSender = idSender;
-    }
-
-    public String getIdReceiver() {
-        return idReceiver;
-    }
-
-    public void setIdReceiver(String idReceiver) {
-        this.idReceiver = idReceiver;
+    public void setId_sender(String id_sender) {
+        this.id_sender = id_sender;
     }
 
     public String getMessage() {
@@ -36,28 +27,27 @@ public class Message {
         this.message = message;
     }
 
-    public String getIdMessage() {
-        return idMessage;
+    public String getDate_app() {
+        return date_app;
     }
 
-    public void setIdMessage(String idMessage) {
-        this.idMessage = idMessage;
+    public void setDate_app(String date_app) {
+        this.date_app = date_app;
     }
 
-    public String getStatus() {
-        return status;
+    public String getKey() {
+        return key;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getImage() {
-        return image;
+    public String getId_receiver() {
+        return id_receiver;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setId_receiver(String id_receiver) {
+        this.id_receiver = id_receiver;
     }
-
 }

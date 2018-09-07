@@ -2,23 +2,23 @@ package br.sendlook.yeslap.controller;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -29,15 +29,10 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventList
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
 import br.sendlook.yeslap.R;
-import br.sendlook.yeslap.model.ChatMessageAdapter;
-import br.sendlook.yeslap.model.MessagesAdapter;
-import br.sendlook.yeslap.view.ChatMessage;
 import br.sendlook.yeslap.model.MesageAdapter;
 import br.sendlook.yeslap.view.Message;
 import br.sendlook.yeslap.view.Utils;
@@ -48,12 +43,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ListView lvChat;
     private TextView tvUsername, tvStatus, tvNoMessages;
     private String idReceiver, idSender, username;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private DatabaseReference datadase;
+    private ArrayList<Message> messages;
+    private ArrayAdapter<Message> adapter;
+    private ValueEventListener valueEventListenerMessages;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        mAuth = FirebaseAuth.getInstance();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -75,8 +78,37 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         tvUsername.setText(username);
 
         setStatus();
-        loadMessages();
+        checkIfHaveMessages();
 
+        //LOADING MESSAGES
+        messages = new ArrayList<>();
+        adapter = new MesageAdapter(ChatActivity.this, messages);
+        lvChat.setAdapter(adapter);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(idSender).child(idReceiver);
+        valueEventListenerMessages = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                checkIfHaveMessages();
+                messages.clear();
+
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Message message = data.getValue(Message.class);
+                    messages.add(message);
+                    lvChat.smoothScrollToPosition(messages.size());
+                }
+
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        mDatabase.addValueEventListener(valueEventListenerMessages);
     }
 
     @Override
@@ -96,10 +128,74 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 if (message.isEmpty()) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.enter_a_messege_to_send));
                 } else {
-                    playSoundSentMessage();
+                    //SAVING MESSAGE ON FIREBASE
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(idSender).child(idReceiver).push();
+                    String push = mDatabase.getKey();
 
+                    Boolean returnsender = saveMessage(idSender, idReceiver, message, getDateTimeNow(), mDatabase);
+                    if (!returnsender) {
+                        Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
+                    } else {
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(idReceiver).child(idSender).child(push);
+                        Boolean returnReceiver = saveMessage(idSender, idReceiver, message, getDateTimeNow(), mDatabase);
+                        if (!returnReceiver) {
+                            Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
+                        } else {
+                            playSoundSentMessage();
+                            etChat.setText("");
 
+                            //SAVING CHAT ON MYSQL DATABASE
+                            Ion.with(ChatActivity.this)
+                                    .load(Utils.URL_SAVE_UPDATE_CHAT)
+                                    .setBodyParameter(Utils.ID_SENDER_APP, idSender)
+                                    .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
+                                    .setBodyParameter(Utils.MESSAGE_APP, message)
+                                    .asJsonObject()
+                                    .setCallback(new FutureCallback<JsonObject>() {
+                                        @Override
+                                        public void onCompleted(Exception e, JsonObject result) {
+                                            String returnApp = result.get(Utils.CHAT).getAsString();
 
+                                            switch (returnApp) {
+                                                case Utils.CODE_SUCCESS:
+
+                                                    //SAVIND CHAT RECEIVER
+                                                    Ion.with(ChatActivity.this)
+                                                            .load(Utils.URL_SAVE_UPDATE_CHAT)
+                                                            .setBodyParameter(Utils.ID_SENDER_APP, idReceiver)
+                                                            .setBodyParameter(Utils.ID_RECEIVER_APP, idSender)
+                                                            .setBodyParameter(Utils.MESSAGE_APP, message)
+                                                            .asJsonObject()
+                                                            .setCallback(new FutureCallback<JsonObject>() {
+                                                                @Override
+                                                                public void onCompleted(Exception e, JsonObject result) {
+                                                                    String returnApp = result.get(Utils.CHAT).getAsString();
+
+                                                                    switch (returnApp) {
+                                                                        case Utils.CODE_SUCCESS:
+                                                                            checkIfHaveMessages();
+                                                                            break;
+                                                                        case Utils.CODE_ERROR:
+                                                                            checkIfHaveMessages();
+                                                                            Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                                            break;
+                                                                    }
+
+                                                                }
+                                                            });
+
+                                                    break;
+                                                case Utils.CODE_ERROR:
+                                                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                                                    break;
+                                            }
+
+                                        }
+                                    });
+
+                        }
+                    }
+                    lvChat.smoothScrollToPosition(messages.size() - 1);
 
                 }
                 break;
@@ -112,15 +208,60 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void loadMessages() {
+    private Boolean saveMessage(String idSender, String idReceiver, String message, String date, DatabaseReference db) {
+        try {
 
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put(Utils.ID_SENDER, idSender);
+            msg.put(Utils.ID_RECEIVER, idReceiver);
+            msg.put(Utils.MESSAGE, message);
+            msg.put(Utils.DATE, date);
+            msg.put(Utils.KEY, mDatabase.getKey());
+            db.setValue(msg).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Utils.toastyError(getApplicationContext(), e.getMessage());
+                }
+            });
 
+            return true;
+        } catch (Exception e) {
+            Utils.toastyError(getApplicationContext(), e.getMessage());
+            return false;
+        }
     }
 
     private void checkIfHaveMessages() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(idSender).child(idReceiver);
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child(Utils.MESSAGES).child(idReceiver).child(idSender);
+                    database1.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot1) {
+                            if (dataSnapshot1.getChildrenCount() == 0) {
+                                tvNoMessages.setVisibility(View.VISIBLE);
+                            } else {
+                                tvNoMessages.setVisibility(View.GONE);
+                            }
+                        }
 
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+                } else {
+                    tvNoMessages.setVisibility(View.GONE);
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
     }
 
     private void playSoundSentMessage() {
@@ -157,6 +298,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         super.onPause();
         updateStatus(idSender, Utils.OFFLINE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mDatabase.removeEventListener(valueEventListenerMessages);
     }
 
     private void updateStatus(final String id_user, final String status) {
@@ -202,6 +349,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
+    }
+
+    private String getDateTimeNow() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        int yyyy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH);
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        return yyyy + "-" + mm + "-" + dd;
     }
 
 }

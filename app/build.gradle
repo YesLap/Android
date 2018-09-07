@@ -8,10 +8,10 @@ android {
         applicationId "br.sendlook.yeslap"
         minSdkVersion 21
         targetSdkVersion 27
-        //Dont forget to change the version in the Firebase and in Settings Screen
-        versionCode 31
-        versionName "2.0.32"
-        //Dont forget to change the version in the Firebase
+        //Dont forget to change the version in the MySQL Database and in Settings Screen
+        versionCode 32
+        versionName "2.0.33"
+        //Dont forget to change the version in the MySQL Database and in Settings Screen
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
