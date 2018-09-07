@@ -35,6 +35,7 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import br.sendlook.yeslap.R;
+import br.sendlook.yeslap.model.ChatMessageAdapter;
 import br.sendlook.yeslap.model.MessagesAdapter;
 import br.sendlook.yeslap.view.ChatMessage;
 import br.sendlook.yeslap.model.MesageAdapter;
@@ -47,8 +48,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ListView lvChat;
     private TextView tvUsername, tvStatus, tvNoMessages;
     private String idReceiver, idSender, username;
-    private MessagesAdapter adapter;
-    private List<Message> messageList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,85 +98,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     playSoundSentMessage();
 
-                    //SAVING MESSAGE
-                    Ion.with(getApplicationContext())
-                            .load(Utils.URL_SEND_MESSAGE)
-                            .setBodyParameter(Utils.ID_SENDER_APP, idSender)
-                            .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
-                            .setBodyParameter(Utils.MESSAGE_APP, message)
-                            .asJsonObject()
-                            .setCallback(new FutureCallback<JsonObject>() {
-                                @Override
-                                public void onCompleted(Exception e, JsonObject result) {
-                                    try {
-                                        String returnApp = result.get(Utils.MESSAGES).getAsString();
 
-                                        switch (returnApp) {
-                                            case Utils.CODE_SUCCESS:
-                                                etChat.setText("");
-
-                                                //SAVING CHAT SENDER
-                                                Ion.with(ChatActivity.this)
-                                                        .load(Utils.URL_SAVE_UPDATE_CHAT)
-                                                        .setBodyParameter(Utils.ID_SENDER_APP, idSender)
-                                                        .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
-                                                        .setBodyParameter(Utils.MESSAGE_APP, message)
-                                                        .asJsonObject()
-                                                        .setCallback(new FutureCallback<JsonObject>() {
-                                                            @Override
-                                                            public void onCompleted(Exception e, JsonObject result) {
-                                                                String returnApp = result.get(Utils.CHAT).getAsString();
-
-                                                                switch (returnApp) {
-                                                                    case Utils.CODE_SUCCESS:
-
-                                                                        //SAVIND CHAT RECEIVER
-                                                                        Ion.with(ChatActivity.this)
-                                                                                .load(Utils.URL_SAVE_UPDATE_CHAT)
-                                                                                .setBodyParameter(Utils.ID_SENDER_APP, idReceiver)
-                                                                                .setBodyParameter(Utils.ID_RECEIVER_APP, idSender)
-                                                                                .setBodyParameter(Utils.MESSAGE_APP, message)
-                                                                                .asJsonObject()
-                                                                                .setCallback(new FutureCallback<JsonObject>() {
-                                                                                    @Override
-                                                                                    public void onCompleted(Exception e, JsonObject result) {
-                                                                                        String returnApp = result.get(Utils.CHAT).getAsString();
-
-                                                                                        switch (returnApp) {
-                                                                                            case Utils.CODE_SUCCESS:
-                                                                                                checkIfHaveMessages();
-                                                                                                loadMessages();
-                                                                                                break;
-                                                                                            case Utils.CODE_ERROR:
-                                                                                                checkIfHaveMessages();
-                                                                                                loadMessages();
-                                                                                                Utils.toastyError(getApplicationContext(), e.getMessage());
-                                                                                                break;
-                                                                                        }
-
-                                                                                    }
-                                                                                });
-
-                                                                        break;
-                                                                    case Utils.CODE_ERROR:
-                                                                        Utils.toastyError(getApplicationContext(), e.getMessage());
-                                                                        break;
-                                                                }
-
-                                                            }
-                                                        });
-
-                                                break;
-                                            case Utils.CODE_ERROR:
-                                                Utils.toastyError(getApplicationContext(), getString(R.string.error_send_message));
-                                                break;
-                                        }
-
-                                    } catch (Exception x) {
-                                        Utils.toastyError(getApplicationContext(), x.getMessage());
-                                    }
-                                }
-                            });
 
 
                 }
@@ -191,70 +113,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void loadMessages() {
-        messageList = new ArrayList<Message>();
-        adapter = new MessagesAdapter(ChatActivity.this, messageList);
-        lvChat.setAdapter(adapter);
 
-        Ion.with(this)
-                .load(Utils.URL_LOAD_MESSAGES)
-                .setBodyParameter(Utils.ID_SENDER_APP, idSender)
-                .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
-                .asJsonArray()
-                .setCallback(new FutureCallback<JsonArray>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonArray result) {
-                        try {
-                            if (result.size() == 0) {
-                                tvNoMessages.setVisibility(View.VISIBLE);
-                            } else {
-                                for (int i = 0; i < result.size(); i++) {
-                                    tvNoMessages.setVisibility(View.INVISIBLE);
-
-                                    JsonObject j = result.get(i).getAsJsonObject();
-                                    Message m = new Message();
-
-                                    m.setIdSender(j.get(Utils.ID_SENDER_APP).getAsString());
-                                    m.setIdReceiver(j.get(Utils.ID_RECEIVER_APP).getAsString());
-                                    m.setMessage(j.get(Utils.MESSAGE_APP).getAsString());
-                                    m.setStatus(j.get(Utils.STATUS_USER).getAsString());
-                                    m.setImage(j.get(Utils.IMAGE_USER_1).getAsString());
-
-                                    messageList.add(m);
-                                }
-                                adapter.notifyDataSetChanged();
-                                lvChat.smoothScrollToPosition(messageList.size() - 1);
-                            }
-                        } catch (Exception x) {
-                            Utils.toastyError(getApplicationContext(), x.getMessage());
-                        }
-                    }
-                });
 
     }
 
     private void checkIfHaveMessages() {
 
-        Ion.with(ChatActivity.this)
-                .load(Utils.URL_CHECK_IF_HAVE_MESSAGE)
-                .setBodyParameter(Utils.ID_SENDER_APP, idSender)
-                .setBodyParameter(Utils.ID_RECEIVER_APP, idReceiver)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        String returnApp = result.get(Utils.MESSAGES).getAsString();
 
-                        switch (returnApp) {
-                            case Utils.CODE_SUCCESS:
-                                tvNoMessages.setVisibility(View.GONE);
-                                break;
-                            case Utils.CODE_ERROR:
-                                tvNoMessages.setVisibility(View.VISIBLE);
-                                break;
-                        }
-
-                    }
-                });
 
     }
 

@@ -17,12 +17,15 @@ public class Utils {
     public static final String CURRENT_VERSION = "current_version";
     public static final String PREF_NAME = "preferencesYeslap";
 
+    public static final String SQL_CALENDAR = "sql_calendar_app";
     public static final String URL = "url";
+    public static final String KEY = "key";
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
     public static final String EMAIL_USER = "email_user";
     public static final String PASSWORD = "password_user";
     public static final String IMAGE_1 = "image1";
+    public static final String MESSAGE = "message";
     public static final String IMAGE_2 = "image2";
     public static final String IMAGE_3 = "image3";
     public static final String DISTANCE_APP = "distance_app";
@@ -126,6 +129,7 @@ public class Utils {
     public static final String URL_GET_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/getcalendaruser.php";
     public static final String URL_DELETE_CALENDAR_USER = "http://yeslap-eu.umbler.net/calendar/deletecalendaruser.php";
     public static final String URL_FIND_USERS = "http://yeslap-eu.umbler.net/finduser/findusers.php";
+    public static final String URL_FIND_USERS_CALENDAR = "http://yeslap-eu.umbler.net/finduser/finduserscalendar.php";
     public static final String URL_ADD_NEW_FAVORITE = "http://yeslap-eu.umbler.net/userprofile/addnewfavorite.php";
     public static final String URL_ADD_NEW_REPORT = "http://yeslap-eu.umbler.net/userprofile/addnewreport.php";
     public static final String URL_GET_FAVORITES = "http://yeslap-eu.umbler.net/userprofile/getfavorites.php";

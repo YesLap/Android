@@ -18,8 +18,6 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -111,14 +109,16 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!sun) {
-                    ivBgSun.setImageResource(R.drawable.iconbubbleweekon);
+                    ivBgSun.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekon));
                     tvSun.setTextColor(Color.WHITE);
                     sun = true;
+                    loadUsersCalendar();
                 } else {
-                    ivBgSun.setImageResource(R.drawable.iconbubbleweekoff);
+                    ivBgSun.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
                     tvSun.setTextColor(getResources().getColor(R.color.colorLightBlue));
                     sun = false;
                 }
+                //checkToEnableCalendar();
             }
         });
 
@@ -126,15 +126,16 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!mon) {
-                    ivBgMon.setImageResource(R.drawable.iconbubbleweekon);
+                    ivBgMon.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekon));
                     tvMon.setTextColor(Color.WHITE);
                     mon = true;
+                    loadUsersCalendar();
                 } else {
-                    ivBgMon.setImageResource(R.drawable.iconbubbleweekoff);
+                    ivBgMon.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
                     tvMon.setTextColor(getResources().getColor(R.color.colorLightBlue));
                     mon = false;
                 }
-
+                //checkToEnableCalendar();
             }
         });
 
@@ -142,15 +143,16 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!tue) {
-                    ivBgTue.setImageResource(R.drawable.iconbubbleweekon);
+                    ivBgTue.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekon));
                     tvTue.setTextColor(Color.WHITE);
                     tue = true;
+                    loadUsersCalendar();
                 } else {
-                    ivBgTue.setImageResource(R.drawable.iconbubbleweekoff);
+                    ivBgTue.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
                     tvTue.setTextColor(getResources().getColor(R.color.colorLightBlue));
                     tue = false;
                 }
-
+                //checkToEnableCalendar();
             }
         });
 
@@ -158,14 +160,16 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!wed) {
-                    ivBgWed.setImageResource(R.drawable.iconbubbleweekon);
+                    ivBgWed.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekon));
                     tvWed.setTextColor(Color.WHITE);
                     wed = true;
+                    loadUsersCalendar();
                 } else {
-                    ivBgWed.setImageResource(R.drawable.iconbubbleweekoff);
+                    ivBgWed.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
                     tvWed.setTextColor(getResources().getColor(R.color.colorLightBlue));
                     wed = false;
                 }
+                //checkToEnableCalendar();
             }
         });
 
@@ -173,15 +177,16 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!thu) {
-                    ivBgThu.setImageResource(R.drawable.iconbubbleweekon);
+                    ivBgThu.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekon));
                     tvThu.setTextColor(Color.WHITE);
                     thu = true;
+                    loadUsersCalendar();
                 } else {
-                    ivBgThu.setImageResource(R.drawable.iconbubbleweekoff);
+                    ivBgThu.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
                     tvThu.setTextColor(getResources().getColor(R.color.colorLightBlue));
                     thu = false;
                 }
-
+                //checkToEnableCalendar();
             }
         });
 
@@ -189,15 +194,16 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!fri) {
-                    ivBgFri.setImageResource(R.drawable.iconbubbleweekon);
+                    ivBgFri.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekon));
                     tvFri.setTextColor(Color.WHITE);
                     fri = true;
+                    loadUsersCalendar();
                 } else {
-                    ivBgFri.setImageResource(R.drawable.iconbubbleweekoff);
+                    ivBgFri.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
                     tvFri.setTextColor(getResources().getColor(R.color.colorLightBlue));
                     fri = false;
                 }
-
+                checkToEnableCalendar();
             }
         });
 
@@ -205,15 +211,16 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!sat) {
-                    ivBgSat.setImageResource(R.drawable.iconbubbleweekon);
+                    ivBgSat.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekon));
                     tvSat.setTextColor(Color.WHITE);
                     sat = true;
+                    loadUsersCalendar();
                 } else {
-                    ivBgSat.setImageResource(R.drawable.iconbubbleweekoff);
+                    ivBgSat.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
                     tvSat.setTextColor(getResources().getColor(R.color.colorLightBlue));
                     sat = false;
                 }
-
+                //checkToEnableCalendar();
             }
         });
 
@@ -221,13 +228,13 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!m) {
-                    ivMorning.setImageResource(R.drawable.iconmorningon);
+                    ivMorning.setBackground(getResources().getDrawable(R.drawable.iconmorningon));
                     m = true;
                 } else {
-                    ivMorning.setImageResource(R.drawable.iconmorningoff);
+                    ivMorning.setBackground(getResources().getDrawable(R.drawable.iconmorningoff));
                     m = false;
                 }
-
+                checkToEnableCalendar();
             }
         });
 
@@ -235,12 +242,13 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!a) {
-                    ivAfternoon.setImageResource(R.drawable.iconafternoonon);
+                    ivAfternoon.setBackground(getResources().getDrawable(R.drawable.iconafternoonon));
                     a = true;
                 } else {
-                    ivAfternoon.setImageResource(R.drawable.iconafternoonoff);
+                    ivAfternoon.setBackground(getResources().getDrawable(R.drawable.iconafternoonoff));
                     a = false;
                 }
+                checkToEnableCalendar();
             }
         });
 
@@ -248,13 +256,13 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (!n) {
-                    ivNight.setImageResource(R.drawable.iconnighton);
+                    ivNight.setBackground(getResources().getDrawable(R.drawable.iconnighton));
                     n = true;
                 } else {
-                    ivNight.setImageResource(R.drawable.iconnightoff);
+                    ivNight.setBackground(getResources().getDrawable(R.drawable.iconnightoff));
                     n = false;
                 }
-
+                checkToEnableCalendar();
             }
         });
 
@@ -292,6 +300,158 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    private void checkToEnableCalendar() {
+        if (!m && !a && !n) {
+            ivBgSun.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekdisable));
+            ivBgSun.setEnabled(false);
+            ivBgMon.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekdisable));
+            ivBgMon.setEnabled(false);
+            ivBgTue.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekdisable));
+            ivBgTue.setEnabled(false);
+            ivBgWed.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekdisable));
+            ivBgWed.setEnabled(false);
+            ivBgThu.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekdisable));
+            ivBgThu.setEnabled(false);
+            ivBgFri.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekdisable));
+            ivBgFri.setEnabled(false);
+            ivBgSat.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekdisable));
+            ivBgSat.setEnabled(false);
+            tvSun.setTextColor(getResources().getColor(R.color.colorGrey));
+            tvMon.setTextColor(getResources().getColor(R.color.colorGrey));
+            tvTue.setTextColor(getResources().getColor(R.color.colorGrey));
+            tvWed.setTextColor(getResources().getColor(R.color.colorGrey));
+            tvThu.setTextColor(getResources().getColor(R.color.colorGrey));
+            tvFri.setTextColor(getResources().getColor(R.color.colorGrey));
+            tvSat.setTextColor(getResources().getColor(R.color.colorGrey));
+        } else {
+            if (!sun) {
+                tvSun.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                ivBgSun.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
+                ivBgSun.setEnabled(true);
+            }
+            if (!mon) {
+                tvMon.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                ivBgMon.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
+                ivBgMon.setEnabled(true);
+            }
+            if (!tue) {
+                tvTue.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                ivBgTue.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
+                ivBgTue.setEnabled(true);
+            }
+            if (!wed) {
+                tvWed.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                ivBgWed.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
+                ivBgWed.setEnabled(true);
+            }
+            if (!thu) {
+                tvThu.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                ivBgThu.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
+                ivBgThu.setEnabled(true);
+            }
+            if (!fri) {
+                tvFri.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                ivBgFri.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
+                ivBgFri.setEnabled(true);
+            }
+            if (!sat) {
+                tvSat.setTextColor(getResources().getColor(R.color.colorLightBlue));
+                ivBgSat.setBackground(getResources().getDrawable(R.drawable.iconbubbleweekoff));
+                ivBgSat.setEnabled(true);
+            }
+
+        }
+    }
+
+    private String calendarSQL() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM tb_calendar WHERE");
+
+        if (sun) {
+            if (m) {
+                sql.append(" sun_m = :ID OR");
+            }
+            if (a) {
+                sql.append(" sun_a = :ID OR");
+            }
+            if (n) {
+                sql.append(" sun_n = :ID OR");
+            }
+        }
+        if (mon) {
+            if (m) {
+                sql.append(" mon_m = :ID OR");
+            }
+            if (a) {
+                sql.append(" mon_a = :ID OR");
+            }
+            if (n) {
+                sql.append(" mon_n = :ID OR");
+            }
+        }
+        if (tue) {
+            if (m) {
+                sql.append(" tue_m = :ID OR");
+            }
+            if (a) {
+                sql.append(" tue_a = :ID OR");
+            }
+            if (n) {
+                sql.append(" tue_n = :ID OR");
+            }
+        }
+        if (wed) {
+            if (m) {
+                sql.append(" wed_m = :ID OR");
+            }
+            if (a) {
+                sql.append(" wed_a = :ID OR");
+            }
+            if (n) {
+                sql.append(" wed_n = :ID OR");
+            }
+        }
+        if (thu) {
+            if (m) {
+                sql.append(" thu_m = :ID OR");
+            }
+            if (a) {
+                sql.append(" thu_a = :ID OR");
+            }
+            if (n) {
+                sql.append(" thu_n = :ID OR");
+            }
+        }
+        if (fri) {
+            if (m) {
+                sql.append(" fri_m = :ID OR");
+            }
+            if (a) {
+                sql.append(" fri_a = :ID OR");
+            }
+            if (n) {
+                sql.append(" fri_n = :ID OR");
+            }
+        }
+        if (sat) {
+            if (m) {
+                sql.append(" sat_m = :ID OR");
+            }
+            if (a) {
+                sql.append(" sat_a = :ID OR");
+            }
+            if (n) {
+                sql.append(" sat_n = :ID OR");
+            }
+        }
+
+        String newsql = sql.substring(0, sql.length() - 2);
+        Log.d("QWERTY", newsql);
+
+        return newsql;
+    }
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -302,6 +462,7 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
+        checkToEnableCalendar();
         updateStatus(id, Utils.ONLINE);
         loadUsers();
     }
@@ -310,6 +471,90 @@ public class FindUsersActivity extends AppCompatActivity implements View.OnClick
     protected void onPause() {
         super.onPause();
         updateStatus(id, Utils.OFFLINE);
+    }
+
+    private void loadUsersCalendar() {
+
+        dialog = new ProgressDialog(FindUsersActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        usersList = new ArrayList<Users>();
+        adapter = new UsersAdapter(FindUsersActivity.this, usersList);
+        lstUsers.setAdapter(adapter);
+
+        Ion.with(this)
+                .load(Utils.URL_FIND_USERS_CALENDAR)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .setBodyParameter(Utils.GENDER_SEARCH_APP, genderSearch)
+                .setBodyParameter(Utils.AGE_SEARCH_MIN_APP, ageSearchMin)
+                .setBodyParameter(Utils.AGE_SEARCH_MAX_APP, ageSearchMax)
+                .setBodyParameter(Utils.SQL_CALENDAR, calendarSQL())
+                .asJsonArray()
+                .setCallback(new FutureCallback<JsonArray>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonArray result) {
+                        try {
+                            if (result.size() == 0) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                tvNoUsers.setVisibility(View.VISIBLE);
+                            } else {
+                                tvNoUsers.setVisibility(View.VISIBLE);
+                                for (int i = 0; i < result.size(); i++) {
+                                    JsonObject jsonObject = result.get(i).getAsJsonObject();
+
+                                    tvNoUsers.setVisibility(View.GONE);
+                                    Users u = new Users();
+                                    u.setId_user(jsonObject.get(Utils.ID_USER).getAsString());
+                                    u.setStatus_user(jsonObject.get(Utils.STATUS_USER).getAsString());
+                                    u.setUsername_user(jsonObject.get(Utils.USERNAME_USER).getAsString());
+                                    u.setImage_user(jsonObject.get(Utils.IMAGE_USER_1).getAsString());
+                                    u.setDistance(jsonObject.get(Utils.DISTANCE).getAsString());
+                                    u.setDiff_distance(jsonObject.get(Utils.DIFF_DISTANCE).getAsString());
+                                    u.setSun_m(jsonObject.get(Utils.SUNDAY_M).getAsString());
+                                    u.setSun_a(jsonObject.get(Utils.SUNDAY_A).getAsString());
+                                    u.setSun_n(jsonObject.get(Utils.SUNDAY_N).getAsString());
+                                    u.setMon_m(jsonObject.get(Utils.MONDAY_M).getAsString());
+                                    u.setMon_a(jsonObject.get(Utils.MONDAY_A).getAsString());
+                                    u.setMon_n(jsonObject.get(Utils.MONDAY_N).getAsString());
+                                    u.setTue_m(jsonObject.get(Utils.TUESDAY_M).getAsString());
+                                    u.setTue_a(jsonObject.get(Utils.TUESDAY_A).getAsString());
+                                    u.setTue_n(jsonObject.get(Utils.TUESDAY_N).getAsString());
+                                    u.setWed_m(jsonObject.get(Utils.WEDNESDAY_M).getAsString());
+                                    u.setWed_a(jsonObject.get(Utils.WEDNESDAY_A).getAsString());
+                                    u.setWed_n(jsonObject.get(Utils.WEDNESDAY_N).getAsString());
+                                    u.setThu_m(jsonObject.get(Utils.THURSDAY_M).getAsString());
+                                    u.setThu_a(jsonObject.get(Utils.THURSDAY_A).getAsString());
+                                    u.setThu_n(jsonObject.get(Utils.THURSDAY_N).getAsString());
+                                    u.setFri_m(jsonObject.get(Utils.FRIDAY_M).getAsString());
+                                    u.setFri_a(jsonObject.get(Utils.FRIDAY_A).getAsString());
+                                    u.setFri_n(jsonObject.get(Utils.FRIDAY_N).getAsString());
+                                    u.setSat_m(jsonObject.get(Utils.SATURDAY_M).getAsString());
+                                    u.setSat_a(jsonObject.get(Utils.SATURDAY_A).getAsString());
+                                    u.setSat_n(jsonObject.get(Utils.SATURDAY_N).getAsString());
+                                    usersList.add(u);
+
+                                }
+                            }
+
+                            adapter.notifyDataSetChanged();
+
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+
+                        } catch (Exception x) {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                        }
+                    }
+                });
+
     }
 
     private void loadUsers() {

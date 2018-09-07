@@ -357,6 +357,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         if (!haveNetworkConnection()) {
             // Display message in dialog box if you have not internet connection
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setCancelable(false);
             alertDialogBuilder.setTitle(R.string.no_internet_connection);
             alertDialogBuilder.setMessage(R.string.no_internet_connection_msg);
             alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -382,6 +383,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         }
     }
+
+
 
     private boolean existProfile() {
         Ion.with(this)

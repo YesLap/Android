@@ -58,6 +58,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="2sp"
             android:layout_alignStart="@+id/textView"
             android:layout_below="@+id/textView"
             android:orientation="vertical">
@@ -79,6 +80,70 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5sp"
                     android:text="1"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMorningSun"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:src="@drawable/iconmorningoff" />
+
+                <ImageView
+                    android:id="@+id/ivAfternoonSun"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="20sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivMorningSun"
+                    android:src="@drawable/iconafternoonoff" />
+
+                <ImageView
+                    android:id="@+id/ivNightSun"
+                    android:layout_width="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="18sp"
+                    android:layout_marginStart="9sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_below="@id/ivAfternoonSun"
+                    android:src="@drawable/iconnightoff" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22sp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/iconbubbleweekon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5sp"
+                    android:text="2"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
 
@@ -143,7 +208,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5sp"
-                    android:text="2"
+                    android:text="3"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
 
@@ -208,7 +273,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5sp"
-                    android:text="3"
+                    android:text="4"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
 
@@ -273,7 +338,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5sp"
-                    android:text="4"
+                    android:text="5"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
 
@@ -338,7 +403,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5sp"
-                    android:text="5"
+                    android:text="6"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
 
@@ -403,7 +468,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5sp"
-                    android:text="6"
+                    android:text="7"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
 
@@ -438,71 +503,6 @@
                     android:layout_marginStart="9sp"
                     android:layout_marginTop="2sp"
                     android:layout_below="@id/ivAfternoonSat"
-                    android:src="@drawable/iconnightoff" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2sp"
-            android:layout_alignStart="@+id/textView"
-            android:layout_below="@+id/textView"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:layout_width="22sp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/iconbubbleweekon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5sp"
-                    android:text="7"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/ivMorningSun"
-                    android:layout_width="20sp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_height="20sp"
-                    android:src="@drawable/iconmorningoff" />
-
-                <ImageView
-                    android:id="@+id/ivAfternoonSun"
-                    android:layout_width="20sp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_height="20sp"
-                    android:layout_marginStart="8sp"
-                    android:layout_marginTop="2sp"
-                    android:layout_below="@id/ivMorningSun"
-                    android:src="@drawable/iconafternoonoff" />
-
-                <ImageView
-                    android:id="@+id/ivNightSun"
-                    android:layout_width="20sp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_height="18sp"
-                    android:layout_marginStart="9sp"
-                    android:layout_marginTop="2sp"
-                    android:layout_below="@id/ivAfternoonSun"
                     android:src="@drawable/iconnightoff" />
 
             </RelativeLayout>
