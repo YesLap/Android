@@ -9,8 +9,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         //Dont forget to change the version in the MySQL Database and in Settings Screen
-        versionCode 32
-        versionName "2.0.33"
+        versionCode 33
+        versionName "2.0.34"
         //Dont forget to change the version in the MySQL Database and in Settings Screen
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

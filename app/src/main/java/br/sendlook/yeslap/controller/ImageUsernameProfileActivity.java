@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -69,6 +71,9 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
             id = bundle.getString(Utils.ID_USER_APP);
         }
 
+        showSpotlight();
+        getImage();
+
         etUsername = (AppCompatEditText) findViewById(R.id.etUsername);
         cvImageUser = (CircleImageView) findViewById(R.id.cvImageUser);
         btnChangeImage = (Button) findViewById(R.id.btnChangeImage);
@@ -111,6 +116,83 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
 
     }
 
+    private void getImage() {
+        dialog = new ProgressDialog(ImageUsernameProfileActivity.this);
+        dialog.setMessage(getString(R.string.loading));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        Ion.with(this)
+                .load(Utils.URL_GET_USER_DATA)
+                .setBodyParameter(Utils.ID_USER_APP, id)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String returnApp = result.get(Utils.GET_USER_DATA).getAsString();
+
+                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
+
+                                String image_user_1 = result.get(Utils.IMAGE_USER_1).getAsString();
+
+                                if (image_user_1 != null && !Objects.equals(image_user_1, " ")) {
+                                    Picasso.with(ImageUsernameProfileActivity.this).load(image_user_1).placeholder(R.drawable.img_profile).into(cvImageUser);
+                                    btnSave.setVisibility(View.VISIBLE);
+                                }
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+
+                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                            }
+
+                        } catch (Exception x) {
+                            Utils.toastyError(getApplicationContext(), x.getMessage());
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void showSpotlight() {
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.btnChangeImage), "Image", "It is necessary that you choose a profile image")
+                                .dimColor(R.color.colorLightBlue)
+                                .outerCircleColor(R.color.colorLightBlue)
+                                .targetCircleColor(android.R.color.white)
+                                .textColor(android.R.color.white)
+                                .cancelable(false),
+                        TapTarget.forView(findViewById(R.id.etUsername), "Username", "Choose your username")
+                                .dimColor(R.color.colorLightBlue)
+                                .outerCircleColor(R.color.colorLightBlue)
+                                .targetCircleColor(android.R.color.white)
+                                .textColor(android.R.color.white)
+                                .cancelable(false)
+                ).listener(new TapTargetSequence.Listener() {
+            @Override
+            public void onSequenceFinish() {
+
+            }
+
+            @Override
+            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+            }
+
+            @Override
+            public void onSequenceCanceled(TapTarget lastTarget) {
+
+            }
+        }).start();
+    }
+
     private void imagePicker() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -137,7 +219,7 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                        while (!urlTask.isSuccessful());
+                        while (!urlTask.isSuccessful()) ;
                         Uri download = urlTask.getResult();
 
                         Ion.with(getApplicationContext())
