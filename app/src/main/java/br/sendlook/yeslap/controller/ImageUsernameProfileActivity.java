@@ -100,6 +100,8 @@ public class ImageUsernameProfileActivity extends AppCompatActivity {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.fill_username_field));
                 } else if (b || s) {
                     Utils.toastyInfo(getApplicationContext(), getString(R.string.username_must_have_only));
+                } else if (username.length() < 6) {
+                    Utils.toastyInfo(getApplicationContext(), getString(R.string.username_more_6_char));
                 } else {
                     dialog = new ProgressDialog(ImageUsernameProfileActivity.this);
                     dialog.setTitle(getString(R.string.loading));

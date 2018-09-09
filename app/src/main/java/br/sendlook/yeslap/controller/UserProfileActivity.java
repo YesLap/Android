@@ -79,7 +79,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     completePerfil(getString(R.string.select_genre_search));
                 } else if (Objects.equals(ageSearchMax, " ") || Objects.equals(ageSearchMin, " ")) {
                     completePerfil(getString(R.string.select_age_search));
-                }else if (Objects.equals(distance, " ")) {
+                } else if (Objects.equals(distance, " ")) {
                     completePerfil(getString(R.string.select_distance));
                 } else {
                     Intent intent = new Intent(UserProfileActivity.this, FindUsersActivity.class);
@@ -116,7 +116,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     completePerfil(getString(R.string.select_genre_search));
                 } else if (Objects.equals(ageSearchMax, " ") || Objects.equals(ageSearchMin, " ")) {
                     completePerfil(getString(R.string.select_age_search));
-                }else if (Objects.equals(distance, " ")) {
+                } else if (Objects.equals(distance, " ")) {
                     completePerfil(getString(R.string.select_distance));
                 } else {
                     Intent intentchat = new Intent(UserProfileActivity.this, ChatMessagesActivity.class);
@@ -298,38 +298,35 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
     private void chekcUpateApplication() {
         try {
-            final String currentVersionApp = BuildConfig.VERSION_NAME;
-            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Utils.APP_CONFIG).child(Utils.APP_VERSION);
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String currentVersionPlayStore = dataSnapshot.child(Utils.CURRENT_VERSION).getValue(String.class);
-                    final String url = dataSnapshot.child(Utils.PLAYSTORE_LINK).getValue(String.class);
-                    if (!Objects.equals(currentVersionApp, currentVersionPlayStore)) {
+            Ion.with(this)
+                    .load(Utils.URL_CHECK_VERSION_APP)
+                    .setBodyParameter(Utils.VERSION_APP, BuildConfig.VERSION_NAME)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, final JsonObject result) {
+                            String returnApp = result.get(Utils.SETTINGS).getAsString();
 
-                        new MaterialDialog.Builder(UserProfileActivity.this)
-                                .title(getString(R.string.update_avaliable))
-                                .content(getString(R.string.update_avaliable_msg))
-                                .positiveText(getString(R.string.update))
-                                .cancelable(false)
-                                .canceledOnTouchOutside(false)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        Intent i = new Intent(Intent.ACTION_VIEW);
-                                        i.setData(Uri.parse(url));
-                                        startActivity(i);
-                                    }
-                                })
-                                .show();
-                    }
-                }
+                            if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
+                                new MaterialDialog.Builder(UserProfileActivity.this)
+                                        .title(getString(R.string.update_avaliable))
+                                        .content(getString(R.string.update_avaliable_msg))
+                                        .positiveText(getString(R.string.update))
+                                        .cancelable(false)
+                                        .canceledOnTouchOutside(false)
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                                i.setData(Uri.parse(result.get(Utils.URL).getAsString()));
+                                                startActivity(i);
+                                            }
+                                        })
+                                        .show();
+                            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+                        }
+                    });
         } catch (Exception e) {
             Utils.toastyError(getApplicationContext(), e.getMessage());
         }
@@ -355,7 +352,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
     private void checkInternetConnection() {
         if (!haveNetworkConnection()) {
-            // Display message in dialog box if you have not internet connection
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setCancelable(false);
             alertDialogBuilder.setTitle(R.string.no_internet_connection);
@@ -370,45 +366,17 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             alertDialog.show();
         } else {
             if (isLoginAuth()) {
-                //if (existProfile()) {
+
                 checkIfProfileIsComplete();
                 updateStatus(idUser, Utils.ONLINE);
                 setLastSeen();
-                //} else {
-                //    sendToStart();
-                //}
+                chekcUpateApplication();
+
             } else {
                 sendToStart();
             }
 
         }
-    }
-
-
-
-    private boolean existProfile() {
-        Ion.with(this)
-                .load(Utils.URL_EXIST_PROFILE)
-                .setBodyParameter(Utils.ID_USER_APP, idUser)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        try {
-                            String returnApp = result.get(Utils.EXIST_PROFILE).getAsString();
-
-                            if (Objects.equals(returnApp, Utils.CODE_SUCCESS)) {
-                                //return true;
-                            } else if (Objects.equals(returnApp, Utils.CODE_ERROR)) {
-                                //return false;
-                            }
-
-                        } catch (Exception x) {
-                            Utils.toastyError(getApplicationContext(), x.getMessage());
-                        }
-                    }
-                });
-        return false;
     }
 
     @Override
@@ -513,6 +481,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
                         } catch (Exception x) {
                             Utils.toastyError(getApplicationContext(), x.getMessage());
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
                         }
                     }
                 });

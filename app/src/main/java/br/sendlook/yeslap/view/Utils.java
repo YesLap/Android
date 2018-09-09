@@ -11,9 +11,10 @@ import es.dmoral.toasty.Toasty;
 public class Utils {
 
     public static final String USERS = "users";
+    public static final String SETTINGS = "settings";
     public static final String USER_IMAGES = "user_images";
     public static final String APP_CONFIG = "app_config";
-    public static final String APP_VERSION = "app_version";
+    public static final String VERSION_APP = "version_app";
     public static final String CURRENT_VERSION = "current_version";
     public static final String PREF_NAME = "preferencesYeslap";
 
@@ -147,6 +148,7 @@ public class Utils {
     public static final String URL_UPDATE_IMAGE_USER_1 = "http://yeslap-eu.umbler.net/userprofile/updateimageuser1.php";
     public static final String URL_UPDATE_IMAGE_USER_2 = "http://yeslap-eu.umbler.net/userprofile/updateimageuser2.php";
     public static final String URL_UPDATE_IMAGE_USER_3 = "http://yeslap-eu.umbler.net/userprofile/updateimageuser3.php";
+    public static final String URL_CHECK_VERSION_APP = "http://yeslap-eu.umbler.net/settings/checkversionapp.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
