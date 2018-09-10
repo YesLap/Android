@@ -148,7 +148,7 @@ public class Utils {
     public static final String URL_UPDATE_IMAGE_USER_1 = "http://yeslap-eu.umbler.net/userprofile/updateimageuser1.php";
     public static final String URL_UPDATE_IMAGE_USER_2 = "http://yeslap-eu.umbler.net/userprofile/updateimageuser2.php";
     public static final String URL_UPDATE_IMAGE_USER_3 = "http://yeslap-eu.umbler.net/userprofile/updateimageuser3.php";
-    public static final String URL_CHECK_VERSION_APP = "http://yeslap-eu.umbler.net/settings/checkversionapp.php";
+    public static final String URL_CHECK_VERSION_APP = "http://yeslap-eu.umbler.net/Settings/checkversionapp.php";
 
     public static final String EMAIL_APP = "email_app";
     public static final String PASSWORD_APP = "password_app";
